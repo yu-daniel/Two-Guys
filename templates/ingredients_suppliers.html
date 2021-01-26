@@ -2,7 +2,7 @@
 {% block title %}Ingredients & Suppliers{% endblock %}
 
 {% block content %}
-<table>
+<table id="overview">
 	<caption>Overview of the Ingredients entity.</caption>
 	<thead>
 		<tr>
@@ -27,7 +27,7 @@
 	</tbody>
 </table>
 
-<div>
+<div class="col-sm-12">
 	<form action="#" method="POST">
 		{{ form.hidden_tag() }}
 		<fieldset>

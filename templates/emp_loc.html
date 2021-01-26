@@ -2,7 +2,7 @@
 {% block title %}Employees, Managers & Locations{% endblock %}
 
 {% block content %}
-<table>
+<table id="overview">
 	<caption>Overview of the Employees, Managers and Locations.</caption>
 	<thead>
 		<tr>
@@ -24,7 +24,7 @@
 	</tbody>
 </table>
 
-<div>
+<div class="row">
 	<div class="col-sm-6">
 		<form action="", method="POST">
 			{{ emp_man_form.hidden_tag() }}
@@ -65,7 +65,7 @@
 		</form>
 	</div>
 
-	<div> 
+	<div class="col-sm-6"> 
 		<form action="#", method="POST">
 			{{ loc_form.hidden_tag() }}
 			<fieldset>
