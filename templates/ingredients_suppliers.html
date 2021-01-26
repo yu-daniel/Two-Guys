@@ -2,10 +2,7 @@
 {% block title %}Ingredients & Suppliers{% endblock %}
 {% block content %}
 
-
-
 <h1 class="header1">Ingredients & Suppliers</h1>
-
 
 <table class="center">
 	<caption>Overview of the Ingredients entity.</caption>
@@ -68,55 +65,58 @@
 	</tbody>
 </table>
 
-
-<div class="center">
-	<form action="#" method="POST">
-		{{ ingredient_form.hidden_tag() }}
-		<fieldset>
-			<legend>Ingredients:</legend>
-			<div>
-				{{ ingredient_form.ingredient_id.label }}
-				{{ ingredient_form.ingredient_id }}
-			</div>
-			<div>
-				{{ ingredient_form.order_date.label }}
-				{{ ingredient_form.order_date }}
-			</div>
-			<div>
-				{{ ingredient_form.ingredient_name.label }}
-				{{ ingredient_form.ingredient_name }}
-			</div>
-			<div>
-				{{ ingredient_form.ingredient_cost.label }}
-				{{ ingredient_form.ingredient_cost }}
-			</div>
-			<div>
-				{{ ingredient_form.order_id.label }}
-				{{ ingredient_form.order_id }}
-			</div>
-			<div>
-				{{ ingredient_form.submit }}
-			</div>
-		</fieldset>
-	</form>
-	<br>
-	<form action="#" method="POST">
-		{{ supplier_form.hidden_tag() }}
-		<fieldset>
-			<legend>Suppliers:</legend>
-			<div>
-				{{ supplier_form.supplier_id.label }}
-				{{ supplier_form.supplier_id }}
-			</div>
-			<div>
-				{{ supplier_form.supplier_name.label }}
-				{{ supplier_form.supplier_name }}
-			</div>
-			<div>
-				{{ supplier_form.submit }}
-			</div>
-		</fieldset>
-	</form>
+<div class="row">
+	<div class="col-sm-6">
+		<form action="#" method="POST">
+			{{ ingredient_form.hidden_tag() }}
+			<fieldset>
+				<legend>Ingredients:</legend>
+				<div>
+					{{ ingredient_form.ingredient_id.label }}
+					{{ ingredient_form.ingredient_id }}
+				</div>
+				<div>
+					{{ ingredient_form.order_date.label }}
+					{{ ingredient_form.order_date }}
+				</div>
+				<div>
+					{{ ingredient_form.ingredient_name.label }}
+					{{ ingredient_form.ingredient_name }}
+				</div>
+				<div>
+					{{ ingredient_form.ingredient_cost.label }}
+					{{ ingredient_form.ingredient_cost }}
+				</div>
+				<div>
+					{{ ingredient_form.order_id.label }}
+					{{ ingredient_form.order_id }}
+				</div>
+				<div>
+					{{ ingredient_form.submit }}
+				</div>
+			</fieldset>
+		</form>
+	</div>
+		<br>
+	<div class="col-sm-6">
+		<form action="#" method="POST">
+			{{ supplier_form.hidden_tag() }}
+			<fieldset>
+				<legend>Suppliers:</legend>
+				<div>
+					{{ supplier_form.supplier_id.label }}
+					{{ supplier_form.supplier_id }}
+				</div>
+				<div>
+					{{ supplier_form.supplier_name.label }}
+					{{ supplier_form.supplier_name }}
+				</div>
+				<div>
+					{{ supplier_form.submit }}
+				</div>
+			</fieldset>
+		</form>
+	</div>
 </div>
 
 {% endblock %}
