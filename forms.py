@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, BooleanField, DecimalField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, DateField, BooleanField, DecimalField, SubmitField, IntegerField
+from wtforms.validators import DataRequired, Length, NumberRange
 
 class EmployeeManagerForm(FlaskForm):
 	first_name = StringField('First Name', validators=[DataRequired()])
@@ -17,3 +17,11 @@ class LocationForm(FlaskForm):
 	state = StringField('State', validators=[DataRequired()])
 	zip_code = DecimalField('Zip Code', validators=[DataRequired()])
 	add = SubmitField('Add Location')
+
+class IngredientsForm(FlaskForm):
+	ingredient_id = IntegerField('Ingredient ID', validators = [DataRequired(), NumberRange(min=1, max=1000)])
+	order_date = IntegerField('Order Date', validators = [DataRequired(), NumberRange(min=1, max=10)])
+	ingredient_name = StringField('Ingredient Name', validators = [DataRequired(), Length(min=1, max=50)])
+	ingredient_cost = IntegerField('Ingredient ID', validators = [DataRequired()])
+	order_id = IntegerField('Order ID', validators = [DataRequired(), NumberRange(min=1, max=1000)])
+	submit = SubmitField('Submit')
