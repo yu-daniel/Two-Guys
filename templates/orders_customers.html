@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Orders & Customers{% endblock %}
+{% block content %}
+<h1 class="header1">Customers & Orders</h1>
+<table class="center">
+	<caption>Overview of the Orders entity.</caption>
+	<thead>
+		<tr>
+			{% for title in order_headers %}
+			<th>{{ title }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		{% for set in order_values %}
+		<tr>
+			{% for value in set %}
+			<td>{{ value }}</td>
+			{% endfor %}
+			<td>
+				<input type="button" value="Edit">
+			</td>
+			<td>
+				<input type="button" value="Delete">
+			</td>
+		</tr>
+		{% endfor %}
+	</tr>
+	</tbody>
+</table>
+<br>
+<table class="center">
+	<caption>Overview of the Customers entity.</caption>
+	<thead>
+		<tr>
+			{% for title in customer_headers %}
+			<th>{{ title }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		{% for set in customer_values %}
+		<tr>
+			{% for value in set %}
+			<td>{{ value }}</td>
+			{% endfor %}
+			<td>
+				<input type="button" value="Edit">
+			</td>
+			<td>
+				<input type="button" value="Delete">
+			</td>
+		</tr>
+		{% endfor %}
+	</tr>
+	</tbody>
+</table>
+<br>
+<div>
+	<form action="#" method="POST">
+		{{ order_form.hidden_tag() }}
+		<fieldset>
+			<legend>Orders:</legend>
+			<div>
+				{{ order_form.order_id.label }}
+				{{ order_form.order_id }}
+			</div>
+			<div>
+				{{ order_form.date_time.label }}
+				{{ order_form.date_time }}
+			</div>
+			<div>
+				{{ order_form.sale_amount.label }}
+				{{ order_form.sale_amount }}
+			</div>
+			<div>
+				{{ order_form.submit }}
+			</div>
+		</fieldset>
+	</form>
+</div>
+<br>
+<div>
+	<form action="#" method="POST">
+		{{ customer_form.hidden_tag() }}
+		<fieldset>
+			<legend>Customers:</legend>
+			<div>
+				{{ customer_form.customer_id.label }}
+				{{ customer_form.customer_id }}
+			</div>
+			<div>
+				{{ customer_form.first_name.label }}
+				{{ customer_form.first_name }}
+			</div>
+			<div>
+				{{ customer_form.last_name.label }}
+				{{ customer_form.last_name }}
+			</div>
+			<div>
+				{{ customer_form.email.label }}
+				{{ customer_form.email }}
+			</div>
+			<div>
+				{{ customer_form.phone_number.label }}
+				{{ customer_form.phone_number }}
+			</div>
+			<div>
+				{{ customer_form.submit }}
+			</div>
+		</fieldset>
+	</form>
+</div>
+
+
+{% endblock %}
