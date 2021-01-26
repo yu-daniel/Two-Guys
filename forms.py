@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, DateField, BooleanField, DecimalField, SubmitField
-from wtforms.validators import DataRequired, NumberRange, Length
+from wtforms import StringField, DateField, BooleanField, DecimalField, SubmitField, IntegerField
+from wtforms.validators import DataRequired, Length, NumberRange
 
 class EmployeeManagerForm(FlaskForm):
 	first_name = StringField('First Name', validators=[DataRequired()])
