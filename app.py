@@ -105,45 +105,6 @@ def orders_customers():
                            )
 
 
-# Note: currently the delete methods below are only deleting the last item in the tables
-# Next step would be having them to delete specific ID's
-
-
-@app.route('/delete_ingredient', methods=['GET', 'POST'])
-def delete_ingredient():
-
-    if ingredient_values:
-        ingredient_values.pop()
-    return redirect(url_for('ingredients_suppliers'))
-
-
-@app.route('/delete_supplier', methods=['GET', 'POST'])
-def delete_supplier():
-    if supplier_values:
-        supplier_values.pop()
-    return redirect(url_for('ingredients_suppliers'))
-
-
-@app.route('/delete_order', methods=['GET', 'POST'])
-def delete_order():
-
-    data = request.data
-    print("DATA: ", data)
-
-    if order_values:
-        order_values.pop()
-    return redirect(url_for('orders_customers'))
-
-
-@ app.route('/delete_customer', methods=['GET', 'POST'])
-def delete_customer():
-    if customer_values:
-        customer_values.pop()
-    return redirect(url_for('orders_customers'))
-
-
-
-
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 3001))
     app.run(port=port, debug=True)
