@@ -19,12 +19,6 @@
 			{% for value in set %}
 			<td>{{ value }}</td>
 			{% endfor %}
-			<td>
-				<input type="button" value="Edit">
-			</td>
-			<td>
-				<input type="button" value="Delete">
-			</td>
 		</tr>
 		{% endfor %}
 	</tr>
@@ -47,12 +41,6 @@
 			{% for value in set %}
 			<td>{{ value }}</td>
 			{% endfor %}
-			<td>
-				<input type="button" value="Edit">
-			</td>
-			<td>
-				<input type="button" value="Delete">
-			</td>
 		</tr>
 		{% endfor %}
 	</tr>
@@ -66,10 +54,6 @@
 			<fieldset>
 				<legend>Orders:</legend>
 				<div>
-					{{ order_form.order_id.label }}
-					{{ order_form.order_id }}
-				</div>
-				<div>
 					{{ order_form.date_time.label }}
 					{{ order_form.date_time }}
 				</div>
@@ -79,6 +63,8 @@
 				</div>
 				<div>
 					{{ order_form.submit }}
+					<input type="button" value="Edit">
+					<input type="button" value="Delete">
 				</div>
 			</fieldset>
 		</form>
@@ -89,10 +75,6 @@
 			{{ customer_form.hidden_tag() }}
 			<fieldset>
 				<legend>Customers:</legend>
-				<div>
-					{{ customer_form.customer_id.label }}
-					{{ customer_form.customer_id }}
-				</div>
 				<div>
 					{{ customer_form.first_name.label }}
 					{{ customer_form.first_name }}
@@ -111,6 +93,8 @@
 				</div>
 				<div>
 					{{ customer_form.submit }}
+					<input type="button" value="Edit">
+					<input type="button" value="Delete">
 				</div>
 			</fieldset>
 		</form>

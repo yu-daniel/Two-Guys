@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect
 from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers
 
 app = Flask(__name__)
@@ -16,34 +16,34 @@ data = [
 ]
 
 # Just some dummy data for Step 3
-ingredient_headers = ("ingredients_id", "order_date", "ingredient_name", "ingredient_cost", "order_id", "", "")
-ingredient_values = (
-    (1, "2021-01-01", "ground beef", 10, 101),
-    (2, "2021-01-02", "buns", 5, 102),
-    (3, "2021-01-03", "tomatoes", 5, 103),
-    (4, "2021-01-04", "onions", 2, 104),
-    (5, "2021-01-05", "ground beef", 10, 105),
-    (6, "2021-01-06", "ketchup", 2, 106),
-)
+ingredient_headers = ["order_date", "ingredient_name", "ingredient_cost", "order_id"]
+ingredient_values = [
+    ["2021-01-01", "ground beef", 10, 101],
+    ["2021-01-02", "buns", 5, 102],
+    ["2021-01-03", "tomatoes", 5, 103],
+    ["2021-01-04", "onions", 2, 104],
+    ["2021-01-05", "ground beef", 10, 105],
+    ["2021-01-06", "ketchup", 2, 106],
+]
 
-supplier_headers = ("supplier_id", "supplier_name", "", "")
-supplier_values = (
-    (100, "Johnson Ville"),
-    (101, "Meat Industry")
-)
+supplier_headers = ["supplier_name"]
+supplier_values = [
+    ["Johnson Ville"],
+    ["Meat Industry"]
+]
 
-order_headers = ("order_id", "date_time", "sale_amount", "", "")
-order_values = (
-    (300, "2021-01-01", 900),
-    (301, "2021-01-02", 500),
-    (302, "2021-01-03", 340)
-)
+order_headers = ["date_time", "sale_amount"]
+order_values = [
+    ["2021-01-01", 900],
+    ["2021-01-02", 500],
+    ["2021-01-03", 340]
+]
 
-customer_headers = ("customer_id", "first_name", "last_name", "email", "phone_number", "", "")
-customer_values = (
-    (5000, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"),
-    (5001, "Alex", "Shin", "alexshin@osu.com", "702-153-0211")
-)
+customer_headers = ["first_name", "last_name", "email", "phone_number"]
+customer_values = [
+    ["Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
+    ["Alex", "Shin", "alexshin@osu.com", "702-153-0211"]
+]
 
 
 # route for the homepage (root) is defined, but it's html is just the base
@@ -65,7 +65,29 @@ def ingredients_suppliers():
     ingredient_form = IngredientsForm()
     supplier_form = SuppliersForm()
 
-    return render_template("ingredients_suppliers.html", title='Register', ingredient_form=ingredient_form,
+    if supplier_form.validate_on_submit():
+        supplier_name = supplier_form.data.get("supplier_name")
+        results = [supplier_name]
+
+        if results not in supplier_values:
+            print("Adding supplier.")
+            supplier_values.append(results)
+            return redirect(url_for('ingredients_suppliers'))
+
+    elif ingredient_form.validate_on_submit():
+        order_date = ingredient_form.data.get("order_date")
+        ingredient_name = ingredient_form.data.get("ingredient_name")
+        ingredient_cost = ingredient_form.data.get("ingredient_cost")
+        order_id = ingredient_form.data.get("order_id")
+        results = [order_date, ingredient_name, ingredient_cost, order_id]
+
+        if results not in ingredient_values:
+            ingredient_values.append(results)
+            return redirect(url_for('ingredients_suppliers'))
+
+
+    return render_template("ingredients_suppliers.html", title='Add/Edit/Delete Ingredients & Suppliers',
+                           ingredient_form=ingredient_form,
                            column_headers=ingredient_headers, sample_values=ingredient_values,
                            supplier_headers=supplier_headers, supplier_values=supplier_values,
                            supplier_form=supplier_form
@@ -77,10 +99,47 @@ def orders_customers():
     order_form = OrderForm()
     customer_form = Customers()
 
-    return render_template("orders_customers.html", title='Register', order_form=order_form,
+    return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers', order_form=order_form,
                            customer_form=customer_form, order_headers=order_headers, order_values=order_values,
                            customer_headers=customer_headers, customer_values=customer_values
                            )
+
+
+# Note: currently the delete methods below are only deleting the last item in the tables
+# Next step would be having them to delete specific ID's
+
+
+@app.route('/delete_ingredient', methods=['GET', 'POST'])
+def delete_ingredient():
+
+    if ingredient_values:
+        ingredient_values.pop()
+    return redirect(url_for('ingredients_suppliers'))
+
+
+@app.route('/delete_supplier', methods=['GET', 'POST'])
+def delete_supplier():
+    if supplier_values:
+        supplier_values.pop()
+    return redirect(url_for('ingredients_suppliers'))
+
+
+@app.route('/delete_order', methods=['GET', 'POST'])
+def delete_order():
+
+    data = request.data
+    print("DATA: ", data)
+
+    if order_values:
+        order_values.pop()
+    return redirect(url_for('orders_customers'))
+
+
+@ app.route('/delete_customer', methods=['GET', 'POST'])
+def delete_customer():
+    if customer_values:
+        customer_values.pop()
+    return redirect(url_for('orders_customers'))
 
 
 
