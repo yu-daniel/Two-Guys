@@ -1,4 +1,4 @@
-table, .col-sm-6, .col-sm-12{
+table, .col-sm-6, .col-sm-12, .header1 {
 	text-align: center;
 }
 
@@ -20,9 +20,4 @@ tr:nth-child(even){
 .center {
 	margin-left: auto;
 	margin-right: auto;
-}
-
-/*center the header (i.e. page title)*/
-.header1 {
-	text-align: center;
 }

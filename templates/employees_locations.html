@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Employees, Managers & Locations{% endblock %}
-
 {% block content %}
-<table id="overview">
-	<caption>Overview of the Employees, Managers and Locations.</caption>
+<h1 class="header1">Employees & Locations</h1>
+<table class="center">
+	<caption>Overview of the Employees and Managers.</caption>
 	<thead>
 		<tr>
 			{% for header in headers %}
@@ -18,6 +18,40 @@
 				{% for info in infos %}
 				<td>{{ info }}</td>
 				{% endfor %}
+				<td>
+					<input type="button" value="Edit">
+				</td>
+				<td>
+					<input type="button" value="Delete">
+				</td>
+			</tr>
+			{% endfor %}
+		</tr>
+	</tbody>
+</table>
+<br>
+<table class="center">
+	<caption>Overview of Locations.</caption>
+	<thead>
+		<tr>
+			{% for header in location_headers %}
+			<th>{{ header }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			{% for data in location_data %}
+			<tr>
+				{% for location in data %}
+				<td>{{ location }}</td>
+				{% endfor %}
+				<td>
+					<input type="button" value="Edit">
+				</td>
+				<td>
+					<input type="button" value="Delete">
+				</td>
 			</tr>
 			{% endfor %}
 		</tr>

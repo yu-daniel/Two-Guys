@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request
-from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers
+from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, CustomersForm
 
 app = Flask(__name__)
 
@@ -8,14 +8,20 @@ app = Flask(__name__)
 # need to create a config file to keep key and DB configs later
 app.config['SECRET_KEY'] = '7cd4739b6ecbf78e2fb020b7f663a979'
 
-# dummy data
-headers = ['Name', 'Start Date', 'Vacation', 'Manager', 'Managed by', 'Location']
+# dummy data for employees_locations
+headers = ['Name', 'Start Date', 'Vacation', 'Manager', 'Managed by', 'Location', '', '']
 data = [
-    ['Alex Shin', '10/25/2011', 'Yes', 'No', 'Daniel Yu', 'LA'],
-    ['Daniel Yu', '11/11/2004', 'No', 'Yes', 'None', 'LA']
+    ['Alex Shin', '10/25/2011', 'Yes', 'No', 'Daniel Yu', 'Los Angeles'],
+    ['Daniel Yu', '11/11/2004', 'No', 'Yes', 'None', 'Los Angeles']
 ]
 
-# Just some dummy data for Step 3
+location_headers = ['City', 'State', 'Zip Code', '', '']
+location_data = [
+    ['Los Angeles', 'California', '90017'],
+    ['Seattle', 'Washington', '98101']
+]
+
+# dummy data for ingredients_suppliers
 ingredient_headers = ("ingredients_id", "order_date", "ingredient_name", "ingredient_cost", "order_id", "", "")
 ingredient_values = (
     (1, "2021-01-01", "ground beef", 10, 101),
@@ -32,6 +38,7 @@ supplier_values = (
     (101, "Meat Industry")
 )
 
+# dummy data for orders_customers
 order_headers = ("order_id", "date_time", "sale_amount", "", "")
 order_values = (
     (300, "2021-01-01", 900),
@@ -45,18 +52,19 @@ customer_values = (
     (5001, "Alex", "Shin", "alexshin@osu.com", "702-153-0211")
 )
 
-
-# route for the homepage (root) is defined, but it's html is just the base
+# home page
 @app.route("/", methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
 
-
-@app.route("/people", methods=['GET', 'POST'])
+# route for the employees & locations page
+@app.route("/employees-locations", methods=['GET', 'POST'])
 def people():
     emp_man_form = EmployeeManagerForm()
     loc_form = LocationForm()
-    return render_template('emp_loc.html', headers=headers, data=data, emp_man_form=emp_man_form, loc_form=loc_form)
+    return render_template('employees_locations.html', headers=headers, data=data,
+                            location_headers=location_headers, location_data=location_data,
+                            emp_man_form=emp_man_form, loc_form=loc_form)
 
 
 # route for the ingredients & suppliers page
@@ -71,19 +79,16 @@ def ingredients_suppliers():
                            supplier_form=supplier_form
                            )
 
-
+# route for the orders & customers page
 @app.route("/orders-customers", methods=["GET", "POST"])
 def orders_customers():
     order_form = OrderForm()
-    customer_form = Customers()
+    customer_form = CustomersForm()
 
     return render_template("orders_customers.html", title='Register', order_form=order_form,
                            customer_form=customer_form, order_headers=order_headers, order_values=order_values,
                            customer_headers=customer_headers, customer_values=customer_values
                            )
-
-
-
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 3001))
