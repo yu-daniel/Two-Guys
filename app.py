@@ -1,3 +1,6 @@
+# Hello Alex! This is Daniel!
+
+
 import os
 from flask import Flask, render_template, request, url_for, redirect
 from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers
@@ -56,7 +59,7 @@ def index():
 def people():
     emp_man_form = EmployeeManagerForm()
     loc_form = LocationForm()
-    return render_template('emp_loc.html', headers=headers, data=data, emp_man_form=emp_man_form, loc_form=loc_form)
+    return render_template('employees_locations.html', headers=headers, data=data, emp_man_form=emp_man_form, loc_form=loc_form)
 
 
 # route for the ingredients & suppliers page
