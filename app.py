@@ -12,10 +12,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '7cd4739b6ecbf78e2fb020b7f663a979'
 
 # dummy data
-headers = ['Name', 'Start Date', 'Vacation', 'Manager', 'Managed by', 'Location']
+headers = ['Name', 'Start Date', 'Vacation', 'Manager', 'Managed by', 'Location', "", ""]
 data = [
     ['Alex Shin', '10/25/2011', 'Yes', 'No', 'Daniel Yu', 'LA'],
     ['Daniel Yu', '11/11/2004', 'No', 'Yes', 'None', 'LA']
+]
+
+location_headers = ['City', 'State', 'Zip Code', '', '']
+location_data = [
+    ['Los Angeles', 'California', '90017'],
+    ['Seattle', 'Washington', '98101']
 ]
 
 # Just some dummy data for Step 3
@@ -73,11 +79,11 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/people", methods=['GET', 'POST'])
+@app.route("/employees-locations", methods=['GET', 'POST'])
 def people():
     emp_man_form = EmployeeManagerForm()
     loc_form = LocationForm()
-    return render_template('employees_locations.html', headers=headers, data=data, emp_man_form=emp_man_form, loc_form=loc_form)
+    return render_template('employees_locations.html', headers=headers, data=data, location_headers=location_headers, location_data=location_data, emp_man_form=emp_man_form, loc_form=loc_form)
 
 
 # route for the ingredients & suppliers page
