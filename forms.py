@@ -4,20 +4,20 @@ from wtforms.validators import DataRequired, Length, NumberRange
 
 
 class EmployeeManagerForm(FlaskForm):
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
+    first_name = StringField('First Name', validators=[DataRequired(), NumberRange(min=1, max=50)])
+    last_name = StringField('Last Name', validators=[DataRequired(), NumberRange(min=1, max=50)])
     start_date = DateField('Start Date', validators=[DataRequired()])
     status = BooleanField('Vacation', validators=[DataRequired()])
     manager = BooleanField('Manager', validators=[DataRequired()])
-    managed_by = StringField('Managed by', validators=[DataRequired()])
+    managed_by = StringField('Managed by', validators=[DataRequired(), NumberRange(min=1, max=100)])
     store = StringField('Store', validators=[DataRequired()])
     add = SubmitField('Add Employee/Manager')
 
 
 class LocationForm(FlaskForm):
-    city = StringField('City', validators=[DataRequired()])
+    city = StringField('City', validators=[DataRequired(), NumberRange(min=2)])
     state = StringField('State', validators=[DataRequired()])
-    zip_code = DecimalField('Zip Code', validators=[DataRequired()])
+    zip_code = DecimalField('Zip Code', validators=[DataRequired(), NumberRange(min=5, max=10)])
     add = SubmitField('Add Location')
 
 
