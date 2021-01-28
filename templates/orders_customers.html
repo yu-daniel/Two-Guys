@@ -4,7 +4,30 @@
 <h1 class="header1">Customers & Orders</h1>
 
 <table class="center">
-	<caption>Overview of the Orders entity.</caption>
+	<caption>Overview of the Orders-Customers (M:M).</caption>
+	<thead>
+		<tr>
+			{% for title in orders_customers_h %}
+			<th>{{ title }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		{% for set in orders_customers_v %}
+		<tr>
+			{% for value in set %}
+			<td>{{ value }}</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</tr>
+	</tbody>
+</table>
+
+
+<table class="center">
+	<caption>Individual view of Orders.</caption>
 	<thead>
 		<tr>
 			{% for title in order_headers %}
@@ -26,7 +49,7 @@
 </table>
 <br>
 <table class="center">
-	<caption>Overview of the Customers entity.</caption>
+	<caption>Individual view of Customers.</caption>
 	<thead>
 		<tr>
 			{% for title in customer_headers %}
@@ -60,6 +83,10 @@
 				<div>
 					{{ order_form.sale_amount.label }}
 					{{ order_form.sale_amount }}
+				</div>
+				<div>
+					{{ order_form.customer_id.label }}
+					{{ order_form.customer_id }}
 				</div>
 				<div>
 					{{ order_form.submit }}

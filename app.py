@@ -19,7 +19,17 @@ data = [
 ]
 
 # Just some dummy data for Step 3
-ingredient_headers = ["order_date", "ingredient_name", "ingredient_cost", "order_id"]
+ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "Supplier"]
+ingredient_suppliers_v = ingredient_values = [
+    ["2021-01-01", "ground beef", 10, 101, "Johnson Ville"],
+    ["2021-01-02", "buns", 5, 102, "Meat Industry"],
+    ["2021-01-03", "tomatoes", 5, 103, "Johnson Ville"],
+    ["2021-01-04", "onions", 2, 104, "Johnson Ville"],
+    ["2021-01-05", "ground beef", 10, 105, "Meat Industry"],
+    ["2021-01-06", "ketchup", 2, 106, "Meat Industry"],
+]
+
+ingredient_headers = ["Order Date", "Name", "Cost ($)", "Order ID"]
 ingredient_values = [
     ["2021-01-01", "ground beef", 10, 101],
     ["2021-01-02", "buns", 5, 102],
@@ -29,20 +39,28 @@ ingredient_values = [
     ["2021-01-06", "ketchup", 2, 106],
 ]
 
-supplier_headers = ["supplier_name"]
+supplier_headers = ["Supplier"]
 supplier_values = [
     ["Johnson Ville"],
     ["Meat Industry"]
 ]
 
-order_headers = ["date_time", "sale_amount"]
-order_values = [
-    ["2021-01-01", 900],
-    ["2021-01-02", 500],
-    ["2021-01-03", 340]
+orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail", "Phone Number"]
+orders_customers_v = [
+    ["2021-01-01", 500001, 10, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
+    ["2021-01-02", 500001, 15, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
+    ["2021-01-03", 500003, 20, "Alex", "Shin", "alexshin@osu.com", "702-153-0211"]
 ]
 
-customer_headers = ["first_name", "last_name", "email", "phone_number"]
+
+order_headers = ["Date", "Sales Amount ($)", "Customer ID"]
+order_values = [
+    ["2021-01-01", 10, 500001],
+    ["2021-01-02", 15, 500002],
+    ["2021-01-03", 20, 500003]
+]
+
+customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number"]
 customer_values = [
     ["Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
     ["Alex", "Shin", "alexshin@osu.com", "702-153-0211"]
@@ -93,7 +111,8 @@ def ingredients_suppliers():
                            ingredient_form=ingredient_form,
                            column_headers=ingredient_headers, sample_values=ingredient_values,
                            supplier_headers=supplier_headers, supplier_values=supplier_values,
-                           supplier_form=supplier_form
+                           supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
+                           ingredient_suppliers_v=ingredient_suppliers_v
                            )
 
 
@@ -104,7 +123,8 @@ def orders_customers():
 
     return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers', order_form=order_form,
                            customer_form=customer_form, order_headers=order_headers, order_values=order_values,
-                           customer_headers=customer_headers, customer_values=customer_values
+                           customer_headers=customer_headers, customer_values=customer_values,
+                           orders_customers_h=orders_customers_h, orders_customers_v=orders_customers_v
                            )
 
 

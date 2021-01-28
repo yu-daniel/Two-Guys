@@ -37,6 +37,7 @@ class SuppliersForm(FlaskForm):
 class OrderForm(FlaskForm):
     date_time = StringField('Date', validators=[DataRequired(), NumberRange(min=1, max=10)])
     sale_amount = IntegerField('Sale Amount', validators=[DataRequired()])
+    customer_id = IntegerField('Customer ID', validators=[DataRequired()])
     submit = SubmitField('Add')
 
 
@@ -44,5 +45,5 @@ class Customers(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=1, max=50)])
     last_name = IntegerField('Last Name', validators=[DataRequired(), Length(min=1, max=50)])
     email = StringField('Email', validators=[DataRequired()])
-    phone_number = IntegerField('Order ID', validators=[DataRequired(), NumberRange(min=1, max=20)])
+    phone_number = IntegerField('Phone Number', validators=[DataRequired(), NumberRange(min=1, max=20)])
     submit = SubmitField('Add')

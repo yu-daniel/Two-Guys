@@ -5,11 +5,11 @@
 <h1 class="header1">Ingredients & Suppliers</h1>
 
 <table class="center">
-	<caption>Overview of the Ingredients entity.</caption>
+	<caption>Overview of the Ingredients-Suppliers.</caption>
 	<thead>
 		<tr>
 			<!-- this for loop will grab the column title data from app.py and translate it to the template -->
-			{% for title in column_headers %}
+			{% for title in ingredient_suppliers_h %}
 			<th>{{ title }}</th>
 			{% endfor %}
 		</tr>
@@ -17,7 +17,7 @@
 	<tbody>
 		<tr>
 		<!-- this for loop will output the raw value set of ingredients data from app.py -->
-		{% for set in sample_values %}
+		{% for set in ingredient_suppliers_v %}
 		<tr>
 			<!-- lastly, each type of data in the set is added to each row -->
 			{% for value in set %}
@@ -27,30 +27,61 @@
 		{% endfor %}
 	</tbody>
 </table>
-
 <br>
-<table class="center">
-	<caption>Overview of the Suppliers entity.</caption>
-	<thead>
-		<tr>
-			<!-- this for loop will grab the column title data from app.py and translate it to the template -->
-			{% for title in supplier_headers %}
-			<th>{{ title }}</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<!-- this for loop will output the raw value set of ingredients data from app.py -->
-		<tr>
-			{% for set in supplier_values %}
-			<tr>
-				{% for value in set %}
-				<td>{{ value }}</td>
-				{% endfor %}
-			</tr>
-			{% endfor %}
-	</tbody>
-</table>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-sm-2">
+			<table>
+				<caption>Individual view of Ingredients.</caption>
+				<thead>
+					<tr>
+						<!-- this for loop will grab the column title data from app.py and translate it to the template -->
+						{% for title in column_headers %}
+						<th>{{ title }}</th>
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<!-- this for loop will output the raw value set of ingredients data from app.py -->
+					{% for set in sample_values %}
+					<tr>
+						<!-- lastly, each type of data in the set is added to each row -->
+						{% for value in set %}
+						<td>{{ value }}</td>
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-2">
+			<table>
+				<caption>Individual view of Suppliers.</caption>
+				<thead>
+					<tr>
+						<!-- this for loop will grab the column title data from app.py and translate it to the template -->
+						{% for title in supplier_headers %}
+						<th>{{ title }}</th>
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+					<!-- this for loop will output the raw value set of ingredients data from app.py -->
+					<tr>
+						{% for set in supplier_values %}
+						<tr>
+							{% for value in set %}
+							<td>{{ value }}</td>
+							{% endfor %}
+						</tr>
+						{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+br
 
 <div class="row">
 	<div class="col-sm-6">
