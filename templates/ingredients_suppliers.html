@@ -4,8 +4,8 @@
 
 <h1 class="header1">Ingredients & Suppliers</h1>
 
-<div class="table-scrollbar">
-	<table>
+<div class="search-box-scroll">
+	<table class="center">
 		<caption>Overview of the Ingredients-Suppliers.</caption>
 		<thead>
 			<tr>
@@ -24,12 +24,17 @@
 				{% for value in set %}
 				<td>{{ value }}</td>
 				{% endfor %}
+				<td>
+					<input type="button" value="Edit">
+				</td>
+				<td>
+					<input type="button" value="Delete">
+				</td>
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 </div>
-
 <br>
 <div class="container">
 	<div class="row">

@@ -28,11 +28,10 @@ tr:nth-child(even){
     padding: 10px;
 }
 
-.table-scrollbar {
+.search-box-scroll {
 	margin-left: auto;
 	margin-right: auto;
-	width:500px;
-	height:200px;
-	overflow:auto;
+    width: 700px;
+    height: 300px;
+    overflow:scroll
 }
-

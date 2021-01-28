@@ -9,80 +9,90 @@
 	</form>
 </div>
 
-<div class="table-scrollbar">
-	<table>
-		<caption>Overview of the Orders-Customers (M:M).</caption>
-		<thead>
-			<tr>
-				{% for title in orders_customers_h %}
-				<th>{{ title }}</th>
-				{% endfor %}
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-			{% for set in orders_customers_v %}
-			<tr>
-				{% for value in set %}
-				<td>{{ value }}</td>
-				{% endfor %}
-			</tr>
+<table class="center">
+	<caption>Overview of the Orders-Customers (M:M).</caption>
+	<thead>
+		<tr>
+			{% for title in orders_customers_h %}
+			<th>{{ title }}</th>
 			{% endfor %}
 		</tr>
-		</tbody>
-	</table>
-</div>
+	</thead>
+	<tbody>
+		<tr>
+		{% for set in orders_customers_v %}
+		<tr>
+			{% for value in set %}
+			<td>{{ value }}</td>
+			{% endfor %}
+			<td>
+				<input type="button" value="Edit">
+			</td>
+			<td>
+				<input type="button" value="Delete">
+			</td>
+		</tr>
+		{% endfor %}
+	</tr>
+	</tbody>
+</table>
 
 
-<div class="table-scrollbar">
-	<table>
-		<caption>Individual view of Orders.</caption>
-		<thead>
-			<tr>
-				{% for title in order_headers %}
-				<th>{{ title }}</th>
-				{% endfor %}
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-			{% for set in order_values %}
-			<tr>
-				{% for value in set %}
-				<td>{{ value }}</td>
-				{% endfor %}
-			</tr>
+<table class="center">
+	<caption>Individual view of Orders.</caption>
+	<thead>
+		<tr>
+			{% for title in order_headers %}
+			<th>{{ title }}</th>
 			{% endfor %}
 		</tr>
-		</tbody>
-	</table>
-</div>
-
+	</thead>
+	<tbody>
+		<tr>
+		{% for set in order_values %}
+		<tr>
+			{% for value in set %}
+			<td>{{ value }}</td>
+			{% endfor %}
+			<td>
+				<input type="button" value="Edit">
+			</td>
+			<td>
+				<input type="button" value="Delete">
+			</td>
+		</tr>
+		{% endfor %}
+	</tr>
+	</tbody>
+</table>
 <br>
-<div class="table-scrollbar">
-	<table class="center">
-		<caption>Individual view of Customers.</caption>
-		<thead>
-			<tr>
-				{% for title in customer_headers %}
-				<th>{{ title }}</th>
-				{% endfor %}
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-			{% for set in customer_values %}
-			<tr>
-				{% for value in set %}
-				<td>{{ value }}</td>
-				{% endfor %}
-			</tr>
+<table class="center">
+	<caption>Individual view of Customers.</caption>
+	<thead>
+		<tr>
+			{% for title in customer_headers %}
+			<th>{{ title }}</th>
 			{% endfor %}
 		</tr>
-		</tbody>
-	</table>
-</div>
-
+	</thead>
+	<tbody>
+		<tr>
+		{% for set in customer_values %}
+		<tr>
+			{% for value in set %}
+			<td>{{ value }}</td>
+			{% endfor %}
+			<td>
+				<input type="button" value="Edit">
+			</td>
+			<td>
+				<input type="button" value="Delete">
+			</td>
+		</tr>
+		{% endfor %}
+	</tr>
+	</tbody>
+</table>
 <br>
 <div class="row">
 	<div class="col-sm-6">
