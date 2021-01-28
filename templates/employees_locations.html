@@ -1,62 +1,67 @@
 {% extends "base.html" %}
 {% block title %}Employees, Managers & Locations{% endblock %}
 {% block content %}
+<div class="employees-locations-wallpaper wallpapers"></div>
 <h1 class="header1">Employees & Locations</h1>
-<table class="center">
-	<caption>Overview of the Employees and Managers.</caption>
-	<thead>
-		<tr>
-			{% for header in headers %}
-			<th>{{ header }}</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			{% for infos in data %}
+<div class="search-box-scroll employees-locations">
+	<table>
+		<caption>Overview of the Employees and Managers.</caption>
+		<thead>
 			<tr>
-				{% for info in infos %}
-				<td>{{ info }}</td>
+				{% for header in headers %}
+				<th>{{ header }}</th>
 				{% endfor %}
-				<td>
-					<input type="button" value="Edit">
-				</td>
-				<td>
-					<input type="button" value="Delete">
-				</td>
 			</tr>
-			{% endfor %}
-		</tr>
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			<tr>
+				{% for infos in data %}
+				<tr>
+					{% for info in infos %}
+					<td>{{ info }}</td>
+					{% endfor %}
+					<td>
+						<input type="button" value="Edit">
+					</td>
+					<td>
+						<input type="button" value="Delete">
+					</td>
+				</tr>
+				{% endfor %}
+			</tr>
+		</tbody>
+	</table>
+</div>>
 <br>
-<table class="center">
-	<caption>Overview of Locations.</caption>
-	<thead>
-		<tr>
-			{% for header in location_headers %}
-			<th>{{ header }}</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			{% for data in location_data %}
+<div class="search-box-scroll locations-overview">
+	<table>
+		<caption>Overview of Locations.</caption>
+		<thead>
 			<tr>
-				{% for location in data %}
-				<td>{{ location }}</td>
+				{% for header in location_headers %}
+				<th>{{ header }}</th>
 				{% endfor %}
-				<td>
-					<input type="button" value="Edit">
-				</td>
-				<td>
-					<input type="button" value="Delete">
-				</td>
 			</tr>
-			{% endfor %}
-		</tr>
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			<tr>
+				{% for data in location_data %}
+				<tr>
+					{% for location in data %}
+					<td>{{ location }}</td>
+					{% endfor %}
+					<td>
+						<input type="button" value="Edit">
+					</td>
+					<td>
+						<input type="button" value="Delete">
+					</td>
+				</tr>
+				{% endfor %}
+			</tr>
+		</tbody>
+	</table>
+</div>>
 
 <div class="row">
 	<div class="col-sm-6">

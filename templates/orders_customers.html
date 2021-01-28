@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Orders & Customers{% endblock %}
 {% block content %}
+
+<div class="customers-orders-wallpaper wallpapers"></div>
+
 <h1 class="header1">Customers & Orders</h1>
 
 <div class="center-search">
@@ -9,34 +12,35 @@
 	</form>
 </div>
 
-<table class="center">
-	<caption>Overview of the Orders-Customers (M:M).</caption>
-	<thead>
-		<tr>
-			{% for title in orders_customers_h %}
-			<th>{{ title }}</th>
+<div class="search-box-scroll customers-orders">
+	<table>
+		<caption>Overview of the Orders-Customers (M:M).</caption>
+		<thead>
+			<tr>
+				{% for title in orders_customers_h %}
+				<th>{{ title }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			{% for set in orders_customers_v %}
+			<tr>
+				{% for value in set %}
+				<td>{{ value }}</td>
+				{% endfor %}
+				<td>
+					<input type="button" value="Edit">
+				</td>
+				<td>
+					<input type="button" value="Delete">
+				</td>
+			</tr>
 			{% endfor %}
 		</tr>
-	</thead>
-	<tbody>
-		<tr>
-		{% for set in orders_customers_v %}
-		<tr>
-			{% for value in set %}
-			<td>{{ value }}</td>
-			{% endfor %}
-			<td>
-				<input type="button" value="Edit">
-			</td>
-			<td>
-				<input type="button" value="Delete">
-			</td>
-		</tr>
-		{% endfor %}
-	</tr>
-	</tbody>
-</table>
-
+		</tbody>
+	</table>
+</div>
 
 <table class="center">
 	<caption>Individual view of Orders.</caption>

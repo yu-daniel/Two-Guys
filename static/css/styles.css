@@ -1,3 +1,11 @@
+/* References:
+Unsplash.com - background wallpapers
+David Fedulov - https://unsplash.com/@phototastyfood
+Changyoung Koh - https://unsplash.com/@kcy1019
+Pablo Merchán Montes - https://unsplash.com/@pablomerchanm
+Jonathan Borba - https://unsplash.com/@jonathanborba
+*/
+
 table, .col-sm-6, .col-sm-12, .header1 {
 	text-align: center;
 }
@@ -22,16 +30,62 @@ tr:nth-child(even){
 	margin-right: auto;
 }
 
+/*center the search box for the ingredients-suppliers table*/
 .center-search {
     text-align: center;
-    /*border: 10px solid green;*/
     padding: 10px;
 }
 
+/*scrollbar for all tables*/
 .search-box-scroll {
 	margin-left: auto;
 	margin-right: auto;
-    width: 700px;
-    height: 300px;
-    overflow:scroll
+    overflow-y: scroll;
 }
+
+/*set position of wallpapers*/
+.wallpapers{
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -100;
+}
+
+/*set url for each page's wallpaper*/
+div.ingredients-suppliers-wallpaper {
+  background-image:url(../img/burger3.jpg);
+}
+
+div.home-wallpaper {
+    background-image:url(../img/burger1.jpg);
+}
+
+div.customers-orders-wallpaper {
+    background-image:url(../img/burger2.jpg);
+}
+
+div.employees-locations-wallpaper {
+    background-image:url(../img/burger0.jpg);
+}
+
+/*set width/height for each table, since it can vary*/
+.ingredients-suppliers {
+    width: 650px;
+    height: 300px;
+}
+
+.customers-orders {
+    width: 1000px;
+    height: 300px;
+}
+
+.employees-locations {
+    width: 660px;
+    height: 300px;
+}
+
+.locations-overview {
+    width: 400px;
+    height: 200px;
+}
+
