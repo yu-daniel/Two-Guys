@@ -23,6 +23,12 @@
 			{% for value in set %}
 			<td>{{ value }}</td>
 			{% endfor %}
+			<td>
+				<input type="button" value="Edit">
+			</td>
+			<td>
+				<input type="button" value="Delete">
+			</td>
 		</tr>
 		{% endfor %}
 	</tbody>
@@ -50,6 +56,12 @@
 						{% for value in set %}
 						<td>{{ value }}</td>
 						{% endfor %}
+						<td>
+							<input type="button" value="Edit">
+						</td>
+						<td>
+							<input type="button" value="Delete">
+						</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -74,6 +86,12 @@
 							{% for value in set %}
 							<td>{{ value }}</td>
 							{% endfor %}
+							<td>
+								<input type="button" value="Edit">
+							</td>
+							<td>
+								<input type="button" value="Delete">
+							</td>							
 						</tr>
 						{% endfor %}
 				</tbody>
@@ -107,8 +125,6 @@ br
 				</div>
 				<div>
 					{{ ingredient_form.submit }}
-					<input type="button" name="ingredient_action" value="Edit">
-					<input type="button" name="ingredient_action" value="Delete">
 				</div>
 			</fieldset>
 		</form>
@@ -125,8 +141,6 @@ br
 				</div>
 				<div>
 					{{ supplier_form.submit }}
-					<input type="button" name="supplier_action" value="Edit">
-					<input type="button" name="supplier_action" value="Delete">
 				</div>
 			</fieldset>
 		</form>

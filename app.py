@@ -25,7 +25,7 @@ location_data = [
 ]
 
 # Just some dummy data for Step 3
-ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "Supplier"]
+ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "Supplier", "", ""]
 ingredient_suppliers_v = ingredient_values = [
     ["2021-01-01", "ground beef", 10, 101, "Johnson Ville"],
     ["2021-01-02", "buns", 5, 102, "Meat Industry"],
@@ -35,7 +35,7 @@ ingredient_suppliers_v = ingredient_values = [
     ["2021-01-06", "ketchup", 2, 106, "Meat Industry"],
 ]
 
-ingredient_headers = ["Order Date", "Name", "Cost ($)", "Order ID"]
+ingredient_headers = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
 ingredient_values = [
     ["2021-01-01", "ground beef", 10, 101],
     ["2021-01-02", "buns", 5, 102],
@@ -45,13 +45,13 @@ ingredient_values = [
     ["2021-01-06", "ketchup", 2, 106],
 ]
 
-supplier_headers = ["Supplier"]
+supplier_headers = ["Supplier", "", ""]
 supplier_values = [
     ["Johnson Ville"],
     ["Meat Industry"]
 ]
 
-orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail", "Phone Number"]
+orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail", "Phone Number", "", ""]
 orders_customers_v = [
     ["2021-01-01", 500001, 10, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
     ["2021-01-02", 500001, 15, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
@@ -59,14 +59,14 @@ orders_customers_v = [
 ]
 
 
-order_headers = ["Date", "Sales Amount ($)", "Customer ID"]
+order_headers = ["Date", "Sales Amount ($)", "Customer ID", "", ""]
 order_values = [
     ["2021-01-01", 10, 500001],
     ["2021-01-02", 15, 500002],
     ["2021-01-03", 20, 500003]
 ]
 
-customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number"]
+customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number", "", ""]
 customer_values = [
     ["Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
     ["Alex", "Shin", "alexshin@osu.com", "702-153-0211"]
