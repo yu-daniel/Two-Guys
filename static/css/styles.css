@@ -1,9 +1,12 @@
 /* References:
-Unsplash.com - background wallpapers
+(1) - Unsplash.com - background wallpapers
 David Fedulov - https://unsplash.com/@phototastyfood
 Changyoung Koh - https://unsplash.com/@kcy1019
 Pablo Merchán Montes - https://unsplash.com/@pablomerchanm
 Jonathan Borba - https://unsplash.com/@jonathanborba
+
+(2) - YouTube - animation
+CodeRookie - https://www.youtube.com/watch?v=UInN6O_nMKs
 */
 
 table, .col-sm-6, .col-sm-12, .header1 {
@@ -51,6 +54,41 @@ tr:nth-child(even){
     z-index: -100;
 }
 
+/*center all containers; may need change if there's more than 1 container later on*/
+.container {
+  text-align: center
+}
+
+/*bring home container to middle of page*/
+.home-container {
+    margin-top: 10%;
+}
+
+/*Reference - see (2)*/
+/*allow Two Guys title in front back to slowly appear*/
+.primary-animation{
+  animation: appearIn 2s;
+}
+
+/*allow company description to slowly appear after "Two Guys"*/
+.secondary-animation{
+  animation: appearIn 3s;
+}
+
+@keyframes appearIn{
+  /*initial values - begin at no opacity and
+  then transition to full opacity*/
+  from {
+    opacity: 0;
+  }
+
+  /*default values*/
+  to {
+    opacity: 1;
+  }
+}
+
+/*Reference - see (1)*/
 /*set url for each page's wallpaper*/
 div.ingredients-suppliers-wallpaper {
   background-image:url(../img/burger3.jpg);
