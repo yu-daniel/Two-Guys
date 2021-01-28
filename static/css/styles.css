@@ -127,3 +127,15 @@ div.employees-locations-wallpaper {
     height: 200px;
 }
 
+/*change Bootstrap's orange color to a custom color*/
+.btn-warning {
+    margin-right: 3px;
+    background-color: #404040;
+    border: none;
+}
+
+/*on hover effect for buttons*/
+.btn-warning:hover{
+  background-color: #FFC107;
+  color: black !important;
+}
