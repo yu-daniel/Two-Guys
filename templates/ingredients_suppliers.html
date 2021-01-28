@@ -4,29 +4,32 @@
 
 <h1 class="header1">Ingredients & Suppliers</h1>
 
-<table class="center">
-	<caption>Overview of the Ingredients-Suppliers.</caption>
-	<thead>
-		<tr>
-			<!-- this for loop will grab the column title data from app.py and translate it to the template -->
-			{% for title in ingredient_suppliers_h %}
-			<th>{{ title }}</th>
+<div class="table-scrollbar">
+	<table>
+		<caption>Overview of the Ingredients-Suppliers.</caption>
+		<thead>
+			<tr>
+				<!-- this for loop will grab the column title data from app.py and translate it to the template -->
+				{% for title in ingredient_suppliers_h %}
+				<th>{{ title }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<!-- this for loop will output the raw value set of ingredients data from app.py -->
+			{% for set in ingredient_suppliers_v %}
+			<tr>
+				<!-- lastly, each type of data in the set is added to each row -->
+				{% for value in set %}
+				<td>{{ value }}</td>
+				{% endfor %}
+			</tr>
 			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-		<!-- this for loop will output the raw value set of ingredients data from app.py -->
-		{% for set in ingredient_suppliers_v %}
-		<tr>
-			<!-- lastly, each type of data in the set is added to each row -->
-			{% for value in set %}
-			<td>{{ value }}</td>
-			{% endfor %}
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
+
 <br>
 <div class="container">
 	<div class="row">
