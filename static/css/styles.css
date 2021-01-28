@@ -7,6 +7,12 @@ Jonathan Borba - https://unsplash.com/@jonathanborba
 
 (2) - YouTube - animation
 CodeRookie - https://www.youtube.com/watch?v=UInN6O_nMKs
+
+(3) - Bootstrap - table rows' hovering
+Link - https://getbootstrap.com/docs/4.0/content/tables/
+
+(4) - W3Schools - styling input forms
+Link - https://www.w3schools.com/css/css_form.asp
 */
 
 table, .col-sm-6, .col-sm-12, .header1 {
@@ -19,7 +25,15 @@ td, th {
 }
 
 tr:nth-child(even){
-	background-color: #B2FF66;
+	background-color: #F3F3F3;
+}
+
+tr:first-child {
+    background-color: #FFC107;
+}
+
+table {
+    background-color: #E0E0E0;
 }
 
 #overview {
@@ -139,6 +153,43 @@ div.employees-locations-wallpaper {
 
 /*on hover effect for buttons*/
 .btn-warning:hover{
-  background-color: #FFC107;
-  color: black !important;
+    background-color: #FFC107;
+    color: black !important;
+}
+
+/*set the spacing between table rows to make it more compact*/
+table {
+    border-spacing: 4px !important;
+}
+
+td {
+    padding: 5px !important;
+}
+
+/*give spacing and reduce the edge sharpness of form input fields*/
+input {
+    display: inline-block;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border: 1px solid #A0A0A0;
+    border-radius: 4px;
+}
+
+/*add background color when using a certain input field*/
+input[type=text]: focus {
+  background-color: #E5FFCC;
+}
+
+/*add background color when hover over an input field*/
+input[type=text]: hover {
+  background-color: #E5FFCC;
+}
+
+/*hover effect for table rows, except for the header*/
+tr:hover {
+  background-color: #FFE797;
+}
+
+tr:first-child:hover {
+    background-color: #FFC107;
 }
