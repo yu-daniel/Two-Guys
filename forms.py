@@ -9,16 +9,16 @@ class EmployeeManagerForm(FlaskForm):
     start_date = DateField('Start Date', validators=[DataRequired()])
     status = BooleanField('Vacation', validators=[DataRequired()])
     manager = BooleanField('Manager', validators=[DataRequired()])
-    managed_by = StringField('Managed by', validators=[DataRequired(), NumberRange(min=1, max=100)])
+    managed_by = StringField('Managed by')
     store = StringField('Store', validators=[DataRequired()])
-    add = SubmitField('Add Employee/Manager')
+    add = SubmitField('Add')
 
 
 class LocationForm(FlaskForm):
     city = StringField('City', validators=[DataRequired(), NumberRange(min=2)])
     state = StringField('State', validators=[DataRequired()])
     zip_code = DecimalField('Zip Code', validators=[DataRequired(), NumberRange(min=5, max=10)])
-    add = SubmitField('Add Location')
+    add = SubmitField('Add')
 
 
 class IngredientsForm(FlaskForm):
@@ -26,6 +26,7 @@ class IngredientsForm(FlaskForm):
     ingredient_name = StringField('Ingredient Name', validators=[DataRequired(), Length(min=1, max=50)])
     ingredient_cost = IntegerField('Ingredient Cost', validators=[DataRequired()])
     order_id = IntegerField('Order ID', validators=[DataRequired(), NumberRange(min=1, max=1000)])
+    supplier = StringField('Supplier', validators=[DataRequired(), Length(min=1, max=50)])
     submit = SubmitField('Add')
 
 

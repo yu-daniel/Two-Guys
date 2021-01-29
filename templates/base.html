@@ -3,48 +3,55 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- tried to add favicon -->
+		<!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->
+
+		<!-- javascript -->
+		<script src="/static/static/app.js"></script>
+		
+		<!-- google fonts -->
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/static/styles.css">
   </head>
   <body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container-fluid">
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav mx-auto">
+						<li class="nav-item">
+							<a class="nav-link btn btn-warning" aria-current="page" href="/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link btn btn-warning" href="/orders-customers">Orders & Customers</a>
+						</li>
+						<li class="nav-item">
+									<a class="nav-link btn btn-warning" href="/ingredients-suppliers">Ingredients & Suppliers</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link btn btn-warning" href="/employees-locations">Employees & Locations</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <div class="container-fluid">
+<!-- this will be where the forms go -->
+<div class="cointainer">
+	{% block content %}{% endblock %}
+</div>
 
-	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-	      <span class="navbar-toggler-icon"></span>
-	    </button>
-	    <div class="collapse navbar-collapse" id="navbarNav">
-	      <ul class="navbar-nav">
-	        <li class="nav-item">
-	          <a class="nav-link btn btn-warning" aria-current="page" href="/">Home
-			  </a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link btn btn-warning" href="/orders-customers">Orders & Customers</a>
-			</li>
-			<li class="nav-item">
-	          <a class="nav-link btn btn-warning" href="/ingredients-suppliers">Ingredients & Suppliers</a>
-			</li>
-			<li class="nav-item">
-	          <a class="nav-link btn btn-warning" href="/employees-locations">Employees & Locations</a>
-	        </li>
-	      </ul>
-	    </div>
-	  </div>
-	</nav>
-
-	<!-- this will be where the forms go -->
-    {% block content %}
-    {% endblock %}
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>	
   </body>
 </html>
 

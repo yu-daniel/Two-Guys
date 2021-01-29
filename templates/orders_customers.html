@@ -3,18 +3,14 @@
 {% block content %}
 
 <div class="customers-orders-wallpaper wallpapers"></div>
-
-<h1 class="header1">Customers & Orders</h1>
-
-<div class="center-search">
-	<form action="#">
-		<input type="text" placeholder="Enter customer.." size="50">
-	</form>
-</div>
-
+<h4 class="header1">Orders</h4>
 <div class="search-box-scroll customers-orders">
 	<table class="center">
-		<caption>Overview of the Orders-Customers (M:M).</caption>
+		<div class="center-search">
+			<form action="#">
+				<input type="text" placeholder="Enter customer.." size="50">
+			</form>
+		</div>
 		<thead>
 			<tr>
 				{% for title in orders_customers_h %}
@@ -24,54 +20,26 @@
 		</thead>
 		<tbody>
 			<tr>
-			{% for set in orders_customers_v %}
-			<tr>
-				{% for value in set %}
-				<td>{{ value }}</td>
+				{% for set in orders_customers_v %}
+				<tr>
+					{% for value in set %}
+					<td>{{ value }}</td>
+					{% endfor %}
+					<td>
+						<input type="button" value="Edit">
+					</td>
+					<td>
+						<input type="button" value="Delete">
+					</td>
+				</tr>
 				{% endfor %}
-				<td>
-					<input type="button" value="Edit">
-				</td>
-				<td>
-					<input type="button" value="Delete">
-				</td>
 			</tr>
-			{% endfor %}
-		</tr>
 		</tbody>
 	</table>
 </div>
 
+<h4 class="header1">Customers</h4>
 <table class="center">
-	<caption>Individual view of Orders.</caption>
-	<thead>
-		<tr>
-			{% for title in order_headers %}
-			<th>{{ title }}</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-		{% for set in order_values %}
-		<tr>
-			{% for value in set %}
-			<td>{{ value }}</td>
-			{% endfor %}
-			<td>
-				<input type="button" value="Edit">
-			</td>
-			<td>
-				<input type="button" value="Delete">
-			</td>
-		</tr>
-		{% endfor %}
-	</tr>
-	</tbody>
-</table>
-<br>
-<table class="center">
-	<caption>Individual view of Customers.</caption>
 	<thead>
 		<tr>
 			{% for title in customer_headers %}
@@ -97,13 +65,13 @@
 	</tr>
 	</tbody>
 </table>
-<br>
+
 <div class="row">
 	<div class="col-sm-6">
 		<form action="#" method="POST">
 			{{ order_form.hidden_tag() }}
 			<fieldset>
-				<legend>Orders:</legend>
+				<legend>Add a new order</legend>
 				<div>
 					{{ order_form.date_time.label }}
 					{{ order_form.date_time }}
@@ -118,18 +86,16 @@
 				</div>
 				<div>
 					{{ order_form.submit }}
-					<input type="button" value="Edit">
-					<input type="button" value="Delete">
 				</div>
 			</fieldset>
 		</form>
 	</div>
-	<br>
+
 	<div class="col-sm-6">
 		<form action="#" method="POST">
 			{{ customer_form.hidden_tag() }}
 			<fieldset>
-				<legend>Customers:</legend>
+				<legend>Add a new customer</legend>
 				<div>
 					{{ customer_form.first_name.label }}
 					{{ customer_form.first_name }}
@@ -148,12 +114,9 @@
 				</div>
 				<div>
 					{{ customer_form.submit }}
-					<input type="button" value="Edit">
-					<input type="button" value="Delete">
 				</div>
 			</fieldset>
 		</form>
 	</div>
 </div>
-
 {% endblock %}

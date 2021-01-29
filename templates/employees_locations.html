@@ -2,10 +2,9 @@
 {% block title %}Employees, Managers & Locations{% endblock %}
 {% block content %}
 <div class="employees-locations-wallpaper wallpapers"></div>
-<h1 class="header1">Employees & Locations</h1>
+<h4 class="header1">Employees and Managers</h4>
 <div class="search-box-scroll employees-locations">
 	<table>
-		<caption>Overview of the Employees and Managers.</caption>
 		<thead>
 			<tr>
 				{% for header in headers %}
@@ -31,11 +30,11 @@
 			</tr>
 		</tbody>
 	</table>
-</div>>
-<br>
+</div>
+
+<h4 class="header1">Locations</h4>
 <div class="search-box-scroll locations-overview">
 	<table class="center">
-		<caption>Overview of Locations.</caption>
 		<thead>
 			<tr>
 				{% for header in location_headers %}
@@ -61,14 +60,14 @@
 			</tr>
 		</tbody>
 	</table>
-</div>>
+</div>
 
 <div class="row">
 	<div class="col-sm-6">
 		<form action="", method="POST">
 			{{ emp_man_form.hidden_tag() }}
 			<fieldset>
-				<legend>Employee, Manager</legend>
+				<legend>Add a new employee/manager</legend>
 				<div>
 					{{ emp_man_form.first_name.label }}
 					{{ emp_man_form.first_name }}
@@ -84,8 +83,6 @@
 				<div>
 					{{ emp_man_form.status.label }}
 					{{ emp_man_form.status }}
-				</div>
-				<div>
 					{{ emp_man_form.manager.label }}
 					{{ emp_man_form.manager }}
 				</div>
@@ -108,7 +105,7 @@
 		<form action="#", method="POST">
 			{{ loc_form.hidden_tag() }}
 			<fieldset>
-				<legend>Location:</legend>
+				<legend>Add a store location</legend>
 				<div>
 					{{ loc_form.city.label }}
 					{{ loc_form.city }}
@@ -127,5 +124,5 @@
 			</fieldset>
 		</form>
 	</div>
-	</div>
+</div>
 {% endblock content %}
