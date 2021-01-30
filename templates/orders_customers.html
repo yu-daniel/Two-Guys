@@ -73,7 +73,7 @@
 		<form action="#" method="POST">
 			{{ order_form.hidden_tag() }}
 			<fieldset>
-				<legend>Add a new order</legend>
+				<legend><span class="span-bg">Add a new order</span></legend>
 				<div>
 					{{ order_form.date_time.label }}
 					{{ order_form.date_time }}
@@ -97,7 +97,7 @@
 		<form action="#" method="POST">
 			{{ customer_form.hidden_tag() }}
 			<fieldset>
-				<legend>Add a new customer</legend>
+				<legend><span class="span-bg">Add a new customer</span></legend>
 				<div>
 					{{ customer_form.first_name.label }}
 					{{ customer_form.first_name }}

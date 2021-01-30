@@ -71,7 +71,7 @@
 		<form action="#" method="POST" id="addform">
 			{{ ingredient_form.hidden_tag() }}
 			<fieldset>
-				<legend>Add ingredients</legend>
+				<legend><span class="span-bg">Add ingredients</span></legend>
 				<div>
 					{{ ingredient_form.order_date.label }}
 					{{ ingredient_form.order_date }}
@@ -103,7 +103,7 @@
 		<form action="#" method="POST">
 			{{ supplier_form.hidden_tag() }}
 			<fieldset>
-				<legend>Add a supplier</legend>
+				<legend><span class="span-bg">Add a supplier</span></legend>
 				<div>
 					{{ supplier_form.supplier_name.label }}
 					{{ supplier_form.supplier_name }}
