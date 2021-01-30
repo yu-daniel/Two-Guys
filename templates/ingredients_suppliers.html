@@ -2,8 +2,8 @@
 {% block title %}Ingredients & Suppliers{% endblock %}
 {% block content %}
 
-<div class="ingredients-suppliers-wallpaper wallpapers"></div>
-<h2 class="page-description ingredients-suppliers-header">Add/Edit/Delete for Ingredients & Suppliers (entities)</h2>
+<!-- <div class="ingredients-suppliers-wallpaper wallpapers"></div> -->
+<h2 class="page-description orange-header">Add/Edit/Delete for Ingredients & Suppliers (entities)</h2>
 <h4 class="header1">Ingredients</h4>
 <div class="search-box-scroll ingredients-suppliers">
 	<table class="center table-hover">
@@ -98,23 +98,23 @@
 			<fieldset>
 				<legend><span class="span-bg">Add ingredients</span></legend>
 				<div>
-					{{ ingredient_form.order_date.label }}
+					{{ ingredient_form.order_date.label(class="span-bg") }}
 					{{ ingredient_form.order_date }}
 				</div>
 				<div>
-					{{ ingredient_form.ingredient_name.label }}
+					{{ ingredient_form.ingredient_name.label(class="span-bg") }}
 					{{ ingredient_form.ingredient_name }}
 				</div>
 				<div>
-					{{ ingredient_form.ingredient_cost.label }}
+					{{ ingredient_form.ingredient_cost.label(class="span-bg") }}
 					{{ ingredient_form.ingredient_cost }}
 				</div>
 				<div>
-					{{ ingredient_form.supplier.label }}
+					{{ ingredient_form.supplier.label(class="span-bg") }}
 					{{ ingredient_form.supplier }}
 				</div>
 				<div>
-					{{ ingredient_form.order_id.label }}
+					{{ ingredient_form.order_id.label(class="span-bg") }}
 					{{ ingredient_form.order_id }}
 				</div>
 				<div>
@@ -130,11 +130,11 @@
 			<fieldset>
 				<legend><span class="span-bg">Add a supplier</span></legend>
 				<div>
-					{{ supplier_form.supplier_name.label }}
+					{{ supplier_form.supplier_name.label(class="span-bg") }}
 					{{ supplier_form.supplier_name }}
 				</div>
 				<div>
-					{{ supplier_form.ingredients_supplied.label }}
+					{{ supplier_form.ingredients_supplied.label(class="span-bg") }}
 					{{ supplier_form.ingredients_supplied }}
 				</div>
 				<div>

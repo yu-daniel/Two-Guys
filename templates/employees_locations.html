@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Employees, Managers & Locations{% endblock %}
 {% block content %}
-<div class="employees-locations-wallpaper wallpapers"></div>
+<!-- <div class="employees-locations-wallpaper wallpapers"></div> -->
 <h2 class="page-description orange-header">Add/Edit/Delete for Employees, Managers & Locations (entities)</h2>
 <h4 class="header1">Employees and Managers</h4>
 <div class="search-box-scroll employees-locations">
@@ -70,29 +70,29 @@
 			<fieldset>
 				<legend><span class="span-bg">Add a new employee/manager</span></legend>
 				<div>
-					{{ emp_man_form.first_name.label }}
+					{{ emp_man_form.first_name.label(class="span-bg") }}
 					{{ emp_man_form.first_name }}
 				</div>
 				<div>
-					{{ emp_man_form.last_name.label }}
+					{{ emp_man_form.last_name.label(class="span-bg") }}
 					{{ emp_man_form.last_name }}
 				</div>
 				<div>
-					{{ emp_man_form.start_date.label }}
+					{{ emp_man_form.start_date.label(class="span-bg") }}
 					{{ emp_man_form.start_date }}
 				</div>
 				<div>
-					{{ emp_man_form.status.label }}
+					{{ emp_man_form.status.label(class="span-bg") }}
 					{{ emp_man_form.status }}
-					{{ emp_man_form.manager.label }}
+					{{ emp_man_form.manager.label(class="span-bg") }}
 					{{ emp_man_form.manager }}
 				</div>
 				<div>
-					{{ emp_man_form.managed_by.label }}
+					{{ emp_man_form.managed_by.label(class="span-bg") }}
 					{{ emp_man_form.managed_by }}
 				</div>
 				<div>
-					{{ emp_man_form.store.label }}
+					{{ emp_man_form.store.label(class="span-bg") }}
 					{{ emp_man_form.store }}
 				</div>
 				<div>
@@ -108,15 +108,15 @@
 			<fieldset>
 				<legend><span class="span-bg">Add a store location</span></legend>
 				<div>
-					{{ loc_form.city.label }}
+					{{ loc_form.city.label(class="span-bg") }}
 					{{ loc_form.city }}
 				</div>
 				<div>
-					{{ loc_form.state.label }}
+					{{ loc_form.state.label(class="span-bg") }}
 					{{ loc_form.state }}
 				</div>
 				<div>
-					{{ loc_form.zip_code.label }}
+					{{ loc_form.zip_code.label(class="span-bg") }}
 					{{ loc_form.zip_code }}
 				</div>
 				<div>

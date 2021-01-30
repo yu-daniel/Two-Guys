@@ -2,7 +2,7 @@
 {% block title %}Orders & Customers{% endblock %}
 {% block content %}
 
-<div class="customers-orders-wallpaper wallpapers"></div>
+<!-- <div class="customers-orders-wallpaper wallpapers"></div> -->
 
 <h2 class="page-description orange-header">Add/Edit/Delete for Customers & Orders (entities)</h2>
 <h4 class="header1">Orders</h4>
@@ -75,15 +75,15 @@
 			<fieldset>
 				<legend><span class="span-bg">Add a new order</span></legend>
 				<div>
-					{{ order_form.date_time.label }}
+					{{ order_form.date_time.label(class="span-bg") }}
 					{{ order_form.date_time }}
 				</div>
 				<div>
-					{{ order_form.sale_amount.label }}
+					{{ order_form.sale_amount.label(class="span-bg") }}
 					{{ order_form.sale_amount }}
 				</div>
 				<div>
-					{{ order_form.customer_id.label }}
+					{{ order_form.customer_id.label(class="span-bg") }}
 					{{ order_form.customer_id }}
 				</div>
 				<div>
@@ -99,23 +99,23 @@
 			<fieldset>
 				<legend><span class="span-bg">Add a new customer</span></legend>
 				<div>
-					{{ customer_form.first_name.label }}
+					{{ customer_form.first_name.label(class="span-bg") }}
 					{{ customer_form.first_name }}
 				</div>
 				<div>
-					{{ customer_form.last_name.label }}
+					{{ customer_form.last_name.label(class="span-bg") }}
 					{{ customer_form.last_name }}
 				</div>
 				<div>
-					{{ customer_form.email.label }}
+					{{ customer_form.email.label(class="span-bg") }}
 					{{ customer_form.email }}
 				</div>
 				<div>
-					{{ customer_form.phone_number.label }}
+					{{ customer_form.phone_number.label(class="span-bg") }}
 					{{ customer_form.phone_number }}
 				</div>
 				<div>
-					{{ customer_form.location.label }}
+					{{ customer_form.location.label(class="span-bg") }}
 					{{ customer_form.location }}
 				</div>
 				<div>
