@@ -67,10 +67,30 @@ table {
   text-align: center
 }
 
+.page-description {
+    text-align: center;
+    text-decoration: bold;
+    margin-top: 20px;
+}
+
+.ingredients-suppliers-header {
+    color: #202020;
+}
+
+.orange-header {
+    color: #FFC107;
+}
+
+
+
 /*bring home container to middle of page*/
 .home-container {
     margin-top: 10%;
     color: #FFC107;
+}
+
+.front-page-p {
+    color: #F6F6F6;
 }
 
 /*Reference - see (2)*/
