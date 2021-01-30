@@ -12,13 +12,17 @@ app.config['SECRET_KEY'] = '7cd4739b6ecbf78e2fb020b7f663a979'
 headers = ['Name', 'Start Date', 'Vacation', 'Manager', 'Managed by', 'Location ID', "", ""]
 data = [
     ['Alex Shin', '10/25/2011', 'Yes', 'No', 'Daniel Yu', '101'],
-    ['Daniel Yu', '11/11/2004', 'No', 'Yes', 'None', '101']
+    ['Daniel Yu', '11/11/2004', 'No', 'Yes', 'None', '101'],
+    ['John Doe', '1/1/2021', 'No', 'No', 'Daniel Yu', '101'],
+    ['Jane Doe', '1/1/2021', 'No', 'No', 'Daniel Yu', '101']
 ]
 
 location_headers = ['City', 'State', 'Zip Code', '', '']
 location_data = [
     ['Los Angeles', 'California', '90017'],
-    ['Seattle', 'Washington', '98101']
+    ['Seattle', 'Washington', '98101'],
+    ['Austin', 'Texas', '73301'],
+    ['New York', 'New York', '10001']
 ]
 
 # Just some dummy data for Step 3
@@ -45,7 +49,11 @@ orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "
 orders_customers_v = [
     ["2021-01-01", 500001, 10, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
     ["2021-01-02", 500001, 15, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
-    ["2021-01-03", 500003, 20, "Alex", "Shin", "alexshin@osu.com", "702-153-0211"]
+    ["2021-01-03", 500003, 20, "Alex", "Shin", "alexshin@osu.com", "702-153-0211"],
+    ["2021-01-06", 500003, 110, "Alex", "Shin", "alexshin@osu.com", "702-153-0211"],
+    ["2021-01-07", 500003, 220, "Alex", "Shin", "alexshin@osu.com", "702-153-0211"],
+    ["2021-01-08", 500003, 27, "Alex", "Shin", "alexshin@osu.com", "702-153-0211"],
+    ["2021-01-09", 500003, 38.70, "Alex", "Shin", "alexshin@osu.com", "702-153-0211"]
 ]
 
 customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number", "Location", "", ""]
