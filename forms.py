@@ -32,6 +32,7 @@ class IngredientsForm(FlaskForm):
 
 class SuppliersForm(FlaskForm):
     supplier_name = StringField('Supplier Name', validators=[DataRequired(), Length(min=1, max=50)])
+    ingredients_supplied = StringField('Ingredients Supplied', validators=[DataRequired(), Length(min=1, max=50)])
     submit = SubmitField('Add')
 
 
@@ -47,4 +48,5 @@ class Customers(FlaskForm):
     last_name = IntegerField('Last Name', validators=[DataRequired(), Length(min=1, max=50)])
     email = StringField('Email', validators=[DataRequired()])
     phone_number = IntegerField('Phone Number', validators=[DataRequired(), NumberRange(min=1, max=20)])
+    location = StringField('Location', validators=[DataRequired(), NumberRange(min=5, max=10)])
     submit = SubmitField('Add')
