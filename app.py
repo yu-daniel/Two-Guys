@@ -22,15 +22,18 @@ location_data = [
 ]
 
 # Just some dummy data for Step 3
-ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "Supplier", "", ""]
+ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
 ingredient_suppliers_v = ingredient_values = [
-    ["2021-01-01", "ground beef", 10, 101, "Johnson Ville"],
-    ["2021-01-02", "buns", 5, 102, "Meat Industry"],
-    ["2021-01-03", "tomatoes", 5, 103, "Johnson Ville"],
-    ["2021-01-04", "onions", 2, 104, "Johnson Ville"],
-    ["2021-01-05", "ground beef", 10, 105, "Meat Industry"],
-    ["2021-01-06", "ketchup", 2, 106, "Meat Industry"],
+    ["2021-01-01", "ground beef", 10, 101],
+    ["2021-01-02", "buns", 5, 102],
+    ["2021-01-03", "tomatoes", 5, 103],
+    ["2021-01-04", "onions", 2, 104],
+    ["2021-01-05", "ground beef", 10, 105],
+    ["2021-01-06", "ketchup", 2, 106]
 ]
+
+suppliers_headers = ["Name", "", ""]
+suppliers_values = ["Johnson Ville", "Meat Industry", "Lettuce Factory"]
 
 ingredients_suppliers_headers = ["Ingredient", "Supplier", "", ""]
 ingredients_suppliers_values = [
@@ -97,6 +100,7 @@ def ingredients_suppliers():
                            ingredient_form=ingredient_form,
                            ingredients_suppliers_headers=ingredients_suppliers_headers, 
                            ingredients_suppliers_values=ingredients_suppliers_values,
+                           suppliers_headers=suppliers_headers, suppliers_values=suppliers_values,
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
                            ingredient_suppliers_v=ingredient_suppliers_v
                            )

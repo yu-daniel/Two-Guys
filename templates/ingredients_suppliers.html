@@ -4,7 +4,7 @@
 
 <div class="ingredients-suppliers-wallpaper wallpapers"></div>
 <h2 class="page-description ingredients-suppliers-header">Add/Edit/Delete for Ingredients & Suppliers (entities)</h2>
-<h4 class="header1">Order Ingredients</h4>
+<h4 class="header1">Ingredients</h4>
 <div class="search-box-scroll ingredients-suppliers">
 	<table class="center table-hover">
 		<thead>
@@ -36,7 +36,32 @@
 	</table>
 </div>
 
-<h4 class="header1">Ingredients from Suppliers</h4>
+<h4 class="header1">Suppliers</h4>
+<table class="center">
+	<thead>
+		<tr>
+			{% for title in suppliers_headers %}
+			<th>{{ title }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		{% for supplier in suppliers_values %}
+		<tr>
+			<td>{{ supplier }}</td>
+			<td>
+				<input type="button" value="Edit">
+			</td>
+			<td>
+				<input type="button" value="Delete">
+			</td>
+		</tr>
+		{% endfor %}	
+	</tbody>
+</table>
+
+<h4 class="header1">Ingredients and Suppliers</h4>
 <table class="center">
 	<thead>
 		<tr>
