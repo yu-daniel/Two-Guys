@@ -126,6 +126,6 @@ def orders_customers():
                            )
 
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 3001))
-    app.run(port=port, debug=True)
+# if __name__ == '__main__':
+#     port = int(os.environ.get('PORT', 3001))
+#     app.run(port=port, debug=True)
