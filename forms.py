@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, BooleanField, DecimalField, SubmitField, IntegerField
+from wtforms import StringField, DateField, BooleanField, DecimalField, SubmitField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, NumberRange
 
 
@@ -9,8 +9,8 @@ class EmployeeManagerForm(FlaskForm):
     start_date = DateField('Start Date', validators=[DataRequired()])
     status = BooleanField('Vacation', validators=[DataRequired()])
     manager = BooleanField('Manager', validators=[DataRequired()])
-    managed_by = StringField('Managed by')
-    store = StringField('Store', validators=[DataRequired()])
+    managed_by = SelectField('Managed by', choices=['Select', 'Daniel Yu', 'John Smith'])
+    store = SelectField('Store', choices=['Select', 'Los Angeles', 'Seattle', 'Austin', 'New York'])
     add = SubmitField('Add')
 
 
@@ -26,13 +26,13 @@ class IngredientsForm(FlaskForm):
     ingredient_name = StringField('Ingredient Name', validators=[DataRequired(), Length(min=1, max=50)])
     ingredient_cost = IntegerField('Ingredient Cost', validators=[DataRequired()])
     order_id = IntegerField('Order ID', validators=[DataRequired(), NumberRange(min=1, max=1000)])
-    supplier = StringField('Supplier', validators=[DataRequired(), Length(min=1, max=50)])
+    supplier = SelectField('Supplier', choices=['Select', 'Johnson Ville', 'Meat Industry', 'Lettuce Factory'])
     submit = SubmitField('Add')
 
 
 class SuppliersForm(FlaskForm):
     supplier_name = StringField('Supplier Name', validators=[DataRequired(), Length(min=1, max=50)])
-    ingredients_supplied = StringField('Ingredients Supplied', validators=[DataRequired(), Length(min=1, max=50)])
+    ingredients_supplied = SelectField('Ingredients Supplied', choices=['Select', 'ground beef', 'buns', 'tomatoes', 'onions', 'ketchup'])
     submit = SubmitField('Add')
 
 
