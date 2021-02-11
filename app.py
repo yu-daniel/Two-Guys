@@ -9,12 +9,12 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '7cd4739b6ecbf78e2fb020b7f663a979'
 
 # dummy data
-headers = ['Name', 'Start Date', 'Vacation', 'Manager', 'Managed by', 'Location ID', "", ""]
+headers = ['Name', 'Start Date', 'Vacation', 'Managed by', 'Location', "", ""]
 data = [
-    ['Alex Shin', '10/25/2011', 'Yes', 'No', 'Daniel Yu', '101'],
-    ['Daniel Yu', '11/11/2004', 'No', 'Yes', 'None', '101'],
-    ['John Doe', '1/1/2021', 'No', 'No', 'Daniel Yu', '101'],
-    ['Jane Doe', '1/1/2021', 'No', 'No', 'Daniel Yu', '101']
+    ['Alex Shin', '10/25/2011', 'Yes', 'Daniel Yu', 'Los Angeles'],
+    ['Daniel Yu', '11/11/2004', 'No', 'None', 'Los Angeles'],
+    ['John Doe', '1/1/2021', 'No', 'Daniel Yu', 'Los Angeles'],
+    ['Jane Doe', '1/1/2021', 'No', 'Daniel Yu', 'Los Angeles']
 ]
 
 location_headers = ['City', 'State', 'Zip Code', '', '']
