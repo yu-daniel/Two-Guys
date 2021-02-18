@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, url_for, redirect
 from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers
+from db_connector import connect_to_database, execute_query
 
 app = Flask(__name__)
 
@@ -45,7 +46,8 @@ ingredients_suppliers_values = [
     ["Ground Beef", "Meat Industry"]
 ]
 
-orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail", "Phone Number", "", ""]
+orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail", "Phone Number",
+                      "", ""]
 orders_customers_v = [
     ["2021-01-01", 500001, 10, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
     ["2021-01-02", 500001, 15, "Daniel", "Yu", "danielyu@osu.com", "808-254-1999"],
@@ -73,58 +75,226 @@ def index():
 def people():
     emp_man_form = EmployeeManagerForm()
     loc_form = LocationForm()
-    return render_template('employees_locations.html', headers=headers, data=data, location_headers=location_headers, 
-                            location_data=location_data, emp_man_form=emp_man_form, loc_form=loc_form)
+    return render_template('employees_locations.html', headers=headers, data=data, location_headers=location_headers,
+                           location_data=location_data, emp_man_form=emp_man_form, loc_form=loc_form)
 
 
 # route for the ingredients & suppliers page
 @app.route("/ingredients-suppliers", methods=["GET", "POST"])
 def ingredients_suppliers():
+    db_connection = connect_to_database()
+
+
     ingredient_form = IngredientsForm()
     supplier_form = SuppliersForm()
 
-    if supplier_form.validate_on_submit():
-        supplier_name = supplier_form.data.get("supplier_name")
-        results = [supplier_name]
+    # for POST requests
+    if request.method == 'POST':
+        order_date = ingredient_form.order_date.data
+        ingredient_name = ingredient_form.ingredient_name.data
+        ingredient_cost = ingredient_form.ingredient_cost.data
+        supplier = ingredient_form.supplier.data
+        order_id = ingredient_form.order_id.data
 
-        if results not in supplier_values:
-            print("Adding supplier.")
-            supplier_values.append(results)
-            return redirect(url_for('ingredients_suppliers'))
+        # grab user's input from add new Ingredient form, and INSERT into the db
+        ingredients_input_data = (order_date, ingredient_name, ingredient_cost, order_id)
+        ingredient_input_query = "INSERT INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
+                                 "VALUES (%s, %s, %s, %s);"
 
-    elif ingredient_form.validate_on_submit():
-        order_date = ingredient_form.data.get("order_date")
-        ingredient_name = ingredient_form.data.get("ingredient_name")
-        ingredient_cost = ingredient_form.data.get("ingredient_cost")
-        order_id = ingredient_form.data.get("order_id")
-        results = [order_date, ingredient_name, ingredient_cost, order_id]
+        supplier_name = supplier_form.supplier_name.data
+        supplier_input_data = (supplier_name,)
 
-        if results not in ingredient_values:
-            ingredient_values.append(results)
-            return redirect(url_for('ingredients_suppliers'))
+        supplier_input_query = "INSERT INTO Suppliers (supplier_name) VALUES (%s);"
+        execute_query(db_connection, supplier_input_query, supplier_input_data)
 
+        if validator(ingredients_input_data) is True:
+            execute_query(db_connection, ingredient_input_query, ingredients_input_data)
+            db_connection.commit()
+
+        elif validator(supplier_input_data) is True:
+            execute_query(db_connection, supplier_input_query, supplier_input_data)
+            db_connection.commit()
+
+        return redirect(url_for('ingredients_suppliers'))
+
+    # for GET requests
+    ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num FROM `Ingredients`;"
+    suppliers_query = "SELECT supplier_name FROM Suppliers;"
+    ingredients_suppliers_query = "SELECT ingredient_name, supplier_name FROM `Ingredients` \
+            INNER JOIN Ingredients_Suppliers ON Ingredients_Suppliers.ing_id = Ingredients.ingredient_id \
+            INNER JOIN Suppliers ON Suppliers.supplier_id = Ingredients_Suppliers.sup_id \
+            ORDER BY ingredient_name;"
+
+    supplier_results_parsed = []
+    supplier_choices = []
+    order_id_choices = []
+    ingredients_supplied_choices = []
+
+    # select suppliers, order_id, and ingredients from the db
+    supplier_choices_query = "SELECT supplier_name FROM `Suppliers`;"
+    order_id_query = "SELECT order_id FROM `Orders`;"
+    ingredients_supplied_query = "SELECT ingredient_name FROM `Ingredients`;"
+
+    # execute the above select queries and retrieve the data
+    ingredient_results = execute_query(db_connection, ingredients_query).fetchall()
+    suppliers_results = execute_query(db_connection, suppliers_query).fetchall()
+    ingredients_suppliers_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
+
+    supplier_choices_results = execute_query(db_connection, supplier_choices_query).fetchall()
+    ingredients_supplied_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
+    order_id_results = execute_query(db_connection, order_id_query).fetchall()
+
+    # the data retrieved from the db are a tuple of tuples, here we take each individual tuple and add to a list (to
+    # get a list of all items)
+    for choices in order_id_results:
+        order_id_choices.append(choices[0])
+
+    for choices in supplier_choices_results:
+        supplier_choices.append(choices[0])
+
+    for choices in ingredients_supplied_results:
+        ingredients_supplied_choices.append(choices[0])
+
+    for supplier in suppliers_results:
+        supplier_results_parsed.append(supplier[0])
+
+    # from the list of items, assign them to each Form's choices option
+    ingredient_form.supplier.choices = supplier_choices
+    ingredient_form.order_id.choices = order_id_choices
+    supplier_form.ingredients_supplied.choices = ingredients_supplied_choices
 
     return render_template("ingredients_suppliers.html", title='Add/Edit/Delete Ingredients & Suppliers',
                            ingredient_form=ingredient_form,
-                           ingredients_suppliers_headers=ingredients_suppliers_headers, 
+                           ingredients_suppliers_headers=ingredients_suppliers_headers,
                            ingredients_suppliers_values=ingredients_suppliers_values,
-                           suppliers_headers=suppliers_headers, suppliers_values=suppliers_values,
+                           suppliers_headers=suppliers_headers, suppliers_values=supplier_results_parsed,
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
-                           ingredient_suppliers_v=ingredient_suppliers_v
+                           ingredient_suppliers_v=ingredient_results
                            )
+
+
+def validator(data_list):
+    all_valid = True
+
+    for value in data_list:
+        if value is None:
+            all_valid = False
+
+    return all_valid
 
 
 @app.route("/orders-customers", methods=["GET", "POST"])
 def orders_customers():
-    order_form = OrderForm()
-    customer_form = Customers()
+    # form objects
+    order_form = OrderForm(request.form)
+    customer_form = Customers(request.form)
 
-    return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers', order_form=order_form,
-                           customer_form=customer_form,
-                           customer_headers=customer_headers, customer_values=customer_values,
-                           orders_customers_h=orders_customers_h, orders_customers_v=orders_customers_v
+    # establish connect to db
+    db_connection = connect_to_database()
+
+    # check first if there is a POST request
+    if request.method == 'POST':
+        # retrieve data for each field from the new Orders form
+        date_time = order_form.date_time.data
+        sale_amount = order_form.sale_amount.data
+        customer_id = order_form.customer_id.data
+
+        # retrieve data for each field from the new Customers form
+        first_name = customer_form.first_name.data
+        last_name = customer_form.last_name.data
+        email = customer_form.email.data
+        phone_number = customer_form.phone_number.data
+        location = customer_form.location.data
+
+        # place the data in a tuple format
+        order_input_data = (date_time, sale_amount, customer_id,)
+        customer_input_data = (first_name, last_name, email, phone_number,)
+
+        # query for adding a new Order into the db
+        order_input_query = \
+            "INSERT INTO Orders (date_time, sale_amount, customer_num) " \
+            "VALUES (%s, %s, %s);"
+
+        # query for adding a new Customer into the db
+        customer_input_query = \
+            "INSERT INTO Customers (first_name, last_name, email, phone_number) " \
+            "VALUES (%s, %s, %s, %s);"
+
+        # adding a new Customer also involves adding them to the Customers_Locations intersection table
+        # here, we get the location_id based on the location that the user selected
+        get_location_id_query = "SELECT store_id FROM `Locations` WHERE city = (%s)"
+        get_location_id_results = execute_query(db_connection, get_location_id_query, (location,)).fetchall()
+
+        # once our webpage has two forms present, we need to check which one the user is submitting
+        # since the user can only submit one form at any time, the validator() method checks which
+        # form has data and returns a boolean value as a result
+
+        if validator(order_input_data) is True:
+            # execute the query and commit it to the db for changes to be permanent
+            execute_query(db_connection, order_input_query, order_input_data)
+            db_connection.commit()
+
+        elif validator(customer_input_data) is True:
+            execute_query(db_connection, customer_input_query, customer_input_data)
+
+            # get latest customer_id that was added (just now)
+            get_customer_id_query = "SELECT customer_id FROM `Customers` ORDER BY customer_id DESC LIMIT 1"
+            get_customer_id_results = execute_query(db_connection, get_customer_id_query).fetchall()
+
+            # add the customer_id and location_id into the intersection table
+            add_customer_locations = "INSERT INTO Customers_Locations (customer_fk_id, store_fk_id) VALUES (%s, %s);"
+            customer_locations = (get_customer_id_results[0][0], get_location_id_results[0][0],)
+
+            execute_query(db_connection, add_customer_locations, customer_locations)
+            db_connection.commit()
+
+        # refresh the page once the form is submitted
+        return redirect(url_for('orders_customers'))
+
+    # if the request is not POST, then it must be GET
+
+    # queries for displaying the Orders and Customers 'overview' tables
+    orders_query = \
+        "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
+        "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id ORDER BY date_time;"
+
+    customers_query = \
+        "SELECT first_name, last_name, email, phone_number, city AS location FROM `Customers` " \
+        "INNER JOIN Customers_Locations ON Customers_Locations.customer_fk_id = Customers.customer_id " \
+        "INNER JOIN Locations ON Locations.store_id = Customers_Locations.store_fk_id ORDER BY last_name;"
+
+    # execute the query to retrieve the table data from the db
+    order_results = execute_query(db_connection, orders_query).fetchall()
+    customer_results = execute_query(db_connection, customers_query).fetchall()
+
+    # in the 'orders-customers' page, when adding a new Order, we need a dropdown menu for existing Customer ID
+    # below will select all existing Customer IDs and add them to 'choices' in the dropdown menu
+    customer_id_query = "SELECT customer_id FROM Customers;"
+    customer_id_results = execute_query(db_connection, customer_id_query).fetchall()
+    customer_id_choices = []
+
+    for choices in customer_id_results:
+        customer_id_choices.append(choices[0])
+
+    # set the 'choices' option for customer_id for the OrderForm form
+    order_form.customer_id.choices = customer_id_choices
+
+    # same idea for the Locations dropdown menu in the new Customer form
+    locations_query = "SELECT city FROM Locations;"
+    location_results = execute_query(db_connection, locations_query).fetchall()
+    location_choices = []
+
+    for choices in location_results:
+        location_choices.append(choices[0])
+
+    customer_form.location.choices = location_choices
+
+    # render the webpage with all the data retrieved from the db
+    return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers',
+                           order_form=order_form, customer_form=customer_form,
+                           customer_headers=customer_headers, customer_values=customer_results,
+                           orders_customers_h=orders_customers_h, orders_customers_v=order_results
                            )
-
 
 # if __name__ == '__main__':
 #     port = int(os.environ.get('PORT', 3001))

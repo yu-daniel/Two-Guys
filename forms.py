@@ -25,28 +25,28 @@ class IngredientsForm(FlaskForm):
     order_date = StringField('Order Date', validators=[DataRequired(), Length(min=1, max=10)])
     ingredient_name = StringField('Ingredient Name', validators=[DataRequired(), Length(min=1, max=50)])
     ingredient_cost = IntegerField('Ingredient Cost', validators=[DataRequired()])
-    order_id = IntegerField('Order ID', validators=[DataRequired(), NumberRange(min=1, max=1000)])
-    supplier = SelectField('Supplier', choices=['Select', 'Johnson Ville', 'Meat Industry', 'Lettuce Factory'])
+    order_id = SelectField('Order ID')
+    supplier = SelectField('Supplier')
     submit = SubmitField('Add')
 
 
 class SuppliersForm(FlaskForm):
     supplier_name = StringField('Supplier Name', validators=[DataRequired(), Length(min=1, max=50)])
-    ingredients_supplied = SelectField('Ingredients Supplied', choices=['Select', 'ground beef', 'buns', 'tomatoes', 'onions', 'ketchup'])
+    ingredients_supplied = SelectField('Ingredients Supplied')
     submit = SubmitField('Add')
 
 
 class OrderForm(FlaskForm):
     date_time = StringField('Date', validators=[DataRequired(), NumberRange(min=1, max=10)])
     sale_amount = IntegerField('Sale Amount', validators=[DataRequired()])
-    customer_id = IntegerField('Customer ID', validators=[DataRequired()])
+    customer_id = SelectField('Customer ID')
     submit = SubmitField('Add')
 
 
 class Customers(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=1, max=50)])
-    last_name = IntegerField('Last Name', validators=[DataRequired(), Length(min=1, max=50)])
+    last_name = StringField('Last Name', validators=[DataRequired(), Length(min=1, max=50)])
     email = StringField('Email', validators=[DataRequired()])
     phone_number = IntegerField('Phone Number', validators=[DataRequired(), NumberRange(min=1, max=20)])
-    location = StringField('Location', validators=[DataRequired(), NumberRange(min=5, max=10)])
+    location = SelectField('Location')
     submit = SubmitField('Add')

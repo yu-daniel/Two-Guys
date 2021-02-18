@@ -146,13 +146,28 @@ div.employees-locations-wallpaper {
 }
 
 /*set width/height for each table, since it can vary*/
-.ingredients-suppliers {
-    width: 650px;
+.ingredients {
+    width: 500px;
     height: 300px;
 }
 
-.customers-orders {
+.suppliers {
+    width: 300px;
+    height: 300px;
+}
+
+.ingredients-suppliers {
+    width: 320px;
+    height: 300px;
+}
+
+.orders {
     width: 1000px;
+    height: 300px;
+}
+
+.customers {
+    width: 800px;
     height: 300px;
 }
 

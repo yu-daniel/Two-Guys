@@ -11,7 +11,7 @@
 			<input type="text" placeholder="Search customer..." size="50">
 		</form>
 	</div>
-<div class="search-box-scroll customers-orders">
+<div class="search-box-scroll orders">
 	<table class="center">
 		<thead>
 			<tr>
@@ -41,32 +41,34 @@
 </div>
 
 <h4 class="header1">Customers</h4>
-<table class="center">
-	<thead>
-		<tr>
-			{% for title in customer_headers %}
-			<th>{{ title }}</th>
+<div class="search-box-scroll customers">
+	<table class="center">
+		<thead>
+			<tr>
+				{% for title in customer_headers %}
+				<th>{{ title }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			{% for set in customer_values %}
+			<tr>
+				{% for value in set %}
+				<td>{{ value }}</td>
+				{% endfor %}
+				<td>
+					<input type="button" value="Edit">
+				</td>
+				<td>
+					<input type="button" value="Delete">
+				</td>
+			</tr>
 			{% endfor %}
 		</tr>
-	</thead>
-	<tbody>
-		<tr>
-		{% for set in customer_values %}
-		<tr>
-			{% for value in set %}
-			<td>{{ value }}</td>
-			{% endfor %}
-			<td>
-				<input type="button" value="Edit">
-			</td>
-			<td>
-				<input type="button" value="Delete">
-			</td>
-		</tr>
-		{% endfor %}
-	</tr>
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
 
 <div class="row">
 	<div class="col-sm-6">

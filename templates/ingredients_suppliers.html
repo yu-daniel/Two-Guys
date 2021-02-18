@@ -5,7 +5,7 @@
 <!-- <div class="ingredients-suppliers-wallpaper wallpapers"></div> -->
 <h2 class="page-description orange-header">Add/Edit/Delete for Ingredients & Suppliers (entities)</h2>
 <h4 class="header1">Ingredients</h4>
-<div class="search-box-scroll ingredients-suppliers">
+<div class="search-box-scroll ingredients">
 	<table class="center table-hover">
 		<thead>
 			<tr>
@@ -37,59 +37,64 @@
 </div>
 
 <h4 class="header1">Suppliers</h4>
-<table class="center">
-	<thead>
-		<tr>
-			{% for title in suppliers_headers %}
-			<th>{{ title }}</th>
+<div class="search-box-scroll suppliers">
+	<table class="center">
+		<thead>
+			<tr>
+				{% for title in suppliers_headers %}
+				<th>{{ title }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			{% for supplier in suppliers_values %}
+			<tr>
+				<td>{{ supplier }}</td>
+				<td>
+					<input type="button" value="Edit">
+				</td>
+				<td>
+					<input type="button" value="Delete">
+				</td>
+			</tr>
 			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-		{% for supplier in suppliers_values %}
-		<tr>
-			<td>{{ supplier }}</td>
-			<td>
-				<input type="button" value="Edit">
-			</td>
-			<td>
-				<input type="button" value="Delete">
-			</td>
-		</tr>
-		{% endfor %}	
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
 
 <h4 class="header1">Ingredients and Suppliers</h4>
-<table class="center">
-	<thead>
-		<tr>
-			<!-- this for loop will grab the column title data from app.py and translate it to the template -->
-			{% for title in ingredients_suppliers_headers %}
-			<th>{{ title }}</th>
+<div class="search-box-scroll ingredients-suppliers">
+	<table class="center">
+		<thead>
+			<tr>
+				<!-- this for loop will grab the column title data from app.py and translate it to the template -->
+				{% for title in ingredients_suppliers_headers %}
+				<th>{{ title }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<!-- this for loop will output the raw value set of ingredients data from app.py -->
+			{% for set in ingredients_suppliers_values %}
+			<tr>
+				<!-- lastly, each type of data in the set is added to each row -->
+				{% for value in set %}
+				<td>{{ value }}</td>
+				{% endfor %}
+				<td>
+					<input type="button" value="Edit">
+				</td>
+				<td>
+					<input type="button" value="Delete">
+				</td>
+			</tr>
 			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-		<!-- this for loop will output the raw value set of ingredients data from app.py -->
-		{% for set in ingredients_suppliers_values %}
-		<tr>
-			<!-- lastly, each type of data in the set is added to each row -->
-			{% for value in set %}
-			<td>{{ value }}</td>
-			{% endfor %}
-			<td>
-				<input type="button" value="Edit">
-			</td>
-			<td>
-				<input type="button" value="Delete">
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
+
 		
 <div class="row">
 	<div class="col-sm-6">
