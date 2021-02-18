@@ -105,14 +105,27 @@ def ingredients_suppliers():
         supplier_input_data = (supplier_name,)
 
         supplier_input_query = "INSERT INTO Suppliers (supplier_name) VALUES (%s);"
-        execute_query(db_connection, supplier_input_query, supplier_input_data)
+        get_supplier_id_query = "SELECT supplier_id FROM `Suppliers` WHERE supplier_name = (%s)"
+        get_supplier_id_results = execute_query(db_connection, get_supplier_id_query, (supplier,)).fetchall()
 
         if validator(ingredients_input_data) is True:
             execute_query(db_connection, ingredient_input_query, ingredients_input_data)
+
+            # get latest ingredient ID, that was just created
+            get_ingredient_id_query = "SELECT ingredient_id FROM `Ingredients` ORDER BY ingredient_id DESC LIMIT 1"
+            get_ingredient_id_results = execute_query(db_connection, get_ingredient_id_query).fetchall()
+
+            # add ingredient_id and supplier_id to the Ingredients_Suppliers intersection table, to establish a M:M relationship
+            add_ingredient_supplier_IDs = "INSERT INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (%s, %s)"
+            IDs_parsed = (get_ingredient_id_results[0][0], get_supplier_id_results[0][0])
+
+            execute_query(db_connection, add_ingredient_supplier_IDs, IDs_parsed)
+
             db_connection.commit()
 
         elif validator(supplier_input_data) is True:
             execute_query(db_connection, supplier_input_query, supplier_input_data)
+
             db_connection.commit()
 
         return redirect(url_for('ingredients_suppliers'))
