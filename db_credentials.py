@@ -6,9 +6,9 @@
 
 # For Local Development
 host = 'classmysql.engr.oregonstate.edu'
-user = 'cs340_shinal'                       # can be different if you set up another username in your MySQL installation
-passwd = '4304'                            # set accordingly
-db = 'cs340_shinal'
+user = 'cs340_yudan'                       # can be different if you set up another username in your MySQL installation
+passwd = '5890'                            # set accordingly
+db = 'cs340_yudan'
 
 
 # For OSU Flip Servers
