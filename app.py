@@ -71,12 +71,121 @@ def index():
     return render_template('index.html')
 
 
+def validator(data_list):
+    all_valid = True
+
+    for value in data_list:
+        if value is None:
+            all_valid = False
+
+    return all_valid
+
+
 @app.route("/employees-locations", methods=['GET', 'POST'])
-def people():
-    emp_man_form = EmployeeManagerForm()
-    loc_form = LocationForm()
-    return render_template('employees_locations.html', headers=headers, data=data, location_headers=location_headers,
-                           location_data=location_data, emp_man_form=emp_man_form, loc_form=loc_form)
+def employees_locations():
+    db_connection = connect_to_database()
+    employee_manager_form = EmployeeManagerForm(request.form)
+    location_form = LocationForm(request.form)
+
+    if request.method == 'POST':
+        first_name = employee_manager_form.first_name.data
+        last_name = employee_manager_form.last_name.data
+        start_date = employee_manager_form.start_date.data
+
+        if employee_manager_form.status.data is True:
+            status = "vacation"
+        else:
+            status = "active"
+
+        manager = employee_manager_form.manager.data
+
+        if manager is True:
+            managed_by = None
+        else:
+            managed_by_query = "SELECT manager_id FROM Managers WHERE first_name = %s;"
+            managed_by_result = execute_query(db_connection, managed_by_query, str(employee_manager_form.managed_by.data)).fetchall()
+            managed_by = managed_by_result
+        
+        store_query = "SELECT store_id FROM Locations WHERE city = %s;"
+        store_result = execute_query(db_connection, store_query, str(employee_manager_form.store.data)).fetchall() 
+        store = store_result
+        
+        city = location_form.city.data
+        state = location_form.state.data
+        zip_code = location_form.zip_code.data
+
+        # employees_managers
+        if managed_by is not None:
+            employee_input_data = (first_name, last_name, start_date, status, managed_by, store)
+            employee_input_query = "INSERT INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id) \
+                                VALUES (%s, %s, %s, %s, %s, %s);"
+        else:
+            employee_input_data = (first_name, last_name, start_date, status, store)
+            employee_input_query = "INSERT INTO Employees (first_name, last_name, start_date, status, emp_store_id) \
+                                VALUES (%s, %s, %s, %s, %s);"
+
+        manager_input_data = None
+        if manager is True:
+            manager_input_data = (first_name, last_name, status, store)
+            manager_input_query = "INSERT INTO Managers (first_name, last_name, status, manager_store_id) \
+                                   VALUES (%s, %s, %s, %s);"
+
+        # locations
+        location_input_data = (city, state, zip_code)
+        location_input_query = "INSERT INTO Locations (city, state, zip_code) \
+                                VALUES (%s, %s, %s);"
+
+        if validator(location_input_data):
+            execute_query(db_connection, location_input_query, location_input_data)
+            db_connection.commit()
+
+        if validator(employee_input_data):
+            execute_query(db_connection, employee_input_query, employee_input_data)
+            if manager_input_data is not None:
+                execute_query(db_connection, manager_input_query, manager_input_data)
+
+            db_connection.commit()
+        return redirect(url_for("employees_locations"))    
+
+    # for GET requests
+    # employees
+    employees_managers_query = "SELECT \
+                                    CONCAT(Employees.first_name, ' ', Employees.last_name) AS Name, \
+                                    Employees.start_date, Employees.status, \
+                                    CONCAT(Managers.first_name, ' ', Managers.last_name) AS ManagedBy, \
+	                                Locations.city \
+                                FROM Employees \
+                                LEFT JOIN Managers ON Managers.manager_id = Employees.emp_manager_id \
+                                LEFT JOIN Locations ON Locations.store_id = Employees.emp_store_id \
+                                ORDER BY start_date;"
+    employees_managers_results = execute_query(db_connection, employees_managers_query).fetchall()
+
+    # locations
+    location_query = "SELECT city, state, zip_code FROM Locations;" 
+    location_results = execute_query(db_connection, location_query).fetchall()
+
+    # dropdowns
+    managed_by_name_query = "SELECT first_name FROM Managers;"
+    managed_by_name_results = execute_query(db_connection, managed_by_name_query).fetchall()
+    managed_by_choices = []
+
+    for choices in managed_by_name_results:
+        managed_by_choices.append(choices[0])
+
+    employee_manager_form.managed_by.choices += managed_by_choices
+    
+    store_city_query = "SELECT city FROM Locations;"
+    store_city_results = execute_query(db_connection, store_city_query).fetchall()
+    store_city_choices = []
+
+    for choices in store_city_results:
+        store_city_choices.append(choices[0])
+
+    employee_manager_form.store.choices = store_city_choices
+
+
+    return render_template('employees_locations.html', headers=headers, data=employees_managers_results, location_headers=location_headers,
+                           location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form)
 
 
 # route for the ingredients & suppliers page
@@ -186,14 +295,7 @@ def ingredients_suppliers():
                            )
 
 
-def validator(data_list):
-    all_valid = True
 
-    for value in data_list:
-        if value is None:
-            all_valid = False
-
-    return all_valid
 
 
 @app.route("/orders-customers", methods=["GET", "POST"])

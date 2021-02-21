@@ -7,10 +7,10 @@ class EmployeeManagerForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), NumberRange(min=1, max=50)])
     last_name = StringField('Last Name', validators=[DataRequired(), NumberRange(min=1, max=50)])
     start_date = DateField('Start Date', validators=[DataRequired()])
-    status = BooleanField('Vacation', validators=[DataRequired()])
-    manager = BooleanField('Manager', validators=[DataRequired()])
-    managed_by = SelectField('Managed by', choices=['Select', 'Daniel Yu', 'John Smith'])
-    store = SelectField('Store', choices=['Select', 'Los Angeles', 'Seattle', 'Austin', 'New York'])
+    status = BooleanField('Vacation')
+    manager = BooleanField('Manager')
+    managed_by = SelectField('Managed by', choices=['None'])
+    store = SelectField('Store')
     add = SubmitField('Add')
 
 
