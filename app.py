@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, url_for, redirect
-from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers
+from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers, OrdersSearchForm
 from db_connector import connect_to_database, execute_query
 
 app = Flask(__name__)
@@ -301,6 +301,7 @@ def ingredients_suppliers():
 @app.route("/orders-customers", methods=["GET", "POST"])
 def orders_customers():
     # form objects
+    search_customer_form = OrdersSearchForm(request.form)
     order_form = OrderForm(request.form)
     customer_form = Customers(request.form)
 
@@ -408,7 +409,8 @@ def orders_customers():
     return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers',
                            order_form=order_form, customer_form=customer_form,
                            customer_headers=customer_headers, customer_values=customer_results,
-                           orders_customers_h=orders_customers_h, orders_customers_v=order_results
+                           orders_customers_h=orders_customers_h, orders_customers_v=order_results,
+                           search_customer_form=search_customer_form
                            )
 
 # if __name__ == '__main__':

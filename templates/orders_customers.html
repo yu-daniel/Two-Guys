@@ -6,11 +6,21 @@
 
 <h2 class="page-description orange-header">Add/Edit/Delete for Customers & Orders (entities)</h2>
 <h4 class="header1">Orders</h4>
-	<div class="center-search">
-		<form action="#">
-			<input type="text" placeholder="Search customer..." size="50">
+<div class="row">
+	<div class="col-sm-12">
+		<form action="#" method="POST">
+			{{ search_customer_form.hidden_tag() }}
+			<fieldset>
+				<div>
+					{{ search_customer_form.search_customer.label(class="span-bg") }}
+					{{ search_customer_form.search_customer }}
+
+					{{ search_customer_form.search_button }}
+				</div>
+			</fieldset>
 		</form>
 	</div>
+</div>
 <div class="search-box-scroll orders">
 	<table class="center">
 		<thead>
