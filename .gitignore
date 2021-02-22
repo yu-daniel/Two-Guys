@@ -4,4 +4,4 @@
  __pycache__/
  *.pyc
 
- db_credentials.py
+.db_credentials
