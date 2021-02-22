@@ -2,9 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, BooleanField, DecimalField, SubmitField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, NumberRange
 
-class OrdersSearchForm(FlaskForm):
-    search_customer = StringField('Search Customer:')
-    search_button = SubmitField('Go!')
 
 class EmployeeManagerForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), NumberRange(min=1, max=50)])

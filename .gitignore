@@ -1,5 +1,8 @@
 /vscode
 /venv
 
+*.pyc
 db_credientials.py
-**/__pycache__
+
+*db_credientials.py~
+
