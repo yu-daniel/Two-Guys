@@ -1,4 +1,4 @@
-import MySQLdb as mariadb
+import pymysql.cursors
 from db_credentials import host, user, passwd, db
 
 
@@ -6,7 +6,7 @@ def connect_to_database(host=host, user=user, passwd=passwd, db=db):
     """
     connects to a database and returns a database objects
     """
-    db_connection = mariadb.connect(host, user, passwd, db)
+    db_connection = pymysql.connect(host=host, user=user, passwd=passwd, db=db)
     return db_connection
 
 

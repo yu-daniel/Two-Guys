@@ -15,7 +15,9 @@
 				{{ search_form.submit_id.label(class="span-bg") }}
 				{{ search_form.submit_id }}
 				{{ search_form.submit }}
-				{{ search_form.clear_search }}
+				<button>
+					<a href="{{ url_for('orders_customers') }}">Clear</a>
+				</button>
 			</div>
 		</fieldset>
 	</form>

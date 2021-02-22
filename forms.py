@@ -63,4 +63,3 @@ class Customers(FlaskForm):
 class SubmitCustomers(FlaskForm):
     submit_id = StringField(label='', render_kw={"placeholder": "Enter Customer First Name..."})
     submit = SubmitField('Search')
-    clear_search = SubmitField('Clear')

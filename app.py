@@ -97,6 +97,7 @@ def employees_locations():
         else:
             status = "active"
 
+
         manager = employee_manager_form.manager.data
 
         if manager is True:
@@ -294,8 +295,6 @@ def ingredients_suppliers():
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
                            ingredient_suppliers_v=ingredient_results
                            )
-
-
 
 
 
