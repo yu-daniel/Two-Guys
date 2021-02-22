@@ -7,13 +7,13 @@
 <h2 class="page-description orange-header">Add/Edit/Delete for Customers & Orders (entities)</h2>
 <h4 class="header1">Orders</h4>
 <div class="center-search">
-
+<!--	search box-->
 	<form action="#", method="POST">
 		{{ search_form.hidden_tag() }}
 		<fieldset>
 			<div>
-				{{ search_form.customer_id.label(class="span-bg") }}
-				{{ search_form.customer_id }}
+				{{ search_form.submit_id.label(class="span-bg") }}
+				{{ search_form.submit_id }}
 				{{ search_form.submit }}
 				{{ search_form.clear_search }}
 			</div>

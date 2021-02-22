@@ -311,10 +311,12 @@ def orders_customers():
     db_connection = connect_to_database()
 
     # grab the user's input from the search box
-    search_data = search_form.customer_id.data
+    search_data = search_form.submit_id.data
 
     # check first if there is a POST request
     if request.method == 'POST' and search_data == "":
+        print("Trying to add new Order or Customer")
+
         # retrieve data for each field from the new Orders form
         date_time = order_form.date_time.data
         sale_amount = order_form.sale_amount.data
@@ -390,7 +392,7 @@ def orders_customers():
     customer_results = execute_query(db_connection, customers_query).fetchall()
 
     if request.method == 'POST' and search_data != "":
-        # print("FOUND SEARCH BOX SUBMISSION!")
+        print("FOUND SEARCH BOX SUBMISSION!")
         search_query = \
             "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
             "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
