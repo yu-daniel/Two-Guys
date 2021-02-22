@@ -1,2 +1,4 @@
 /vscode
 /venv
+
+.db_credientials.py

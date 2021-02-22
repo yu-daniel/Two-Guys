@@ -9,7 +9,7 @@ class OrdersSearchForm(FlaskForm):
 class EmployeeManagerForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), NumberRange(min=1, max=50)])
     last_name = StringField('Last Name', validators=[DataRequired(), NumberRange(min=1, max=50)])
-    start_date = DateField('Start Date', validators=[DataRequired()])
+    start_date = DateField('Start Date', validators=[DataRequired()], render_kw={"placeholder": "Year/Month/Date..."})
     status = BooleanField('Vacation')
     manager = BooleanField('Manager')
     managed_by = SelectField('Managed by', choices=['None'])
@@ -25,7 +25,7 @@ class LocationForm(FlaskForm):
 
 
 class IngredientsForm(FlaskForm):
-    order_date = StringField('Order Date', validators=[DataRequired(), Length(min=1, max=10)])
+    order_date = StringField('Order Date', validators=[DataRequired(), Length(min=1, max=10)], render_kw={"placeholder": "Year/Month/Date..."})
     ingredient_name = StringField('Ingredient Name', validators=[DataRequired(), Length(min=1, max=50)])
     ingredient_cost = IntegerField('Ingredient Cost', validators=[DataRequired()])
     order_id = SelectField('Order ID')
@@ -40,7 +40,7 @@ class SuppliersForm(FlaskForm):
 
 
 class OrderForm(FlaskForm):
-    date_time = StringField('Date', validators=[DataRequired(), NumberRange(min=1, max=10)])
+    date_time = StringField('Date', validators=[DataRequired(), NumberRange(min=1, max=10)], render_kw={"placeholder": "Year/Month/Date..."})
     sale_amount = IntegerField('Sale Amount', validators=[DataRequired()])
     customer_id = SelectField('Customer ID')
     submit = SubmitField('Add')
