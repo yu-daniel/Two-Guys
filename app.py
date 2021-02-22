@@ -391,7 +391,7 @@ def orders_customers():
     customer_results = execute_query(db_connection, customers_query).fetchall()
 
     if request.method == 'POST' and search_data != "":
-        print("FOUND SEARCH BOX SUBMISSION!")
+        # print("FOUND SEARCH BOX SUBMISSION!")
         search_query = \
             "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
             "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
