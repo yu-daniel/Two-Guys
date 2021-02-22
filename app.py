@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, url_for, redirect
-from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers, OrdersSearchForm
+from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers, OrdersSearchForm, SubmitCustomers
 from db_connector import connect_to_database, execute_query
 
 app = Flask(__name__)
@@ -224,7 +224,8 @@ def ingredients_suppliers():
             get_ingredient_id_query = "SELECT ingredient_id FROM `Ingredients` ORDER BY ingredient_id DESC LIMIT 1"
             get_ingredient_id_results = execute_query(db_connection, get_ingredient_id_query).fetchall()
 
-            # add ingredient_id and supplier_id to the Ingredients_Suppliers intersection table, to establish a M:M relationship
+            # add ingredient_id and supplier_id to the Ingredients_Suppliers intersection table, to establish a M:M
+            # relationship
             add_ingredient_supplier_IDs = "INSERT INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (%s, %s)"
             IDs_parsed = (get_ingredient_id_results[0][0], get_supplier_id_results[0][0])
 
@@ -301,15 +302,19 @@ def ingredients_suppliers():
 @app.route("/orders-customers", methods=["GET", "POST"])
 def orders_customers():
     # form objects
-    search_customer_form = OrdersSearchForm(request.form)
     order_form = OrderForm(request.form)
     customer_form = Customers(request.form)
+
+    search_form = SubmitCustomers(request.form)
 
     # establish connect to db
     db_connection = connect_to_database()
 
+    # grab the user's input from the search box
+    search_data = search_form.customer_id.data
+
     # check first if there is a POST request
-    if request.method == 'POST':
+    if request.method == 'POST' and search_data == "":
         # retrieve data for each field from the new Orders form
         date_time = order_form.date_time.data
         sale_amount = order_form.sale_amount.data
@@ -379,9 +384,25 @@ def orders_customers():
         "INNER JOIN Customers_Locations ON Customers_Locations.customer_fk_id = Customers.customer_id " \
         "INNER JOIN Locations ON Locations.store_id = Customers_Locations.store_fk_id ORDER BY last_name;"
 
+
     # execute the query to retrieve the table data from the db
     order_results = execute_query(db_connection, orders_query).fetchall()
     customer_results = execute_query(db_connection, customers_query).fetchall()
+
+    if request.method == 'POST' and search_data != "":
+        # print("FOUND SEARCH BOX SUBMISSION!")
+        search_query = \
+            "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
+            "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
+            "WHERE first_name = (%s);"
+
+        submit_data = (search_data, )
+        # print("submit data = ", submit_data)
+        # print("query = ", orders_query)
+        search_query = execute_query(db_connection, search_query, (search_data, )).fetchall()
+
+        if search_query:
+            order_results = search_query
 
     # in the 'orders-customers' page, when adding a new Order, we need a dropdown menu for existing Customer ID
     # below will select all existing Customer IDs and add them to 'choices' in the dropdown menu
@@ -405,13 +426,17 @@ def orders_customers():
 
     customer_form.location.choices = location_choices
 
+
+
     # render the webpage with all the data retrieved from the db
     return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers',
                            order_form=order_form, customer_form=customer_form,
                            customer_headers=customer_headers, customer_values=customer_results,
                            orders_customers_h=orders_customers_h, orders_customers_v=order_results,
-                           search_customer_form=search_customer_form
+
+                           search_form=search_form
                            )
+
 
 # if __name__ == '__main__':
 #     port = int(os.environ.get('PORT', 3001))
