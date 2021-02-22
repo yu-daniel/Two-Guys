@@ -2,3 +2,4 @@
 /venv
 
 .db_credientials
+**/__pycache__
