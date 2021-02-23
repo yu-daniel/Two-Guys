@@ -1,7 +1,4 @@
 /vscode
 /venv
-
- __pycache__/
- *.pyc
-
+/__pycache__
 db_credentials.yaml
