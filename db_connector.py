@@ -1,6 +1,11 @@
-import pymysql.cursors
-from db_credentials import host, user, passwd, db
+import pymysql.cursors, yaml
+# from db_credentials import host, user, passwd, db
 
+database = yaml.safe_load(open('db_credentials.yaml'))
+host = database['host']
+user = database['user']
+passwd = database['passwd']
+db = database['db']
 
 def connect_to_database(host=host, user=user, passwd=passwd, db=db):
     """
