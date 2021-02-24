@@ -25,7 +25,39 @@
 					<td>{{ value }}</td>
 					{% endfor %}
 					<td>
-						<input type="button" value="Edit">
+						<div class="container">
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-modal{{set[-1]}}">Edit</button>
+							<div class="modal" id="edit-modal{{set[-1]}}">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Put your new info here! For Ingredient ID: {{set[-1]}}</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+										</div>
+										<div class="modal-body">
+											<form action="">
+												<div>
+													<label class="form-abel">First Name</label>
+													<input type="text" class="form-control">
+												</div>
+												<div>
+													<label class="form-abel">Last Name</label>
+													<input type="text" class="form-control">
+												</div>
+												<div>
+													<label class="form-abel">ID</label>
+													<input type="text" class="form-control">
+												</div>
+												<div class="modal-footer">
+													<button type="submit" class="btn btn-primary">Update</button>
+													<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</td>
 					<td>
 						<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_ingredient/{{set[-1]}}'">
@@ -35,6 +67,11 @@
 		</tbody>
 	</table>
 </div>
+
+
+
+
+
 
 <h4 class="header1">Suppliers</h4>
 <div class="search-box-scroll suppliers">
@@ -52,7 +89,7 @@
 			<tr>
 				<td>{{ supplier[0] }}</td>
 				<td>
-					<input type="button" value="Edit">
+					<input type="button" value="Edit" data-toggle="modal" data-target="#modaledit">
 				</td>
 				<td>
 					<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_supplier/{{supplier[1]}}'">
@@ -150,3 +187,4 @@
 	</div>
 </div>
 {% endblock %}
+
