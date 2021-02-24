@@ -36,17 +36,22 @@
 										</div>
 										<div class="modal-body">
 											<form action="/update_ingredient/{{set[-1]}}" method="POST">
+
 												<div>
-													<label class="form-label">First Name</label>
-													<input type="text" class="form-control">
+													<label class="form-label">Order Date</label>
+													<input type="date" class="form-control" name="order_date" value={{set[0]}}>
 												</div>
 												<div>
-													<label class="form-label">Last Name</label>
-													<input type="text" class="form-control">
+													<label class="form-label">Ingredient Name</label>
+													<input type="text" class="form-control" name="ingredient_name" value={{set[1]}}>
 												</div>
 												<div>
-													<label class="form-label">ID</label>
-													<input type="text" class="form-control" name="ingredient_id" value="">
+													<label class="form-label">Ingredient Cost</label>
+													<input type="number" class="form-control" name="ingredient_cost" value={{set[2]}}>
+												</div>
+												<div>
+													<label class="form-label">Order Num.</label>
+													<input type="number" class="form-control" name="order_num" value={{set[3]}}>
 												</div>
 												<div class="modal-footer">
 													<input type='submit' name='Update' value='Update'>

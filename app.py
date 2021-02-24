@@ -426,15 +426,37 @@ def update_ingredient(id):
     """update a ingredient with the given id"""
     db_connection = connect_to_database()
     print("We're at update ingredient query!!")
+
+    if request.method == "GET":
+        ingredient_query = \
+            "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM `Ingredients` " \
+            "WHERE ingredient_id = %s" % id
+
+        ingredient_results = execute_query(db_connection, ingredient_query).fetchone()
+
+        orders_query = "SELECT order_id from Orders;"
+        orders_result = execute_query(db_connection, orders_query).fetchall()
+
+        return render_template('')
+
     if request.method == "POST":
-        ingredient_id = request.form['ingredient_id']
+        print("We're at POST request")
+        order_date = request.form['order_date']
+        ingredient_name = request.form['ingredient_name']
+        ingredient_cost = request.form['ingredient_cost']
+        order_num = request.form['order_num']
 
-        print("THE ingredient ID = ", ingredient_id)
+        print("THE order_date = ", order_date, type(order_date))
+        print("THE ingredient name", ingredient_name, type(ingredient_name))
+        print("THE ingredient_cost = ", ingredient_cost, type(ingredient_cost))
+        print("THE order_num = ", order_num, type(order_num))
 
-    # delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE ing_id = %s"
-    # delete_ingredient_query = "DELETE FROM Ingredients WHERE ingredient_id = %s"
-    # data = (id,)
-    # delete_intersection_results = execute_query(db_connection, delete_intersection_query, data)
-    # delete_ingredient_results = execute_query(db_connection, delete_ingredient_query, data)
+        update_query = \
+            "UPDATE Ingredients SET order_date = %s, ingredient_name = %s, ingredient_cost = %s, order_num = %s " \
+            "WHERE ingredient_id =  %s;"
+
+
+        data = (order_date, ingredient_name, ingredient_cost, order_num, id)
+        result = execute_query(db_connection, update_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
