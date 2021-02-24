@@ -73,11 +73,6 @@
 	</table>
 </div>
 
-
-
-
-
-
 <h4 class="header1">Suppliers</h4>
 <div class="search-box-scroll suppliers">
 	<table class="center">
@@ -94,7 +89,32 @@
 			<tr>
 				<td>{{ supplier[0] }}</td>
 				<td>
-					<input type="button" value="Edit" data-toggle="modal" data-target="#modaledit">
+					<div class="container">
+						<input type='button' name='Edit' value='Edit' data-bs-toggle="modal" data-bs-target="#edit-modal_suppliers{{supplier[1]}}">
+						<div class="modal" id="edit-modal_suppliers{{supplier[1]}}">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Put your new info here! For Supplier ID: {{supplier[1]}}</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+									</div>
+									<div class="modal-body">
+										<form action="/update_supplier/{{supplier[1]}}" method="POST">
+
+											<div>
+												<label class="form-label">Supplier Name</label>
+												<input type="text" class="form-control" name="supplier_name" value={{supplier[0]}}>
+											</div>
+											<div class="modal-footer">
+												<input type='submit' name='Update' value='Update'>
+												<input type='button' name='Cancel' value='Cancel' data-bs-dismiss="modal">
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</td>
 				<td>
 					<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_supplier/{{supplier[1]}}'">

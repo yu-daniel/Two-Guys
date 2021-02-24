@@ -427,18 +427,6 @@ def update_ingredient(id):
     db_connection = connect_to_database()
     print("We're at update ingredient query!!")
 
-    if request.method == "GET":
-        ingredient_query = \
-            "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM `Ingredients` " \
-            "WHERE ingredient_id = %s" % id
-
-        ingredient_results = execute_query(db_connection, ingredient_query).fetchone()
-
-        orders_query = "SELECT order_id from Orders;"
-        orders_result = execute_query(db_connection, orders_query).fetchall()
-
-        return render_template('')
-
     if request.method == "POST":
         print("We're at POST request")
         order_date = request.form['order_date']
@@ -457,6 +445,30 @@ def update_ingredient(id):
 
 
         data = (order_date, ingredient_name, ingredient_cost, order_num, id)
+        result = execute_query(db_connection, update_query, data)
+
+    return redirect(url_for("ingredients_suppliers"))
+
+@app.route('/update_supplier/<int:id>', methods=['POST', 'GET'])
+def update_supplier(id):
+    """update a supplier with the given id"""
+    db_connection = connect_to_database()
+    print("We're at update supplier query!!")
+
+    if request.method == "POST":
+        print("We're at POST request")
+        supplier_name = request.form['supplier_name']
+
+
+        print("THE order_date = ", supplier_name, type(supplier_name))
+
+
+        update_query = \
+            "UPDATE Suppliers SET supplier_name = %s" \
+            "WHERE supplier_id =  %s;"
+
+
+        data = (supplier_name, id)
         result = execute_query(db_connection, update_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
