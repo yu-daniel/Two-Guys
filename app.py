@@ -228,7 +228,7 @@ def ingredients_suppliers():
 
     # for GET requests
     ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM `Ingredients`;"
-    suppliers_query = "SELECT supplier_name FROM Suppliers;"
+    suppliers_query = "SELECT supplier_name, supplier_id FROM Suppliers;"
     ingredients_suppliers_query = "SELECT ingredient_name, supplier_name FROM `Ingredients` \
             INNER JOIN Ingredients_Suppliers ON Ingredients_Suppliers.ing_id = Ingredients.ingredient_id \
             INNER JOIN Suppliers ON Suppliers.supplier_id = Ingredients_Suppliers.sup_id \
@@ -249,6 +249,8 @@ def ingredients_suppliers():
     suppliers_results = execute_query(db_connection, suppliers_query).fetchall()
     ingredients_suppliers_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
 
+
+
     supplier_choices_results = execute_query(db_connection, supplier_choices_query).fetchall()
     ingredients_supplied_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
     order_id_results = execute_query(db_connection, order_id_query).fetchall()
@@ -267,6 +269,8 @@ def ingredients_suppliers():
     for supplier in suppliers_results:
         supplier_results_parsed.append(supplier[0])
 
+    # print("SUPPLIER RESULTS = ", supplier_results_parsed)
+
     # from the list of items, assign them to each Form's choices option
     ingredient_form.supplier.choices = supplier_choices
     ingredient_form.order_id.choices = order_id_choices
@@ -276,7 +280,7 @@ def ingredients_suppliers():
                            ingredient_form=ingredient_form,
                            ingredients_suppliers_headers=ingredients_suppliers_headers,
                            ingredients_suppliers_values=ingredients_suppliers_values,
-                           suppliers_headers=suppliers_headers, suppliers_values=supplier_results_parsed,
+                           suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
                            ingredient_suppliers_v=ingredient_results
                            )
@@ -391,7 +395,7 @@ def employees_locations():
 
 @app.route('/delete_ingredient/<int:id>')
 def delete_ingredient(id):
-    """deletes a person with the given id"""
+    """deletes a ingredient with the given id"""
     db_connection = connect_to_database()
     print("We're at delete query!")
     delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE ing_id = %s"
@@ -399,5 +403,19 @@ def delete_ingredient(id):
     data = (id,)
     delete_intersection_results = execute_query(db_connection, delete_intersection_query, data)
     delete_ingredient_results = execute_query(db_connection, delete_ingredient_query, data)
+
+    return redirect(url_for("ingredients_suppliers"))
+
+
+@app.route('/delete_supplier/<int:id>')
+def delete_supplier(id):
+    """deletes a supplier with the given id"""
+    db_connection = connect_to_database()
+    print("We're at delete query for deleting a supplier!")
+    delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE sup_id = %s"
+    delete_supplier_query = "DELETE FROM Suppliers WHERE supplier_id = %s"
+    data = (id,)
+    delete_intersection_results = execute_query(db_connection, delete_intersection_query, data)
+    delete_ingredient_results = execute_query(db_connection, delete_supplier_query, data)
 
     return redirect(url_for("ingredients_suppliers"))

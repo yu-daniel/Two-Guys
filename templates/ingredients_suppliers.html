@@ -50,12 +50,12 @@
 			<tr>
 			{% for supplier in suppliers_values %}
 			<tr>
-				<td>{{ supplier }}</td>
+				<td>{{ supplier[0] }}</td>
 				<td>
 					<input type="button" value="Edit">
 				</td>
 				<td>
-					<input type="button" value="Delete">
+					<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_supplier/{{supplier[1]}}'">
 				</td>
 			</tr>
 			{% endfor %}
