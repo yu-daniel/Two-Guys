@@ -419,3 +419,17 @@ def delete_supplier(id):
     delete_ingredient_results = execute_query(db_connection, delete_supplier_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
+
+
+@app.route('/update_ingredient/<int:id>')
+def update_ingredient(id):
+    """deletes a ingredient with the given id"""
+    db_connection = connect_to_database()
+    print("We're at update ingredient query!")
+    # delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE ing_id = %s"
+    # delete_ingredient_query = "DELETE FROM Ingredients WHERE ingredient_id = %s"
+    # data = (id,)
+    # delete_intersection_results = execute_query(db_connection, delete_intersection_query, data)
+    # delete_ingredient_results = execute_query(db_connection, delete_ingredient_query, data)
+
+    return redirect(url_for("ingredients_suppliers"))
