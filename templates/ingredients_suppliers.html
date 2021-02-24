@@ -21,14 +21,14 @@
 			{% for set in ingredient_suppliers_v %}
 				<tr>
 				<!-- lastly, each type of data in the set is added to each row -->
-					{% for value in set %}
+					{% for value in set[:-1] %}
 					<td>{{ value }}</td>
 					{% endfor %}
 					<td>
 						<input type="button" value="Edit">
 					</td>
 					<td>
-						<input type="button" value="Delete">
+						<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_ingredient/{{set[-1]}}'">
 					</td>
 				</tr>
 			{% endfor %}

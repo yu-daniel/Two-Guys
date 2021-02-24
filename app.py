@@ -227,7 +227,7 @@ def ingredients_suppliers():
         return redirect(url_for('ingredients_suppliers'))
 
     # for GET requests
-    ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num FROM `Ingredients`;"
+    ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM `Ingredients`;"
     suppliers_query = "SELECT supplier_name FROM Suppliers;"
     ingredients_suppliers_query = "SELECT ingredient_name, supplier_name FROM `Ingredients` \
             INNER JOIN Ingredients_Suppliers ON Ingredients_Suppliers.ing_id = Ingredients.ingredient_id \
@@ -307,11 +307,11 @@ def employees_locations():
             managed_by_query = "SELECT manager_id FROM Managers WHERE first_name = %s;"
             managed_by_result = execute_query(db_connection, managed_by_query, str(employee_manager_form.managed_by.data)).fetchall()
             managed_by = managed_by_result
-        
+
         store_query = "SELECT store_id FROM Locations WHERE city = %s;"
-        store_result = execute_query(db_connection, store_query, str(employee_manager_form.store.data)).fetchall() 
+        store_result = execute_query(db_connection, store_query, str(employee_manager_form.store.data)).fetchall()
         store = store_result
-        
+
         city = location_form.city.data
         state = location_form.state.data
         zip_code = location_form.zip_code.data
@@ -347,7 +347,7 @@ def employees_locations():
                 execute_query(db_connection, manager_input_query, manager_input_data)
 
             db_connection.commit()
-        return redirect(url_for("employees_locations"))    
+        return redirect(url_for("employees_locations"))
 
     # for GET requests
     # employees
@@ -363,7 +363,7 @@ def employees_locations():
     employees_managers_results = execute_query(db_connection, employees_managers_query).fetchall()
 
     # locations
-    location_query = "SELECT city, state, zip_code FROM Locations;" 
+    location_query = "SELECT city, state, zip_code FROM Locations;"
     location_results = execute_query(db_connection, location_query).fetchall()
 
     # dropdowns
@@ -375,7 +375,7 @@ def employees_locations():
         managed_by_choices.append(choices[0])
 
     employee_manager_form.managed_by.choices += managed_by_choices
-    
+
     store_city_query = "SELECT city FROM Locations;"
     store_city_results = execute_query(db_connection, store_city_query).fetchall()
     store_city_choices = []
@@ -387,3 +387,17 @@ def employees_locations():
 
     return render_template('employees_locations.html', headers=headers, data=employees_managers_results, location_headers=location_headers,
                            location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form)
+
+
+@app.route('/delete_ingredient/<int:id>')
+def delete_ingredient(id):
+    """deletes a person with the given id"""
+    db_connection = connect_to_database()
+    print("We're at delete query!")
+    delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE ing_id = %s"
+    delete_ingredient_query = "DELETE FROM Ingredients WHERE ingredient_id = %s"
+    data = (id,)
+    delete_intersection_results = execute_query(db_connection, delete_intersection_query, data)
+    delete_ingredient_results = execute_query(db_connection, delete_ingredient_query, data)
+
+    return redirect(url_for("ingredients_suppliers"))
