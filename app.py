@@ -421,11 +421,16 @@ def delete_supplier(id):
     return redirect(url_for("ingredients_suppliers"))
 
 
-@app.route('/update_ingredient/<int:id>')
+@app.route('/update_ingredient/<int:id>', methods=['POST', 'GET'])
 def update_ingredient(id):
-    """deletes a ingredient with the given id"""
+    """update a ingredient with the given id"""
     db_connection = connect_to_database()
-    print("We're at update ingredient query!")
+    print("We're at update ingredient query!!")
+    if request.method == "POST":
+        ingredient_id = request.form['ingredient_id']
+
+        print("THE ingredient ID = ", ingredient_id)
+
     # delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE ing_id = %s"
     # delete_ingredient_query = "DELETE FROM Ingredients WHERE ingredient_id = %s"
     # data = (id,)

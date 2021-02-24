@@ -35,21 +35,21 @@
 											<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 										</div>
 										<div class="modal-body">
-											<form action="">
+											<form action="/update_ingredient/{{set[-1]}}" method="POST">
 												<div>
-													<label class="form-abel">First Name</label>
+													<label class="form-label">First Name</label>
 													<input type="text" class="form-control">
 												</div>
 												<div>
-													<label class="form-abel">Last Name</label>
+													<label class="form-label">Last Name</label>
 													<input type="text" class="form-control">
 												</div>
 												<div>
-													<label class="form-abel">ID</label>
-													<input type="text" class="form-control">
+													<label class="form-label">ID</label>
+													<input type="text" class="form-control" name="ingredient_id" value="">
 												</div>
 												<div class="modal-footer">
-													<input type='button' name='Update' value='Update' onclick="window.location = '/update_ingredient/{{set[-1]}}'">
+													<input type='submit' name='Update' value='Update'>
 													<input type='button' name='Cancel' value='Cancel' data-bs-dismiss="modal">
 												</div>
 											</form>
