@@ -256,6 +256,10 @@ body {
   font-size: 15px;
 }
 
+#clear-button:hover {
+  background-color: #FFC107;
+}
+
 #clear-link {
   text-decoration: none;
   color: black;
