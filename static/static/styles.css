@@ -302,3 +302,6 @@ th {
   border-collapse: collapse;
 }
 
+h1, h2, h4, p, th, label, input, span {
+  -webkit-user-select: none;
+}
