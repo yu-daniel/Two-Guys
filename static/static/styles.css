@@ -11,8 +11,9 @@ CodeRookie - https://www.youtube.com/watch?v=UInN6O_nMKs
 (3) - Bootstrap - table rows' hovering
 Link - https://getbootstrap.com/docs/4.0/content/tables/
 
-(4) - W3Schools - styling input forms
+(4) - W3Schools - styling input forms, using user-select to disable selecting text
 Link - https://www.w3schools.com/css/css_form.asp
+Link - https://www.w3schools.com/cssref/css3_pr_user-select.asp
 */
 
 table, .col-sm-6, .col-sm-12, .header1 {
@@ -56,7 +57,7 @@ table {
 
 /*scrollbar for all tables*/
 .search-box-scroll {
-	margin-left: auto;
+  margin-left: auto;
   margin-right: auto;
   overflow-y: scroll;
 }
@@ -293,7 +294,11 @@ input[type="button"]:focus {
   outline: none;
 }
 
-td, th {
-  width: 1px;
-  white-space: nowrap;
+th {
+  position: sticky;
+  background-color: #FFC107;
+  top: 0px;
+  border-top: 2px;
+  border-collapse: collapse;
 }
+
