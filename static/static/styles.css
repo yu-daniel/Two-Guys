@@ -147,12 +147,12 @@ div.employees-locations-wallpaper {
 
 /*set width/height for each table, since it can vary*/
 .ingredients {
-    width: 500px;
+    width: 549px;
     height: 300px;
 }
 
 .suppliers {
-    width: 300px;
+    width: 352px;
     height: 300px;
 }
 
@@ -162,22 +162,22 @@ div.employees-locations-wallpaper {
 }
 
 .orders {
-    width: 1000px;
+    width: 1059px;
     height: 300px;
 }
 
 .customers {
-    width: 800px;
+    width: 805px;
     height: 300px;
 }
 
 .employees-locations {
-    width: 660px;
+    width: 737px;
     height: 300px;
 }
 
 .locations-overview {
-    width: 400px;
+    width: 421px;
     height: 200px;
 }
 
@@ -287,4 +287,13 @@ input[type="button"]:hover, input[type="submit"]:hover {
 
 input[type="text"], input[type="date"],  input[type="number"], input[type="button"], input[type="submit"] {
   font-size: 15px;
+}
+
+input[type="button"]:focus {
+  outline: none;
+}
+
+td, th {
+  width: 1px;
+  white-space: nowrap;
 }
