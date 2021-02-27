@@ -133,39 +133,6 @@
 	</table>
 </div>
 
-<h4 class="header1">Ingredients and Suppliers</h4>
-<div class="search-box-scroll ingredients-suppliers">
-	<table class="center">
-		<thead>
-			<tr>
-				<!-- this for loop will grab the column title data from app.py and translate it to the template -->
-				{% for title in ingredients_suppliers_headers %}
-				<th>{{ title }}</th>
-				{% endfor %}
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-			<!-- this for loop will output the raw value set of ingredients data from app.py -->
-			{% for set in ingredients_suppliers_values %}
-			<tr>
-				<!-- lastly, each type of data in the set is added to each row -->
-				{% for value in set %}
-				<td>{{ value }}</td>
-				{% endfor %}
-				<td>
-					<input type="button" value="Edit">
-				</td>
-				<td>
-					<input type="button" value="Delete">
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
-
-		
 <div class="row">
 	<div class="col-sm-6">
 		<form action="#" method="POST" id="addform">
@@ -204,7 +171,7 @@
 			{{ supplier_form.hidden_tag() }}
 			<fieldset>
 				<legend><span class="span-bg">Add a supplier</span></legend>
-				<div>
+				<div >
 					{{ supplier_form.supplier_name.label(class="span-bg") }}
 					{{ supplier_form.supplier_name }}
 				</div>

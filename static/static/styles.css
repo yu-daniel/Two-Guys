@@ -94,6 +94,10 @@ table {
     color: #F6F6F6;
 }
 
+.main-title {
+  font-size: 80px;
+}
+
 /*Reference - see (2)*/
 /*allow Two Guys title in front back to slowly appear*/
 .primary-animation{
@@ -163,7 +167,7 @@ div.employees-locations-wallpaper {
 }
 
 .orders {
-    width: 1059px;
+    width: 1058px;
     height: 300px;
 }
 
@@ -173,7 +177,7 @@ div.employees-locations-wallpaper {
 }
 
 .employees-locations {
-    width: 737px;
+    width: 736px;
     height: 300px;
 }
 
@@ -239,6 +243,7 @@ body {
 
 .span-bg {
   color: white;
+  text-shadow: 2px 2px 4px #0080FF;
 }
 
 .header1 {
@@ -309,4 +314,8 @@ th {
 
 h1, h2, h4, p, th, label, input, span {
   -webkit-user-select: none;
+}
+
+h1, h2, h4 {
+  text-shadow: 2px 2px 4px #FF6666;
 }
