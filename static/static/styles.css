@@ -236,11 +236,6 @@ body {
   font-family: 'Quicksand', sans-serif;
 }
 
-/* .span-bg {
-    background-color: #E0E0E0;
-    border-radius: 4px;
-} */
-
 .span-bg {
   color: white;
 }
@@ -262,5 +257,34 @@ body {
 #clear-link {
   text-decoration: none;
   color: black;
+}
 
+
+.modal-header {
+  background-color: #FFC107;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.modal-title {
+  font-size: 15px;
+}
+
+.modal-body {
+  padding-top: 5px;
+  padding-bottom: 5px;
+ }
+
+ .modal-footer {
+  padding-top: 5px;
+  padding-bottom: 2px;
+ }
+
+input[type="button"]:hover, input[type="submit"]:hover {
+  background-color: #FFC107;
+  color: black !important;
+}
+
+input[type="text"], input[type="date"],  input[type="number"], input[type="button"], input[type="submit"] {
+  font-size: 15px;
 }

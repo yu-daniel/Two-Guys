@@ -31,29 +31,36 @@
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title">Put your new info here! For Ingredient ID: {{set[-1]}}</h5>
+											<h5 class="modal-title">Edit Data for Ingredient ID: {{set[-1]}}</h5>
 											<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 										</div>
 										<div class="modal-body">
 											<form action="/update_ingredient/{{set[-1]}}" method="POST">
-
-												<div>
-													<label class="form-label">Order Date</label>
-													<input type="date" class="form-control" name="order_date" value={{set[0]}}>
+												<div class="row mb-0 mt-0">
+													<label for="date_input" class="col-sm-2 col-form-label col-form-label-sm">Order Date</label>
+													<div class="col-sm-10">
+														<input type="date" class="form-control" id="date_input" name="order_date" value={{set[0]}}>
+													</div>
 												</div>
-												<div>
-													<label class="form-label">Ingredient Name</label>
-													<input type="text" class="form-control" name="ingredient_name" value={{set[1]}}>
+												<div class="row mb-0">
+													<label for="ingred_input" class="col-sm-2 col-form-label col-form-label-sm">Ingredient Name</label>
+													<div class="col-sm-10">
+														<input type="text" class="form-control" id="ingred_input" name="ingredient_name" value={{set[1]}}>
+													</div>
 												</div>
-												<div>
-													<label class="form-label">Ingredient Cost</label>
-													<input type="number" class="form-control" name="ingredient_cost" value={{set[2]}}>
+												<div class="row mb-0">
+													<label for="cost_input" class="col-sm-2 col-form-label col-form-label-sm">Ingredient Cost</label>
+													<div class="col-sm-10">
+														<input type="number" class="form-control" id="cost_input" name="ingredient_cost" value={{set[2]}}>
+													</div>
 												</div>
-												<div>
-													<label class="form-label">Order Num.</label>
-													<input type="number" class="form-control" name="order_num" value={{set[3]}}>
+												<div class="row mb-0">
+													<label for="order_input" class="col-sm-2 col-form-label col-form-label-sm">Order Num.</label>
+													<div class="col-sm-10">
+														<input type="number" class="form-control" id="order_input" name="order_num" value={{set[3]}}>
+													</div>
 												</div>
-												<div class="modal-footer">
+												<div class="modal-footer mb-0">
 													<input type='submit' name='Update' value='Update'>
 													<input type='button' name='Cancel' value='Cancel' data-bs-dismiss="modal">
 												</div>
@@ -65,7 +72,7 @@
 						</div>
 					</td>
 					<td>
-						<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_ingredient/{{set[-1]}}'">
+						<input type='button' class="form-button" name='Delete' value='Delete' onclick="window.location = '/delete_ingredient/{{set[-1]}}'">
 					</td>
 				</tr>
 			{% endfor %}

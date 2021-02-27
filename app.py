@@ -135,12 +135,12 @@ def orders_customers():
         search_query = \
             "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
             "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
-            "WHERE first_name = (%s);"
+            "WHERE first_name LIKE (%s);"
 
         submit_data = (search_data, )
         # print("submit data = ", submit_data)
         # print("query = ", orders_query)
-        search_query = execute_query(db_connection, search_query, (search_data, )).fetchall()
+        search_query = execute_query(db_connection, search_query, ("%" + search_data + "%", )).fetchall()
 
         if search_query:
             order_results = search_query
@@ -248,8 +248,6 @@ def ingredients_suppliers():
     ingredient_results = execute_query(db_connection, ingredients_query).fetchall()
     suppliers_results = execute_query(db_connection, suppliers_query).fetchall()
     ingredients_suppliers_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
-
-
 
     supplier_choices_results = execute_query(db_connection, supplier_choices_query).fetchall()
     ingredients_supplied_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
