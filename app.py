@@ -438,13 +438,9 @@ def delete_employee(id):
     results = execute_query(db_connection, delete_employee_query, data)
 
     # delete managers if not in employee table after deleting employee who might be a manager
-    delete_manager_query = "DELETE * FROM Managers WHERE NOT EXISTS (SELECT FROM Employees WHERE Employees.manager_id = Managers.manager_id;"
+    delete_manager_query = "DELETE FROM Managers WHERE NOT EXISTS (SELECT 1 FROM Employees WHERE Employees.manager_num = Managers.manager_id);"
     execute_query(db_connection, delete_manager_query)
-    
-    # WHERE NOT EXISTS (SELECT first_name FROM Managers "
 
-
-    # 
     return redirect(url_for("employees_locations"))
 
 

@@ -125,16 +125,16 @@ INSERT INTO `Employees` (`employee_id`, `first_name`, `last_name`, `start_date`,
 (3, 'Anselm', 'Feehily', '2018-07-10', 'active', NULL, 4, 3),
 (4, 'Katheryn', 'Wardlow', '2020-02-11', 'vacation', NULL, 5, 4),
 (5, 'Linnet', 'Rule', '2021-01-26', 'active', NULL, 3, 5),
-(6, 'Marley', 'Lehenmann', '0000-00-00', 'active', 1, 1, NULL),
-(7, 'Cristina', 'Ambrozewicz', '0000-00-00', 'active', 1, 1, NULL),
-(8, 'Catlee', 'Fowley', '0000-00-00', 'active', 2, 2, NULL),
-(9, 'Meredith', 'Wain', '0000-00-00', 'active', 2, 2, NULL),
-(10, 'Baxie', 'Corry', '0000-00-00', 'active', 3, 4, NULL),
-(11, 'Janek', 'Edginton', '0000-00-00', 'active', 3, 4, NULL),
-(12, 'Willem', 'Holleran', '0000-00-00', 'active', 4, 5, NULL),
-(13, 'Bee', 'Penhaligon', '0000-00-00', 'active', 4, 5, NULL),
-(14, 'Fabien', 'Brophy', '0000-00-00', 'active', 5, 3, NULL),
-(15, 'Anetta', 'Fishley', '0000-00-00', 'active', 5, 3, NULL);
+(6, 'Marley', 'Lehenmann', '2020-02-11', 'active', 1, 1, NULL),
+(7, 'Cristina', 'Ambrozewicz', '2020-02-11', 'active', 1, 1, NULL),
+(8, 'Catlee', 'Fowley', '2020-02-11', 'active', 2, 2, NULL),
+(9, 'Meredith', 'Wain', '2020-02-11', 'active', 2, 2, NULL),
+(10, 'Baxie', 'Corry', '2020-02-11', 'active', 3, 4, NULL),
+(11, 'Janek', 'Edginton', '2020-02-11', 'active', 3, 4, NULL),
+(12, 'Willem', 'Holleran', '2020-02-11', 'active', 4, 5, NULL),
+(13, 'Bee', 'Penhaligon', '2020-02-11', 'active', 4, 5, NULL),
+(14, 'Fabien', 'Brophy', '2020-02-11', 'active', 5, 3, NULL),
+(15, 'Anetta', 'Fishley', '2020-02-11', 'active', 5, 3, NULL);
 
 -- --------------------------------------------------------
 
