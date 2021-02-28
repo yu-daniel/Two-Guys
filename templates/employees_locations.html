@@ -45,20 +45,52 @@
 		</thead>
 		<tbody>
 			<tr>
-				{% for data in location_data %}
-				<tr>
-					{% for location in data %}
-					<td>{{ location }}</td>
-					{% endfor %}
-					<td>
-						<input type="button" value="Edit">
-					</td>
-					<td>
-						<input type="button" value="Delete">
-					</td>
-				</tr>
+				{% for location in location_data %}
+			<tr>
+				{% for value in location[:-1] %}
+				<td>{{ value }}</td>
 				{% endfor %}
+				<td>
+					<div class="container">
+						<input type='button' name='Edit' value='Edit' data-bs-toggle="modal" data-bs-target="#edit-modal_suppliers{{location[-1]}}">
+						<div class="modal" id="edit-modal_suppliers{{location[-1]}}">
+							<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Put your new info here! For Store ID: {{location[-1]}}</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+									</div>
+									<div class="modal-body">
+										<form action="/update_location/{{location[-1]}}" method="POST">
+
+											<div>
+												<label class="form-label">City</label>
+												<input type="text" class="form-control" name="location_city" value={{location[0]}}>
+											</div>
+											<div>
+												<label class="form-label">State</label>
+												<input type="text" class="form-control" name="location_state" value={{location[1]}}>
+											</div>
+											<div>
+												<label class="form-label">Zip Code</label>
+												<input type="text" class="form-control" name="location_zip_code" value={{location[2]}}>
+											</div>
+											<div class="modal-footer">
+												<input type='submit' name='Update' value='Update'>
+												<input type='button' name='Cancel' value='Cancel' data-bs-dismiss="modal">
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</td>
+				<td>
+					<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_location/{{location[-1]}}'">
+				</td>
 			</tr>
+			{% endfor %}
 		</tbody>
 	</table>
 </div>

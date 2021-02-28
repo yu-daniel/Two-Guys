@@ -365,7 +365,7 @@ def employees_locations():
     employees_managers_results = execute_query(db_connection, employees_managers_query).fetchall()
 
     # locations
-    location_query = "SELECT city, state, zip_code FROM Locations;"
+    location_query = "SELECT city, state, zip_code, store_id FROM Locations;"
     location_results = execute_query(db_connection, location_query).fetchall()
 
     # dropdowns
@@ -417,6 +417,15 @@ def delete_supplier(id):
     delete_ingredient_results = execute_query(db_connection, delete_supplier_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
+
+@app.route('/delete_location/<int:id>')
+def delete_location(id):
+    """deletes a store location with the given id"""
+    db_connection = connect_to_database()
+    delete_query = "DELETE FROM Locations WHERE store_id = %s;"
+    data = (id,)
+    results = execute_query(db_connection, delete_query, data)
+    return redirect(url_for("employees_locations"))
 
 
 @app.route('/update_ingredient/<int:id>', methods=['POST', 'GET'])
@@ -470,3 +479,21 @@ def update_supplier(id):
         result = execute_query(db_connection, update_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
+
+@app.route('/update_location/<int:id>', methods=['POST', 'GET'])
+def update_location(id):
+    """update a store location with the given store id"""
+    db_connection = connect_to_database()
+    
+    if request.method == "POST":
+        location_city = request.form['location_city']
+        location_state = request.form['location_state']
+        location_zip_code = request.form['location_zip_code']
+
+        update_query = \
+            "UPDATE Locations SET city = %s, state = %s, zip_code = %s WHERE store_id = %s;"
+        
+        data = (location_city, location_state, location_zip_code, id)
+        result = execute_query(db_connection, update_query, data)
+    
+    return redirect(url_for("employees_locations"))
