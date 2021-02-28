@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '7cd4739b6ecbf78e2fb020b7f663a979'
 
 # headers for tables displaying data
-headers = ['Name', 'Start Date', 'Vacation', 'Managed by', 'Location', "", ""]
+headers = ['First Name', 'Last Name', 'Start Date', 'Vacation', 'Managed by', 'Location', "", ""]
 location_headers = ['City', 'State', 'Zip Code', '', '']
 ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
 suppliers_headers = ["Name", "", ""]
@@ -336,7 +336,7 @@ def employees_locations():
 
         # locations
         location_input_data = (city, state, zip_code)
-        location_input_query = "INSERT INTO Locations (city, state, zip_code) \
+        location_input_query = "INSERT INTO Locations (`city`, state, zip_code) \
                                 VALUES (%s, %s, %s);"
 
         if validator(location_input_data):
@@ -354,15 +354,16 @@ def employees_locations():
     # for GET requests
     # employees
     employees_managers_query = "SELECT \
-                                    CONCAT(Employees.first_name, ' ', Employees.last_name) AS Name, \
+                                    Employees.first_name, Employees.last_name, \
                                     Employees.start_date, Employees.status, \
                                     CONCAT(Managers.first_name, ' ', Managers.last_name) AS ManagedBy, \
-	                                Locations.city \
+	                                Locations.`city`, Employees.employee_id \
                                 FROM Employees \
                                 LEFT JOIN Managers ON Managers.manager_id = Employees.emp_manager_id \
                                 LEFT JOIN Locations ON Locations.store_id = Employees.emp_store_id \
                                 ORDER BY start_date;"
     employees_managers_results = execute_query(db_connection, employees_managers_query).fetchall()
+    # print(employees_managers_results[0])
 
     # locations
     location_query = "SELECT city, state, zip_code, store_id FROM Locations;"
@@ -427,6 +428,15 @@ def delete_location(id):
     results = execute_query(db_connection, delete_query, data)
     return redirect(url_for("employees_locations"))
 
+@app.route('/delete_employee/<int:id>')
+def delete_employee(id):
+    db_connection = connect_to_database()
+    delete_employee_query = "DELETE FROM Employees WHERE employee_id = %s"
+    # delete_manager_query = "DELETE FROM Managers WHERE manager_id = "
+    data = (id,)
+    results = execute_query(db_connection, delete_employee_query, data)
+    return redirect(url_for("employees_locations"))
+
 
 @app.route('/update_ingredient/<int:id>', methods=['POST', 'GET'])
 def update_ingredient(id):
@@ -479,6 +489,28 @@ def update_supplier(id):
         result = execute_query(db_connection, update_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
+
+@app.route('/update_employee/<int:id>', methods=['POST', 'GET'])
+def update_employee(id):
+    """update an employee with the given employee id"""
+    db_connection = connect_to_database()
+
+    if request.method == "POST":
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        start_date = request.form['start_date']
+        vacation = request.form['vacation']
+        managed_by = request.form['managed_by']
+        location = request.form['location']
+
+        update_query = \
+            "UPDATE Employees SET first_name = %s, last_name=%s, start_date=%s, status=%s  WHERE employee_id = %s;"
+
+        data = (first_name, last_name, start_date, vacation, id)
+        result = execute_query(db_connection, update_query, data)
+    
+    return redirect(url_for("employees_locations"))
+
 
 @app.route('/update_location/<int:id>', methods=['POST', 'GET'])
 def update_location(id):

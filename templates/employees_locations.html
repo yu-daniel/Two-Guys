@@ -15,20 +15,75 @@
 		</thead>
 		<tbody>
 			<tr>
-				{% for infos in data %}
+				{% for employee in data %}
 				<tr>
-					{% for info in infos %}
-					<td>{{ info }}</td>
+					{% for value in employee[:-1] %}
+					<td>{{ value }}</td>
 					{% endfor %}
 					<td>
-						<input type="button" value="Edit">
+						<div class="container">
+							<input type='button' name='Edit' value='Edit' data-bs-toggle="modal" data-bs-target="#edit-modal{{employee[-1]}}">
+							<div class="modal" id="edit-modal{{employee[-1]}}">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Edit Data for Employee ID: {{employee[-1]}}</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+										</div>
+										<div class="modal-body">
+											<form action="/update_employee/{{employee[-1]}}" method="POST">
+												<div class="row mb-0 mt-0">
+													<label for="first_name_input" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
+													<div class="col-sm-10">
+														<input type="text" class="form-control" id="name_input" name="first_name" value="{{employee[0]}}">
+													</div>
+												</div>
+												<div class="row mb-0">
+													<label for="last_name_input" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
+														<div class="col-sm-10">
+															<input type="text" class="form-control" id="name_input" name="last_name" value="{{employee[1]}}">
+														</div>
+												</div>
+												<div class="row mb-0">
+													<label for="start_date_input" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
+													<div class="col-sm-10">
+														<input type="date" class="form-control" id="start_date_input" name="start_date" value={{employee[2]}}>
+													</div>
+												</div>
+												<div class="row mb-0">
+													<label for="vacation_input" class="col-sm-2 col-form-label col-form-label-sm">Vacation</label>
+													<div class="col-sm-10">
+														<input type="text" class="form-control" id="vacation_input" name="vacation" value={{employee[3]}}>
+													</div>
+												</div>
+												<div class="row mb-0">
+													<label for="managed_by_input" class="col-sm-2 col-form-label col-form-label-sm">Managed by</label>
+													<div class="col-sm-10">
+														<input type="text" class="form-control" id="managed_by_input" name="managed_by" value={{employee[4]}}>
+													</div>
+												</div>
+												<div class="row mb-0">
+													<label for="location_input" class="col-sm-2 col-form-label col-form-label-sm">Location</label>
+													<div class="col-sm-10">
+														<input type="text" class="form-control" id="location_input" name="location" value="{{employee[5]}}">
+													</div>
+												</div>
+												<div class="modal-footer mb-0">
+													<input type='submit' name='Update' value='Update'>
+													<input type='button' name='Cancel' value='Cancel' data-bs-dismiss="modal">
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</td>
 					<td>
-						<input type="button" value="Delete">
+						<input type='button' class="form-button" name='Delete' value='Delete' onclick="window.location = '/delete_employee/{{employee[-1]}}'">
 					</td>
 				</tr>
-				{% endfor %}
-			</tr>
+			{% endfor %}
 		</tbody>
 	</table>
 </div>
