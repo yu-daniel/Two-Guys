@@ -419,6 +419,7 @@ def delete_supplier(id):
 
     return redirect(url_for("ingredients_suppliers"))
 
+
 @app.route('/delete_location/<int:id>')
 def delete_location(id):
     """deletes a store location with the given id"""
@@ -428,13 +429,22 @@ def delete_location(id):
     results = execute_query(db_connection, delete_query, data)
     return redirect(url_for("employees_locations"))
 
+
 @app.route('/delete_employee/<int:id>')
 def delete_employee(id):
     db_connection = connect_to_database()
     delete_employee_query = "DELETE FROM Employees WHERE employee_id = %s"
-    # delete_manager_query = "DELETE FROM Managers WHERE manager_id = "
     data = (id,)
     results = execute_query(db_connection, delete_employee_query, data)
+
+    # delete managers if not in employee table after deleting employee who might be a manager
+    delete_manager_query = "DELETE * FROM Managers WHERE NOT EXISTS (SELECT FROM Employees WHERE Employees.manager_id = Managers.manager_id;"
+    execute_query(db_connection, delete_manager_query)
+    
+    # WHERE NOT EXISTS (SELECT first_name FROM Managers "
+
+
+    # 
     return redirect(url_for("employees_locations"))
 
 
@@ -466,6 +476,7 @@ def update_ingredient(id):
 
     return redirect(url_for("ingredients_suppliers"))
 
+
 @app.route('/update_supplier/<int:id>', methods=['POST', 'GET'])
 def update_supplier(id):
     """update a supplier with the given id"""
@@ -489,6 +500,7 @@ def update_supplier(id):
         result = execute_query(db_connection, update_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
+
 
 @app.route('/update_employee/<int:id>', methods=['POST', 'GET'])
 def update_employee(id):

@@ -111,29 +111,30 @@ CREATE TABLE `Employees` (
   `start_date` date NOT NULL,
   `status` varchar(20) NOT NULL,
   `emp_manager_id` int(6) DEFAULT NULL,
-  `emp_store_id` int(6) NOT NULL
+  `emp_store_id` int(6) NOT NULL,
+  `manager_num` int(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `Employees`
 --
 
-INSERT INTO `Employees` (`employee_id`, `first_name`, `last_name`, `start_date`, `status`, `emp_manager_id`, `emp_store_id`) VALUES
-(1, 'Nevins', 'De Bruyn', '2008-04-10', 'vacation', NULL, 1),
-(2, 'Ellynn', 'Dik', '2009-10-10', 'active', NULL, 2),
-(3, 'Anselm', 'Feehily', '2018-07-10', 'active', NULL, 4),
-(4, 'Katheryn', 'Wardlow', '2020-02-11', 'vacation', NULL, 5),
-(5, 'Linnet', 'Rule', '2021-01-26', 'active', NULL, 3),
-(6, 'Marley', 'Lehenmann', '0000-00-00', 'active', 1, 1),
-(7, 'Cristina', 'Ambrozewicz', '0000-00-00', 'active', 1, 1),
-(8, 'Catlee', 'Fowley', '0000-00-00', 'active', 2, 2),
-(9, 'Meredith', 'Wain', '0000-00-00', 'active', 2, 2),
-(10, 'Baxie', 'Corry', '0000-00-00', 'active', 3, 4),
-(11, 'Janek', 'Edginton', '0000-00-00', 'active', 3, 4),
-(12, 'Willem', 'Holleran', '0000-00-00', 'active', 4, 5),
-(13, 'Bee', 'Penhaligon', '0000-00-00', 'active', 4, 5),
-(14, 'Fabien', 'Brophy', '0000-00-00', 'active', 5, 3),
-(15, 'Anetta', 'Fishley', '0000-00-00', 'active', 5, 3);
+INSERT INTO `Employees` (`employee_id`, `first_name`, `last_name`, `start_date`, `status`, `emp_manager_id`, `emp_store_id`, `manager_num`) VALUES
+(1, 'Nevins', 'De Bruyn', '2008-04-10', 'vacation', NULL, 1, 1),
+(2, 'Ellynn', 'Dik', '2009-10-10', 'active', NULL, 2, 2),
+(3, 'Anselm', 'Feehily', '2018-07-10', 'active', NULL, 4, 3),
+(4, 'Katheryn', 'Wardlow', '2020-02-11', 'vacation', NULL, 5, 4),
+(5, 'Linnet', 'Rule', '2021-01-26', 'active', NULL, 3, 5),
+(6, 'Marley', 'Lehenmann', '0000-00-00', 'active', 1, 1, NULL),
+(7, 'Cristina', 'Ambrozewicz', '0000-00-00', 'active', 1, 1, NULL),
+(8, 'Catlee', 'Fowley', '0000-00-00', 'active', 2, 2, NULL),
+(9, 'Meredith', 'Wain', '0000-00-00', 'active', 2, 2, NULL),
+(10, 'Baxie', 'Corry', '0000-00-00', 'active', 3, 4, NULL),
+(11, 'Janek', 'Edginton', '0000-00-00', 'active', 3, 4, NULL),
+(12, 'Willem', 'Holleran', '0000-00-00', 'active', 4, 5, NULL),
+(13, 'Bee', 'Penhaligon', '0000-00-00', 'active', 4, 5, NULL),
+(14, 'Fabien', 'Brophy', '0000-00-00', 'active', 5, 3, NULL),
+(15, 'Anetta', 'Fishley', '0000-00-00', 'active', 5, 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -352,7 +353,8 @@ ALTER TABLE `Customers_Locations`
 ALTER TABLE `Employees`
   ADD PRIMARY KEY (`employee_id`),
   ADD KEY `emp_manager_id` (`emp_manager_id`),
-  ADD KEY `emp_store_id` (`emp_store_id`);
+  ADD KEY `emp_store_id` (`emp_store_id`),
+  ADD KEY `manager_num` (`manager_num`);
 
 --
 -- Indexes for table `Ingredients`
@@ -455,8 +457,9 @@ ALTER TABLE `Customers_Locations`
 -- Constraints for table `Employees`
 --
 ALTER TABLE `Employees`
-  ADD CONSTRAINT `Employees_ibfk_1` FOREIGN KEY (`emp_manager_id`) REFERENCES `Managers` (`manager_id`),
-  ADD CONSTRAINT `Employees_ibfk_2` FOREIGN KEY (`emp_store_id`) REFERENCES `Locations` (`store_id`);
+  ADD CONSTRAINT `Employees_ibfk_1` FOREIGN KEY (`emp_manager_id`) REFERENCES `Managers` (`manager_id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `Employees_ibfk_2` FOREIGN KEY (`emp_store_id`) REFERENCES `Locations` (`store_id`),
+  ADD CONSTRAINT `Employees_ibfk_3` FOREIGN KEY (`manager_num`) REFERENCES `Managers` (`manager_id`);
 
 --
 -- Constraints for table `Ingredients`
