@@ -281,7 +281,7 @@ def ingredients_suppliers():
                            ingredients_suppliers_values=ingredients_suppliers_values,
                            suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
-                           ingredient_suppliers_v=ingredient_results
+                           ingredient_suppliers_v=ingredient_results, order_nums=order_id_results
                            )
 
 # route for employees & locations page
