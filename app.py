@@ -118,7 +118,7 @@ def orders_customers():
 
     # queries for displaying the Orders and Customers 'overview' tables
     orders_query = \
-        "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
+        "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number, order_id FROM `Customers` " \
         "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id ORDER BY date_time;"
 
     customers_query = \
@@ -175,6 +175,8 @@ def orders_customers():
 
                            search_form=search_form
                            )
+
+
 
 # route for the ingredients & suppliers page
 @app.route("/ingredients-suppliers", methods=["GET", "POST"])
@@ -391,6 +393,15 @@ def employees_locations():
     return render_template('employees_locations.html', headers=headers, data=employees_managers_results, location_headers=location_headers,
                            location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form)
 
+
+@app.route("/delete_order/<int:id>")
+def delete_order(id):
+    """deletes an order with the given order id"""
+    db_connection = connect_to_database()
+    delete_order_query = "DELETE FROM Orders WHERE order_id = %s;"
+    data = (id,)
+    execute_query(db_connection, delete_order_query, data)
+    return redirect(url_for("orders_customers"))
 
 @app.route('/delete_ingredient/<int:id>')
 def delete_ingredient(id):
