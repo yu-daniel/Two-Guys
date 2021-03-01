@@ -457,6 +457,31 @@ def delete_employee(id):
     return redirect(url_for("employees_locations"))
 
 
+@app.route('/update_order/<int:id>', methods=['POST', 'GET'])
+def update_order(id):
+    """update an order with the given id"""
+    db_connection = connect_to_database()
+
+    if request.method == 'POST':
+        order_date = request.form['date']
+        customer_id = request.form['customer_id']
+
+        sales_amount = request.form['sales_amount']
+
+        update_order_query = \
+            "UPDATE Orders SET date_time=%s, sale_amount=%s, customer_num=%s WHERE order_id=%s;"
+        
+        update_order_data = (order_date, sales_amount, customer_id, id)
+        execute_query(db_connection, update_order_query, update_order_data)
+
+        # update order_date in ingredients table as well
+        update_date_query = "UPDATE Ingredients SET order_date=%s WHERE order_num=%s;"
+        update_date_data = (order_date, id)
+        execute_query(db_connection, update_date_query, update_date_data)
+    
+    return redirect(url_for("orders_customers"))
+
+
 @app.route('/update_ingredient/<int:id>', methods=['POST', 'GET'])
 def update_ingredient(id):
     """update a ingredient with the given id"""
