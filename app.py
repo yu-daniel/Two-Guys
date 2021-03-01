@@ -357,7 +357,7 @@ def employees_locations():
                                     Employees.first_name, Employees.last_name, \
                                     Employees.start_date, Employees.status, \
                                     CONCAT(Managers.first_name, ' ', Managers.last_name) AS ManagedBy, \
-	                                Locations.`city`, Employees.employee_id \
+	                                Locations.city, Employees.employee_id \
                                 FROM Employees \
                                 LEFT JOIN Managers ON Managers.manager_id = Employees.emp_manager_id \
                                 LEFT JOIN Locations ON Locations.store_id = Employees.emp_store_id \
@@ -510,14 +510,34 @@ def update_employee(id):
         last_name = request.form['last_name']
         start_date = request.form['start_date']
         vacation = request.form['vacation']
+
+        # find the manager_id of the new manager entered in the update form for employee
         managed_by = request.form['managed_by']
+        new_manager = managed_by.split(" ", 1)
+        new_manager_query = "SELECT manager_id FROM Managers WHERE Managers.first_name = %s AND Managers.last_name = %s"
+        new_manager_data = (new_manager[0], str(new_manager[1:]))
+        new_manager_id = execute_query(db_connection, new_manager_query, new_manager_data).fetchone()
+
+        # find the store_id of the new location entered in the update form for employee
         location = request.form['location']
+        new_location_query = "SELECT store_id FROM Locations WHERE Locations.city = %s"
+        new_location_id = execute_query(db_connection, new_location_query, location).fetchone()
 
         update_query = \
-            "UPDATE Employees SET first_name = %s, last_name=%s, start_date=%s, status=%s  WHERE employee_id = %s;"
+            "UPDATE Employees SET first_name = %s, last_name=%s, start_date=%s, status=%s, emp_manager_id=%s, emp_store_id=%s WHERE employee_id = %s;"
 
-        data = (first_name, last_name, start_date, vacation, id)
+        data = (first_name, last_name, start_date, vacation, new_manager_id, new_location_id, id)
         result = execute_query(db_connection, update_query, data)
+
+        # if also a manager
+        manager_num_query = "SELECT manager_num FROM Employees WHERE Employees.employee_id = %s"
+        manager_num_data = (id,)
+        manager_num_result = execute_query(db_connection, manager_num_query, manager_num_data).fetchone()
+        if manager_num_result is not None:
+
+            manager_update_query = "UPDATE Managers SET first_name=%s, last_name=%s, status=%s, manager_store_id=%s WHERE manager_id = %s;"
+            manager_update_data = (first_name, last_name, vacation, new_location_id, manager_num_result)
+            execute_query(db_connection, manager_update_query, manager_update_data)
     
     return redirect(url_for("employees_locations"))
 
