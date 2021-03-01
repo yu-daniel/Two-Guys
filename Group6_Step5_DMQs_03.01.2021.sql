@@ -113,7 +113,9 @@ SET
 	start_date = :start_dateInput, 
 	status = :statusInput, 
 	emp_manager_id = :emp_manager_idInput, 
-	emp_store_id = :emp_store_id
+	emp_store_id = :emp_store_id,
+	manager_num = :manager_num
+
 WHERE employee_id = :employee_id_from_the_table;
 
 UPDATE Managers

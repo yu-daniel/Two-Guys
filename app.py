@@ -351,6 +351,20 @@ def employees_locations():
                 execute_query(db_connection, manager_input_query, manager_input_data)
 
             db_connection.commit()
+
+            # add manager_num to Employees table
+            db_connection = connect_to_database()
+            if manager_input_data is not None:
+                last_added_employee_query = "SELECT employee_id FROM Employees ORDER BY employee_id DESC LIMIT 1;"
+                last_added_employee_result = execute_query(db_connection, last_added_employee_query).fetchone()
+
+                last_added_manager_query = "SELECT manager_id FROM Managers ORDER BY manager_id DESC LIMIT 1;"
+                last_added_manager_result = execute_query(db_connection, last_added_manager_query).fetchone()
+
+                add_manager_num_query = "UPDATE Employees SET manager_num=%s WHERE employee_id=%s;"
+                add_manager_num_data = (last_added_manager_result, last_added_employee_result)
+                execute_query(db_connection, add_manager_num_query, add_manager_num_data)
+
         return redirect(url_for("employees_locations"))
 
     # for GET requests
