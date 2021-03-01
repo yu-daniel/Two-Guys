@@ -111,7 +111,7 @@ CREATE TABLE `Employees` (
   `start_date` date NOT NULL,
   `status` varchar(20) NOT NULL,
   `emp_manager_id` int(6) DEFAULT NULL,
-  `emp_store_id` int(6) NOT NULL,
+  `emp_store_id` int(6) DEFAULT NULL,
   `manager_num` int(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -248,7 +248,7 @@ CREATE TABLE `Managers` (
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `status` varchar(20) NOT NULL,
-  `manager_store_id` int(6) NOT NULL
+  `manager_store_id` int(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -450,15 +450,15 @@ ALTER TABLE `Suppliers`
 -- Constraints for table `Customers_Locations`
 --
 ALTER TABLE `Customers_Locations`
-  ADD CONSTRAINT `Customers_Locations_ibfk_1` FOREIGN KEY (`customer_fk_id`) REFERENCES `Customers` (`customer_id`),
-  ADD CONSTRAINT `Customers_Locations_ibfk_2` FOREIGN KEY (`store_fk_id`) REFERENCES `Locations` (`store_id`);
+  ADD CONSTRAINT `Customers_Locations_ibfk_1` FOREIGN KEY (`customer_fk_id`) REFERENCES `Customers` (`customer_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `Customers_Locations_ibfk_2` FOREIGN KEY (`store_fk_id`) REFERENCES `Locations` (`store_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `Employees`
 --
 ALTER TABLE `Employees`
   ADD CONSTRAINT `Employees_ibfk_1` FOREIGN KEY (`emp_manager_id`) REFERENCES `Managers` (`manager_id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `Employees_ibfk_2` FOREIGN KEY (`emp_store_id`) REFERENCES `Locations` (`store_id`),
+  ADD CONSTRAINT `Employees_ibfk_2` FOREIGN KEY (`emp_store_id`) REFERENCES `Locations` (`store_id`) ON DELETE SET NULL,
   ADD CONSTRAINT `Employees_ibfk_3` FOREIGN KEY (`manager_num`) REFERENCES `Managers` (`manager_id`);
 
 --
@@ -478,7 +478,7 @@ ALTER TABLE `Ingredients_Suppliers`
 -- Constraints for table `Managers`
 --
 ALTER TABLE `Managers`
-  ADD CONSTRAINT `Managers_ibfk_1` FOREIGN KEY (`manager_store_id`) REFERENCES `Locations` (`store_id`);
+  ADD CONSTRAINT `Managers_ibfk_1` FOREIGN KEY (`manager_store_id`) REFERENCES `Locations` (`store_id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `Orders`

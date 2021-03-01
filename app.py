@@ -424,9 +424,11 @@ def delete_supplier(id):
 def delete_location(id):
     """deletes a store location with the given id"""
     db_connection = connect_to_database()
-    delete_query = "DELETE FROM Locations WHERE store_id = %s;"
+    delete_intersection_query = "DELETE FROM Customers_Locations WHERE store_fk_id = %s"
+    delete_location_query = "DELETE FROM Locations WHERE store_id = %s;"
     data = (id,)
-    results = execute_query(db_connection, delete_query, data)
+    execute_query(db_connection, delete_intersection_query, data)
+    execute_query(db_connection, delete_location_query, data)
     return redirect(url_for("employees_locations"))
 
 
