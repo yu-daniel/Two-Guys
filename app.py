@@ -172,8 +172,9 @@ def orders_customers():
                            order_form=order_form, customer_form=customer_form,
                            customer_headers=customer_headers, customer_values=customer_results,
                            orders_customers_h=orders_customers_h, orders_customers_v=order_results,
-
-                           search_form=search_form
+                           customer_ids=customer_id_results,
+                           search_form=search_form,
+                           city_name=location_results
                            )
 
 
@@ -281,7 +282,7 @@ def ingredients_suppliers():
                            ingredients_suppliers_values=ingredients_suppliers_values,
                            suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
-                           ingredient_suppliers_v=ingredient_results, order_nums=order_id_results
+                           ingredient_suppliers_v=ingredient_results, order_nums=order_id_results,
                            )
 
 # route for employees & locations page
@@ -375,6 +376,9 @@ def employees_locations():
     managed_by_name_results = execute_query(db_connection, managed_by_name_query).fetchall()
     managed_by_choices = []
 
+    manager_id_name = "SELECT manager_id, CONCAT(first_name, ' ', last_name) AS full_name FROM Managers;"
+    manager_id_name_results = execute_query(db_connection, manager_id_name).fetchall()
+
     for choices in managed_by_name_results:
         managed_by_choices.append(choices[0])
 
@@ -390,7 +394,10 @@ def employees_locations():
     employee_manager_form.store.choices = store_city_choices
 
     return render_template('employees_locations.html', headers=headers, data=employees_managers_results, location_headers=location_headers,
-                           location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form)
+                           location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form,
+                           city_name=store_city_results,
+                           managers=manager_id_name_results
+                           )
 
 
 @app.route("/delete_order/<int:id>", methods=['GET', 'POST'])
@@ -401,6 +408,7 @@ def delete_order(id):
     data = (id,)
     execute_query(db_connection, delete_order_query, data)
     return redirect(url_for("orders_customers"))
+
 
 @app.route("/delete_customer/<int:id>", methods=['GET', 'POST'])
 def delete_customer(id):
@@ -485,7 +493,7 @@ def update_order(id):
 
         update_order_query = \
             "UPDATE Orders SET date_time=%s, sale_amount=%s, customer_num=%s WHERE order_id=%s;"
-        
+
         update_order_data = (order_date, sales_amount, customer_id, id)
         execute_query(db_connection, update_order_query, update_order_data)
 
@@ -493,7 +501,7 @@ def update_order(id):
         update_date_query = "UPDATE Ingredients SET order_date=%s WHERE order_num=%s;"
         update_date_data = (order_date, id)
         execute_query(db_connection, update_date_query, update_date_data)
-    
+
     return redirect(url_for("orders_customers"))
 
 @app.route('/update_customer/<int:id>', methods=['POST', 'GET'])
@@ -523,10 +531,10 @@ def update_customer(id):
 
         update_customers_locations_query = \
             "UPDATE Customers_Locations SET store_fk_id=%s WHERE customer_fk_id=%s;"
-        
+
         update_customers_locations_data = (new_location_id, id)
         execute_query(db_connection, update_customers_locations_query, update_customers_locations_data)
-    
+
     return redirect(url_for("orders_customers"))
 
 
@@ -564,20 +572,13 @@ def update_ingredient(id):
 def update_supplier(id):
     """update a supplier with the given id"""
     db_connection = connect_to_database()
-    print("We're at update supplier query!!")
 
     if request.method == "POST":
-        print("We're at POST request")
         supplier_name = request.form['supplier_name']
-
-
-        print("THE order_date = ", supplier_name, type(supplier_name))
-
 
         update_query = \
             "UPDATE Suppliers SET supplier_name = %s" \
             "WHERE supplier_id =  %s;"
-
 
         data = (supplier_name, id)
         result = execute_query(db_connection, update_query, data)
@@ -600,7 +601,11 @@ def update_employee(id):
         managed_by = request.form['managed_by']
         new_manager = managed_by.split(" ", 1)
         new_manager_query = "SELECT manager_id FROM Managers WHERE Managers.first_name = %s AND Managers.last_name = %s"
-        new_manager_data = (new_manager[0], str(new_manager[1:]))
+        new_manager_data = (new_manager[0], new_manager[1])
+
+        print("new_manager_data = ", new_manager_data)
+        # new_manager_data = (new_manager[0], str(new_manager[1:]))
+
         new_manager_id = execute_query(db_connection, new_manager_query, new_manager_data).fetchone()
 
         # find the store_id of the new location entered in the update form for employee
@@ -619,11 +624,10 @@ def update_employee(id):
         manager_num_data = (id,)
         manager_num_result = execute_query(db_connection, manager_num_query, manager_num_data).fetchone()
         if manager_num_result is not None:
-
             manager_update_query = "UPDATE Managers SET first_name=%s, last_name=%s, status=%s, manager_store_id=%s WHERE manager_id = %s;"
             manager_update_data = (first_name, last_name, vacation, new_location_id, manager_num_result)
             execute_query(db_connection, manager_update_query, manager_update_data)
-    
+
     return redirect(url_for("employees_locations"))
 
 
@@ -631,7 +635,7 @@ def update_employee(id):
 def update_location(id):
     """update a store location with the given store id"""
     db_connection = connect_to_database()
-    
+
     if request.method == "POST":
         location_city = request.form['location_city']
         location_state = request.form['location_state']
@@ -639,8 +643,8 @@ def update_location(id):
 
         update_query = \
             "UPDATE Locations SET city = %s, state = %s, zip_code = %s WHERE store_id = %s;"
-        
+
         data = (location_city, location_state, location_zip_code, id)
         result = execute_query(db_connection, update_query, data)
-    
+
     return redirect(url_for("employees_locations"))

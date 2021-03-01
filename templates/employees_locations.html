@@ -59,13 +59,21 @@
 												<div class="row mb-0">
 													<label for="managed_by_input" class="col-sm-2 col-form-label col-form-label-sm">Managed by</label>
 													<div class="col-sm-10">
-														<input type="text" class="form-control" id="managed_by_input" name="managed_by" value="{{employee[4]}}">
+													<select name="managed_by" id="managed_by_input"> Managed by
+														{% for manager in managers %}
+															<option value="{{manager[1]}}">{{manager[1]}}</option>
+														{% endfor %}
+													</select>
 													</div>
 												</div>
 												<div class="row mb-0">
 													<label for="location_input" class="col-sm-2 col-form-label col-form-label-sm">Location</label>
 													<div class="col-sm-10">
-														<input type="text" class="form-control" id="location_input" name="location" value="{{employee[5]}}">
+													<select name="location" id="location_input"> Location
+														{% for city in city_name %}
+															<option value="{{city[0]}}">{{city[0]}}</option>
+														{% endfor %}
+													</select>
 													</div>
 												</div>
 												<div class="modal-footer mb-0">
