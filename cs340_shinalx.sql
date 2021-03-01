@@ -484,7 +484,7 @@ ALTER TABLE `Managers`
 -- Constraints for table `Orders`
 --
 ALTER TABLE `Orders`
-  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`customer_num`) REFERENCES `Customers` (`customer_id`);
+  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`customer_num`) REFERENCES `Customers` (`customer_id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

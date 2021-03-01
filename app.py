@@ -393,13 +393,28 @@ def employees_locations():
                            location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form)
 
 
-@app.route("/delete_order/<int:id>")
+@app.route("/delete_order/<int:id>", methods=['GET', 'POST'])
 def delete_order(id):
     """deletes an order with the given order id"""
     db_connection = connect_to_database()
     delete_order_query = "DELETE FROM Orders WHERE order_id = %s;"
     data = (id,)
     execute_query(db_connection, delete_order_query, data)
+    return redirect(url_for("orders_customers"))
+
+@app.route("/delete_customer/<int:id>", methods=['GET', 'POST'])
+def delete_customer(id):
+    """deletes a customer with the given customer id"""
+    db_connection = connect_to_database()
+    delete_customer_query = "DELETE FROM Customers WHERE customer_id = %s;"
+    delete_customer_data = (id,)
+    execute_query(db_connection, delete_customer_query, delete_customer_data)
+
+    # also delete from customers_locations M:M table
+    delete_customers_locations_query = "DELETE FROM Customers_Locations WHERE customer_fk_id=%s;"
+    delete_customers_locations_data = (id,)
+    execute_query(db_connection, delete_customers_locations_query, delete_customers_locations_data)
+
     return redirect(url_for("orders_customers"))
 
 
@@ -417,7 +432,7 @@ def delete_ingredient(id):
     return redirect(url_for("ingredients_suppliers"))
 
 
-@app.route('/delete_supplier/<int:id>')
+@app.route('/delete_supplier/<int:id>', methods=['GET', 'POST'])
 def delete_supplier(id):
     """deletes a supplier with the given id"""
     db_connection = connect_to_database()
@@ -431,7 +446,7 @@ def delete_supplier(id):
     return redirect(url_for("ingredients_suppliers"))
 
 
-@app.route('/delete_location/<int:id>')
+@app.route('/delete_location/<int:id>', methods=['GET', 'POST'])
 def delete_location(id):
     """deletes a store location with the given id"""
     db_connection = connect_to_database()
