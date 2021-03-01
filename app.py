@@ -122,7 +122,7 @@ def orders_customers():
         "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id ORDER BY date_time;"
 
     customers_query = \
-        "SELECT first_name, last_name, email, phone_number, city AS location FROM `Customers` " \
+        "SELECT first_name, last_name, email, phone_number, city AS location, customer_id FROM `Customers` " \
         "INNER JOIN Customers_Locations ON Customers_Locations.customer_fk_id = Customers.customer_id " \
         "INNER JOIN Locations ON Locations.store_id = Customers_Locations.store_fk_id ORDER BY last_name;"
 
@@ -175,7 +175,6 @@ def orders_customers():
 
                            search_form=search_form
                            )
-
 
 
 # route for the ingredients & suppliers page
@@ -403,6 +402,7 @@ def delete_order(id):
     execute_query(db_connection, delete_order_query, data)
     return redirect(url_for("orders_customers"))
 
+
 @app.route('/delete_ingredient/<int:id>')
 def delete_ingredient(id):
     """deletes a ingredient with the given id"""
@@ -480,6 +480,40 @@ def update_order(id):
         execute_query(db_connection, update_date_query, update_date_data)
     
     return redirect(url_for("orders_customers"))
+
+@app.route('/update_customer/<int:id>', methods=['POST', 'GET'])
+def update_customer(id):
+    """update a customer with the given id"""
+    db_connection = connect_to_database()
+
+    if request.method == "POST":
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        location = request.form['location']
+
+        update_customer_query = \
+            "UPDATE Customers SET first_name=%s, last_name=%s, email=%s, phone_number=%s WHERE customer_id=%s;"
+
+        update_customer_data = \
+            (first_name, last_name, email, phone_number, id)
+
+        execute_query(db_connection, update_customer_query, update_customer_data)
+
+        # also update the customer_locations M:M table row with changed location
+        new_location_query = "SELECT store_id FROM Locations WHERE city=%s;"
+        new_location_data = (location)
+        new_location_id = execute_query(db_connection, new_location_query, new_location_data).fetchone()
+
+        update_customers_locations_query = \
+            "UPDATE Customers_Locations SET store_fk_id=%s WHERE customer_fk_id=%s;"
+        
+        update_customers_locations_data = (new_location_id, id)
+        execute_query(db_connection, update_customers_locations_query, update_customers_locations_data)
+    
+    return redirect(url_for("orders_customers"))
+
 
 
 @app.route('/update_ingredient/<int:id>', methods=['POST', 'GET'])
