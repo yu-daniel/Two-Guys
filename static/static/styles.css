@@ -208,15 +208,6 @@ td {
     padding: 5px !important;
 }
 
-/*give spacing and reduce the edge sharpness of form input fields*/
-input {
-    display: inline-block;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 1px solid #A0A0A0;
-    border-radius: 4px;
-}
-
 /*add background color when using a certain input field*/
 input[type=text]: focus {
   background-color: #E5FFCC;
@@ -325,3 +316,54 @@ select {
     border-radius: 4px;
     outline-color: #C2DBFE;
 }
+
+.span-bg {
+    width: 20%;
+    text-align: left;
+    display: inline-block;
+}
+
+input[type="submit"].span-bg {
+
+}
+
+.form-position {
+    width: 20%;
+    text-align: left;
+    top-margin: 10px;
+}
+
+/*give spacing and reduce the edge sharpness of form input fields*/
+input {
+    display: inline-block;
+    border: 1px solid #A0A0A0;
+    border-radius: 4px;
+}
+
+input.form-position {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+
+select.form-position {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.form-submit {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    text-align: left;
+    display: inline-block;
+
+}
+
+/*
+div {
+    border: 1px solid red;
+}
+*/
+
+
+

@@ -166,32 +166,34 @@
 				<legend><span class="span-bg">Add a new employee/manager</span></legend>
 				<div>
 					{{ emp_man_form.first_name.label(class="span-bg") }}
-					{{ emp_man_form.first_name }}
+					{{ emp_man_form.first_name(class="form-position") }}
 				</div>
 				<div>
 					{{ emp_man_form.last_name.label(class="span-bg") }}
-					{{ emp_man_form.last_name }}
+					{{ emp_man_form.last_name(class="form-position") }}
 				</div>
 				<div>
 					{{ emp_man_form.start_date.label(class="span-bg") }}
-					{{ emp_man_form.start_date }}
+					{{ emp_man_form.start_date(class="form-position") }}
 				</div>
 				<div>
 					{{ emp_man_form.status.label(class="span-bg") }}
-					{{ emp_man_form.status }}
+					{{ emp_man_form.status(class="form-position") }}
+				</div>
+				<div>
 					{{ emp_man_form.manager.label(class="span-bg") }}
-					{{ emp_man_form.manager }}
+					{{ emp_man_form.manager(class="form-position") }}
 				</div>
 				<div>
 					{{ emp_man_form.managed_by.label(class="span-bg") }}
-					{{ emp_man_form.managed_by }}
+					{{ emp_man_form.managed_by(class="form-position") }}
 				</div>
 				<div>
 					{{ emp_man_form.store.label(class="span-bg") }}
-					{{ emp_man_form.store }}
+					{{ emp_man_form.store(class="form-position") }}
 				</div>
 				<div>
-					{{ emp_man_form.add }}
+					{{ emp_man_form.add(class="form-submit") }}
 				</div>
 			</fieldset>
 		</form>
@@ -204,18 +206,18 @@
 				<legend><span class="span-bg">Add a store location</span></legend>
 				<div>
 					{{ loc_form.city.label(class="span-bg") }}
-					{{ loc_form.city }}
+					{{ loc_form.city(class="form-position") }}
 				</div>
 				<div>
 					{{ loc_form.state.label(class="span-bg") }}
-					{{ loc_form.state }}
+					{{ loc_form.state(class="form-position") }}
 				</div>
 				<div>
 					{{ loc_form.zip_code.label(class="span-bg") }}
-					{{ loc_form.zip_code }}
+					{{ loc_form.zip_code(class="form-position") }}
 				</div>
 				<div>
-					{{ loc_form.add }}
+					{{ loc_form.add(class="form-submit") }}
 				</div>
 			</fieldset>
 		</form>
