@@ -319,3 +319,9 @@ h1, h2, h4, p, th, label, input, span {
 h1, h2, h4 {
   text-shadow: 2px 2px 4px #FF6666;
 }
+
+select {
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    outline-color: #C2DBFE;
+}
