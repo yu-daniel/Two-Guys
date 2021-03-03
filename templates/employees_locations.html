@@ -158,69 +158,72 @@
 	</table>
 </div>
 
-<div class="row">
-	<div class="col-sm-6">
-		<form action="", method="POST">
-			{{ emp_man_form.hidden_tag() }}
-			<fieldset>
-				<legend><span class="span-bg">Add a new employee/manager</span></legend>
-				<div>
-					{{ emp_man_form.first_name.label(class="span-bg") }}
-					{{ emp_man_form.first_name(class="form-position") }}
-				</div>
-				<div>
-					{{ emp_man_form.last_name.label(class="span-bg") }}
-					{{ emp_man_form.last_name(class="form-position") }}
-				</div>
-				<div>
-					{{ emp_man_form.start_date.label(class="span-bg") }}
-					{{ emp_man_form.start_date(class="form-position") }}
-				</div>
-				<div>
-					{{ emp_man_form.status.label(class="span-bg") }}
-					{{ emp_man_form.status(class="form-position") }}
-				</div>
-				<div>
-					{{ emp_man_form.manager.label(class="span-bg") }}
-					{{ emp_man_form.manager(class="form-position") }}
-				</div>
-				<div>
-					{{ emp_man_form.managed_by.label(class="span-bg") }}
-					{{ emp_man_form.managed_by(class="form-position") }}
-				</div>
-				<div>
-					{{ emp_man_form.store.label(class="span-bg") }}
-					{{ emp_man_form.store(class="form-position") }}
-				</div>
-				<div>
-					{{ emp_man_form.add(class="form-submit") }}
-				</div>
-			</fieldset>
-		</form>
-	</div>
+<div class="container form-container">
+	<div class="row justify-content-around">
+		<div class="col-4 inner-group">
+			<form action="", method="POST">
+				{{ emp_man_form.hidden_tag() }}
+				<fieldset>
+					<legend><span class="form-title">New Employee/Manager</span></legend>
+					<div>
+						{{ emp_man_form.first_name.label(class="span-bg") }}
+						{{ emp_man_form.first_name(class="form-position") }}
+					</div>
+					<div>
+						{{ emp_man_form.last_name.label(class="span-bg") }}
+						{{ emp_man_form.last_name(class="form-position") }}
+					</div>
+					<div>
+						{{ emp_man_form.start_date.label(class="span-bg") }}
+						{{ emp_man_form.start_date(class="form-position") }}
+					</div>
+					<div>
+						{{ emp_man_form.status.label(class="span-bg") }}
+						{{ emp_man_form.status(class="form-position") }}
+					</div>
+					<div>
+						{{ emp_man_form.manager.label(class="span-bg") }}
+						{{ emp_man_form.manager(class="form-position") }}
+					</div>
+					<div>
+						{{ emp_man_form.managed_by.label(class="span-bg") }}
+						{{ emp_man_form.managed_by(class="form-position") }}
+					</div>
+					<div>
+						{{ emp_man_form.store.label(class="span-bg") }}
+						{{ emp_man_form.store(class="form-position") }}
+					</div>
+					<div>
+						{{ emp_man_form.add(class="form-submit") }}
+					</div>
+				</fieldset>
+			</form>
+		</div>
 
-	<div class="col-sm-6"> 
-		<form action="#", method="POST">
-			{{ loc_form.hidden_tag() }}
-			<fieldset>
-				<legend><span class="span-bg">Add a store location</span></legend>
-				<div>
-					{{ loc_form.city.label(class="span-bg") }}
-					{{ loc_form.city(class="form-position") }}
-				</div>
-				<div>
-					{{ loc_form.state.label(class="span-bg") }}
-					{{ loc_form.state(class="form-position") }}
-				</div>
-				<div>
-					{{ loc_form.zip_code.label(class="span-bg") }}
-					{{ loc_form.zip_code(class="form-position") }}
-				</div>
-				<div>
-					{{ loc_form.add(class="form-submit") }}
-				</div>
-			</fieldset>
-		</form>
+		<div class="col-4 inner-group">
+			<form action="#", method="POST">
+				{{ loc_form.hidden_tag() }}
+				<fieldset>
+					<legend><span class="form-title">New Store Location</span></legend>
+					<div>
+						{{ loc_form.city.label(class="span-bg") }}
+						{{ loc_form.city(class="form-position") }}
+					</div>
+					<div>
+						{{ loc_form.state.label(class="span-bg") }}
+						{{ loc_form.state(class="form-position") }}
+					</div>
+					<div>
+						{{ loc_form.zip_code.label(class="span-bg") }}
+						{{ loc_form.zip_code(class="form-position") }}
+					</div>
+					<div>
+						{{ loc_form.add(class="form-submit") }}
+					</div>
+				</fieldset>
+			</form>
+		</div>
 	</div>
 </div>
+
 {% endblock content %}

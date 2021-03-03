@@ -8,11 +8,11 @@
 <h4 class="header1">Orders</h4>
 <div class="center-search">
 <!--	search box-->
-	<form action="#", method="POST">
+	<form action="#" method="POST">
 		{{ search_form.hidden_tag() }}
 		<fieldset>
 			<div>
-				{{ search_form.submit_id.label(class="span-bg") }}
+				{{ search_form.submit_id.label(class="") }}
 				{{ search_form.submit_id }}
 				{{ search_form.submit }}
 				<button id="clear-button">
@@ -21,9 +21,8 @@
 			</div>
 		</fieldset>
 	</form>
-
-
 </div>
+
 <div class="search-box-scroll orders">
 	<table class="center">
 		<thead>
@@ -177,61 +176,64 @@
 </table>
 </div>
 
-<div class="row">
-	<div class="col-sm-6">
-		<form action="#" method="POST">
-			{{ order_form.hidden_tag() }}
-			<fieldset>
-				<legend><span class="span-bg">Add a new order</span></legend>
-				<div>
-					{{ order_form.date_time.label(class="span-bg") }}
-					{{ order_form.date_time(class="form-position") }}
-				</div>
-				<div>
-					{{ order_form.sale_amount.label(class="span-bg") }}
-					{{ order_form.sale_amount(class="form-position") }}
-				</div>
-				<div>
-					{{ order_form.customer_id.label(class="span-bg") }}
-					{{ order_form.customer_id(class="form-position") }}
-				</div>
-				<div>
-					{{ order_form.submit(class="form-submit") }}
-				</div>
-			</fieldset>
-		</form>
-	</div>
+<div class="container form-container">
+	<div class="row justify-content-around">
+		<div class="col-4 inner-group">
+			<form action="#" method="POST">
+				{{ order_form.hidden_tag() }}
+				<fieldset>
+					<legend><span class="form-title">New Order</span></legend>
+					<div>
+						{{ order_form.date_time.label(class="span-bg") }}
+						{{ order_form.date_time(class="form-position") }}
+					</div>
+					<div>
+						{{ order_form.sale_amount.label(class="span-bg") }}
+						{{ order_form.sale_amount(class="form-position") }}
+					</div>
+					<div>
+						{{ order_form.customer_id.label(class="span-bg") }}
+						{{ order_form.customer_id(class="form-position") }}
+					</div>
+					<div>
+						{{ order_form.submit(class="form-submit") }}
+					</div>
+				</fieldset>
+			</form>
+		</div>
 
-	<div class="col-sm-6">
-		<form action="#" method="POST">
-			{{ customer_form.hidden_tag() }}
-			<fieldset>
-				<legend><span class="span-bg">Add a new customer</span></legend>
-				<div>
-					{{ customer_form.first_name.label(class="span-bg") }}
-					{{ customer_form.first_name(class="form-position") }}
-				</div>
-				<div>
-					{{ customer_form.last_name.label(class="span-bg") }}
-					{{ customer_form.last_name(class="form-position") }}
-				</div>
-				<div>
-					{{ customer_form.email.label(class="span-bg") }}
-					{{ customer_form.email(class="form-position") }}
-				</div>
-				<div>
-					{{ customer_form.phone_number.label(class="span-bg") }}
-					{{ customer_form.phone_number(class="form-position") }}
-				</div>
-				<div>
-					{{ customer_form.location.label(class="span-bg") }}
-					{{ customer_form.location(class="form-position") }}
-				</div>
-				<div>
-					{{ customer_form.submit(class="form-submit") }}
-				</div>
-			</fieldset>
-		</form>
+		<div class="col-4 inner-group">
+			<form action="#" method="POST">
+				{{ customer_form.hidden_tag() }}
+				<fieldset>
+					<legend><span class="form-title">New Customer</span></legend>
+					<div>
+						{{ customer_form.first_name.label(class="span-bg") }}
+						{{ customer_form.first_name(class="form-position") }}
+					</div>
+					<div>
+						{{ customer_form.last_name.label(class="span-bg") }}
+						{{ customer_form.last_name(class="form-position") }}
+					</div>
+					<div>
+						{{ customer_form.email.label(class="span-bg") }}
+						{{ customer_form.email(class="form-position") }}
+					</div>
+					<div>
+						{{ customer_form.phone_number.label(class="span-bg") }}
+						{{ customer_form.phone_number(class="form-position") }}
+					</div>
+					<div>
+						{{ customer_form.location.label(class="span-bg") }}
+						{{ customer_form.location(class="form-position") }}
+					</div>
+					<div>
+						{{ customer_form.submit(class="form-submit") }}
+					</div>
+				</fieldset>
+			</form>
+		</div>
 	</div>
 </div>
+
 {% endblock %}
