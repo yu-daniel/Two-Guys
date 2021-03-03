@@ -28,7 +28,7 @@ customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number", "Locati
 def index():
     return render_template('index.html')
 
-# validatore helper function to speficy which form was submitted
+# validator helper function to specify which form was submitted
 def validator(data_list):
     all_valid = True
 

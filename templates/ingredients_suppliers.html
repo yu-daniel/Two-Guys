@@ -58,11 +58,7 @@
 												<div class="row mb-0">
 													<label for="order_input" class="col-sm-2 col-form-label col-form-label-sm">Order Num.</label>
 													<div class="col-sm-10">
-														<select name="order_num" id="order_input"> Order Num.
-															{% for order in order_nums %}
-																<option value="{{order[0]}}">{{order[0]}}</option>
-															{% endfor %}
-														</select>
+														<input type="number" class="form-control disabled-input" id="order_input" name="order_num" value={{set[3]}}>
 													</div>
 												</div>
 												<div class="modal-footer mb-0">

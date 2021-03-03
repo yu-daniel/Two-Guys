@@ -51,7 +51,7 @@
 										</div>
 										<div class="modal-body">
 											<form action="/update_order/{{set[-1]}}" method="POST">
-												<div class="row mb-0 mt-0">
+												<div class="row mb-3">
 													<label for="date_input" class="col-sm-2 col-form-label col-form-label-sm">Date</label>
 													<div class="col-sm-10">
 														<input type="date" class="form-control" id="date_input" name="date" value={{set[0]}}>
@@ -60,11 +60,7 @@
 												<div class="row mb-0">
 													<label for="cid_input" class="col-sm-2 col-form-label col-form-label-sm">Customer ID</label>
 													<div class="col-sm-10">
-														<select name="customer_id" id="cid_input"> Customer ID
-															{% for id in customer_ids %}
-																<option value="{{id[0]}}">{{id[0]}}</option>
-															{% endfor %}
-														</select>
+														<input type="number" class="form-control disabled-input" id="cid_input" name="customer_id" value={{set[1]}}>
 													</div>
 												</div>
 												<div class="row mb-0">
