@@ -1,6 +1,6 @@
-import os
 from flask import Flask, render_template, request, url_for, redirect
-from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers, SubmitCustomers
+from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers, \
+    SubmitCustomers
 from db_connector import connect_to_database, execute_query
 
 app = Flask(__name__)
@@ -15,18 +15,12 @@ location_headers = ['City', 'State', 'Zip Code', '', '']
 ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
 suppliers_headers = ["Name", "", ""]
 
-ingredients_suppliers_headers = ["Ingredient", "Supplier", "", ""]
-ingredients_suppliers_values = [
-    ["Ground Beef", "Johnson Ville"],
-    ["Ground Beef", "Meat Industry"]
-]
-orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail", "Phone Number", "", ""]
-customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number", "Location", "", ""]
 
 # route for the homepage (root) is defined, but it's html is just the base
 @app.route("/", methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
+
 
 # validator helper function to specify which form was submitted
 def validator(data_list):
@@ -38,9 +32,14 @@ def validator(data_list):
 
     return all_valid
 
+
 # route for the orders & customers page
 @app.route("/orders-customers", methods=["GET", "POST"])
 def orders_customers():
+    orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail",
+                          "Phone Number", "", ""]
+    customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number", "Location", "", ""]
+
     # form objects
     order_form = OrderForm(request.form)
     customer_form = Customers(request.form)
@@ -55,8 +54,6 @@ def orders_customers():
 
     # check first if there is a POST request
     if request.method == 'POST' and search_data == "":
-        print("Trying to add new Order or Customer")
-
         # retrieve data for each field from the new Orders form
         date_time = order_form.date_time.data
         sale_amount = order_form.sale_amount.data
@@ -95,7 +92,7 @@ def orders_customers():
         if validator(order_input_data) is True:
             # execute the query and commit it to the db for changes to be permanent
             execute_query(db_connection, order_input_query, order_input_data)
-            db_connection.commit()
+            # db_connection.commit()
 
         elif validator(customer_input_data) is True:
             execute_query(db_connection, customer_input_query, customer_input_data)
@@ -109,7 +106,7 @@ def orders_customers():
             customer_locations = (get_customer_id_results[0][0], get_location_id_results[0][0],)
 
             execute_query(db_connection, add_customer_locations, customer_locations)
-            db_connection.commit()
+            # db_connection.commit()
 
         # refresh the page once the form is submitted
         return redirect(url_for('orders_customers'))
@@ -118,7 +115,8 @@ def orders_customers():
 
     # queries for displaying the Orders and Customers 'overview' tables
     orders_query = \
-        "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number, order_id FROM `Customers` " \
+        "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number, order_id FROM " \
+        "`Customers` " \
         "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id ORDER BY date_time;"
 
     customers_query = \
@@ -131,16 +129,12 @@ def orders_customers():
     customer_results = execute_query(db_connection, customers_query).fetchall()
 
     if request.method == 'POST' and search_data != "":
-        # print("FOUND SEARCH BOX SUBMISSION!")
         search_query = \
             "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
             "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
             "WHERE first_name LIKE (%s);"
 
-        submit_data = (search_data, )
-        # print("submit data = ", submit_data)
-        # print("query = ", orders_query)
-        search_query = execute_query(db_connection, search_query, ("%" + search_data + "%", )).fetchall()
+        search_query = execute_query(db_connection, search_query, ("%" + search_data + "%",)).fetchall()
 
         if search_query:
             order_results = search_query
@@ -172,15 +166,15 @@ def orders_customers():
                            order_form=order_form, customer_form=customer_form,
                            customer_headers=customer_headers, customer_values=customer_results,
                            orders_customers_h=orders_customers_h, orders_customers_v=order_results,
-                           customer_ids=customer_id_results,
-                           search_form=search_form,
-                           city_name=location_results
-                           )
+                           customer_ids=customer_id_results, search_form=search_form, city_name=location_results)
 
 
 # route for the ingredients & suppliers page
 @app.route("/ingredients-suppliers", methods=["GET", "POST"])
 def ingredients_suppliers():
+    ingredients_suppliers_headers = ["Ingredient", "Supplier", "", ""]
+    ingredients_suppliers_values = [["Ground Beef", "Johnson Ville"], ["Ground Beef", "Meat Industry"]]
+
     db_connection = connect_to_database()
     ingredient_form = IngredientsForm()
     supplier_form = SuppliersForm()
@@ -219,17 +213,18 @@ def ingredients_suppliers():
 
             execute_query(db_connection, add_ingredient_supplier_IDs, IDs_parsed)
 
-            db_connection.commit()
+            # db_connection.commit()
 
         elif validator(supplier_input_data) is True:
             execute_query(db_connection, supplier_input_query, supplier_input_data)
 
-            db_connection.commit()
+            # db_connection.commit()
 
         return redirect(url_for('ingredients_suppliers'))
 
     # for GET requests
-    ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM `Ingredients`;"
+    ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM " \
+                        "`Ingredients`; "
     suppliers_query = "SELECT supplier_name, supplier_id FROM Suppliers;"
     ingredients_suppliers_query = "SELECT ingredient_name, supplier_name FROM `Ingredients` \
             INNER JOIN Ingredients_Suppliers ON Ingredients_Suppliers.ing_id = Ingredients.ingredient_id \
@@ -269,7 +264,6 @@ def ingredients_suppliers():
     for supplier in suppliers_results:
         supplier_results_parsed.append(supplier[0])
 
-    # print("SUPPLIER RESULTS = ", supplier_results_parsed)
 
     # from the list of items, assign them to each Form's choices option
     ingredient_form.supplier.choices = supplier_choices
@@ -282,8 +276,8 @@ def ingredients_suppliers():
                            ingredients_suppliers_values=ingredients_suppliers_values,
                            suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
-                           ingredient_suppliers_v=ingredient_results, order_nums=order_id_results,
-                           )
+                           ingredient_suppliers_v=ingredient_results, order_nums=order_id_results,)
+
 
 # route for employees & locations page
 @app.route("/employees-locations", methods=['GET', 'POST'])
@@ -309,7 +303,8 @@ def employees_locations():
             managed_by = None
         else:
             managed_by_query = "SELECT manager_id FROM Managers WHERE first_name = %s;"
-            managed_by_result = execute_query(db_connection, managed_by_query, str(employee_manager_form.managed_by.data)).fetchall()
+            managed_by_result = execute_query(db_connection, managed_by_query,
+                                              str(employee_manager_form.managed_by.data)).fetchall()
             managed_by = managed_by_result
 
         store_query = "SELECT store_id FROM Locations WHERE city = %s;"
@@ -407,7 +402,8 @@ def employees_locations():
 
     employee_manager_form.store.choices = store_city_choices
 
-    return render_template('employees_locations.html', headers=headers, data=employees_managers_results, location_headers=location_headers,
+    return render_template('employees_locations.html', headers=headers, data=employees_managers_results,
+                           location_headers=location_headers,
                            location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form,
                            city_name=store_city_results,
                            managers=manager_id_name_results
@@ -436,7 +432,6 @@ def delete_customer(id):
     delete_customers_locations_query = "DELETE FROM Customers_Locations WHERE customer_fk_id=%s;"
     delete_customers_locations_data = (id,)
     execute_query(db_connection, delete_customers_locations_query, delete_customers_locations_data)
-
     return redirect(url_for("orders_customers"))
 
 
@@ -448,8 +443,8 @@ def delete_ingredient(id):
     delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE ing_id = %s"
     delete_ingredient_query = "DELETE FROM Ingredients WHERE ingredient_id = %s"
     data = (id,)
-    delete_intersection_results = execute_query(db_connection, delete_intersection_query, data)
-    delete_ingredient_results = execute_query(db_connection, delete_ingredient_query, data)
+    execute_query(db_connection, delete_intersection_query, data)
+    execute_query(db_connection, delete_ingredient_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
 
@@ -462,8 +457,8 @@ def delete_supplier(id):
     delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE sup_id = %s"
     delete_supplier_query = "DELETE FROM Suppliers WHERE supplier_id = %s"
     data = (id,)
-    delete_intersection_results = execute_query(db_connection, delete_intersection_query, data)
-    delete_ingredient_results = execute_query(db_connection, delete_supplier_query, data)
+    execute_query(db_connection, delete_intersection_query, data)
+    execute_query(db_connection, delete_supplier_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
 
@@ -518,6 +513,7 @@ def update_order(id):
 
     return redirect(url_for("orders_customers"))
 
+
 @app.route('/update_customer/<int:id>', methods=['POST', 'GET'])
 def update_customer(id):
     """update a customer with the given id"""
@@ -552,32 +548,23 @@ def update_customer(id):
     return redirect(url_for("orders_customers"))
 
 
-
 @app.route('/update_ingredient/<int:id>', methods=['POST', 'GET'])
 def update_ingredient(id):
     """update a ingredient with the given id"""
     db_connection = connect_to_database()
-    print("We're at update ingredient query!!")
 
     if request.method == "POST":
-        print("We're at POST request")
         order_date = request.form['order_date']
         ingredient_name = request.form['ingredient_name']
         ingredient_cost = request.form['ingredient_cost']
         order_num = request.form['order_num']
 
-        print("THE order_date = ", order_date, type(order_date))
-        print("THE ingredient name", ingredient_name, type(ingredient_name))
-        print("THE ingredient_cost = ", ingredient_cost, type(ingredient_cost))
-        print("THE order_num = ", order_num, type(order_num))
-
         update_query = \
             "UPDATE Ingredients SET order_date = %s, ingredient_name = %s, ingredient_cost = %s, order_num = %s " \
             "WHERE ingredient_id =  %s;"
 
-
         data = (order_date, ingredient_name, ingredient_cost, order_num, id)
-        result = execute_query(db_connection, update_query, data)
+        execute_query(db_connection, update_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
 
@@ -595,7 +582,7 @@ def update_supplier(id):
             "WHERE supplier_id =  %s;"
 
         data = (supplier_name, id)
-        result = execute_query(db_connection, update_query, data)
+        execute_query(db_connection, update_query, data)
 
     return redirect(url_for("ingredients_suppliers"))
 
