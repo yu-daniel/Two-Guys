@@ -12,8 +12,7 @@ app.config['SECRET_KEY'] = '7cd4739b6ecbf78e2fb020b7f663a979'
 # headers for tables displaying data
 headers = ['First Name', 'Last Name', 'Start Date', 'Vacation', 'Managed by', 'Location', "", ""]
 location_headers = ['City', 'State', 'Zip Code', '', '']
-ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
-suppliers_headers = ["Name", "", ""]
+
 
 
 # route for the homepage (root) is defined, but it's html is just the base
@@ -172,8 +171,8 @@ def orders_customers():
 # route for the ingredients & suppliers page
 @app.route("/ingredients-suppliers", methods=["GET", "POST"])
 def ingredients_suppliers():
-    ingredients_suppliers_headers = ["Ingredient", "Supplier", "", ""]
-    ingredients_suppliers_values = [["Ground Beef", "Johnson Ville"], ["Ground Beef", "Meat Industry"]]
+    ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
+    suppliers_headers = ["Name", "", ""]
 
     db_connection = connect_to_database()
     ingredient_form = IngredientsForm()
@@ -272,8 +271,6 @@ def ingredients_suppliers():
 
     return render_template("ingredients_suppliers.html", title='Add/Edit/Delete Ingredients & Suppliers',
                            ingredient_form=ingredient_form,
-                           ingredients_suppliers_headers=ingredients_suppliers_headers,
-                           ingredients_suppliers_values=ingredients_suppliers_values,
                            suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
                            supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
                            ingredient_suppliers_v=ingredient_results, order_nums=order_id_results,)
