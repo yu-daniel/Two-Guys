@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect
 from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers, \
     SubmitCustomers
 from db_connector import connect_to_database, execute_query
+import yaml
 
 """
 Sources / Citations
@@ -16,21 +17,8 @@ Description:
 
 app = Flask(__name__)
 
-# required to keep sessions secure
-# need to create a config file to keep key and DB configs later
-app.config['SECRET_KEY'] = '7cd4739b6ecbf78e2fb020b7f663a979'
-
-# headers for tables displaying data
-headers = ['First Name', 'Last Name', 'Start Date', 'Vacation', 'Managed by', 'Location', "", ""]
-location_headers = ['City', 'State', 'Zip Code', '', '']
-
-
-# route for the homepage/root
-@app.route("/", methods=['GET', 'POST'])
-def index():
-    # render the homepage html
-    return render_template('index.html')
-
+config = yaml.safe_load(open('db_credentials.yaml'))
+app.config['SECRET_KEY'] = config['secret_key']
 
 def validator(data_list):
     """
@@ -47,6 +35,10 @@ def validator(data_list):
 
     return all_valid            # return the boolean results
 
+# route for home page
+@app.route("/", methods=['GET', 'POST'])
+def index():
+    return render_template('index.html')
 
 # route for the orders & customers page
 @app.route("/orders-customers", methods=["GET", "POST"])
@@ -179,76 +171,78 @@ def orders_customers():
 # route for the ingredients & suppliers page
 @app.route("/ingredients-suppliers", methods=["GET", "POST"])
 def ingredients_suppliers():
-    # connect to the db, and set variables to reference the Forms
-    db_connection = connect_to_database()
+    # create a reference to the form (objects)
     ingredient_form = IngredientsForm()
     supplier_form = SuppliersForm()
 
-    # column headers for the Ingredient and Suppliers table
+    # establish a connection to the db
+    db_connection = connect_to_database()
+
+    # column headers for each table
     ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
     suppliers_headers = ["Name", "", ""]
 
     if request.method == 'POST':
-        # get the field input values from each Form (if any)
+
+        # get the data from each field of the Ingredient Form
         order_date = ingredient_form.order_date.data
         ingredient_name = ingredient_form.ingredient_name.data
         ingredient_cost = ingredient_form.ingredient_cost.data
         supplier = ingredient_form.supplier.data
         order_id = ingredient_form.order_id.data
-
-        # query for creating new Ingredients and Suppliers
+        
+        # query for adding a new Ingredient into db
         ingredient_input_query = "INSERT INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
                                  "VALUES (%s, %s, %s, %s);"
 
+        # query for adding a new Supplier into db
         supplier_input_query = "INSERT INTO Suppliers (supplier_name) VALUES (%s);"
 
-        # query for selecting all supplier_id
-        get_supplier_id_query = "SELECT supplier_id FROM `Suppliers` WHERE supplier_name = (%s)"
+        # adding a new Ingredient also involves adding them to the Ingrdients_Suppliers intersection table
+        # here, we get the supplier_id based on the location that the user selected
+        get_supplier_id_query = "SELECT supplier_id FROM `Suppliers` WHERE supplier_name = (%s);"
         get_supplier_id_results = execute_query(db_connection, get_supplier_id_query, (supplier,)).fetchall()
-
-        # place the form data from user into tuple
         ingredients_input_data = (order_date, ingredient_name, ingredient_cost, order_id)
         supplier_name = supplier_form.supplier_name.data
         supplier_input_data = (supplier_name,)
 
         # use the validator() function to check which form has data, and determine which form to submit to db
         if validator(ingredients_input_data) is True:
+            # execute query to add ingredient into database
             execute_query(db_connection, ingredient_input_query, ingredients_input_data)
 
-            # get latest ingredient ID, that was just created
+            # get latest ingredient_id, that was just created
             get_ingredient_id_query = "SELECT ingredient_id FROM `Ingredients` ORDER BY ingredient_id DESC LIMIT 1"
             get_ingredient_id_results = execute_query(db_connection, get_ingredient_id_query).fetchall()
 
-            # add ingredient_id and supplier_id to the Ingredients_Suppliers intersection table, to establish a M:M
-            # relationship
+            # add ingredient_id and supplier_id to the Ingredients_Suppliers intersection table
             add_ingredient_supplier_IDs = "INSERT INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (%s, %s)"
             IDs_parsed = (get_ingredient_id_results[0][0], get_supplier_id_results[0][0])
             execute_query(db_connection, add_ingredient_supplier_IDs, IDs_parsed)
 
         elif validator(supplier_input_data) is True:
+            # execute query to add supplier into database
             execute_query(db_connection, supplier_input_query, supplier_input_data)
 
         return redirect(url_for('ingredients_suppliers'))
 
-    elif request.method == 'GET':
-        # query to get data from the Ingredients, Suppliers, and Orders table
+    else:
+        # queries for displaying the Ingredients and Suppliers 'overview' tables
         ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM " \
                             "`Ingredients`; "
         suppliers_query = "SELECT supplier_name, supplier_id FROM Suppliers;"
         order_id_query = "SELECT order_id FROM `Orders`;"
-
-        # container that will store the supplier name, order IDs, and ingredient names for dropdown menus
-        supplier_choices = []
-        order_id_choices = []
-        ingredients_supplied_choices = []
 
         # execute the above select queries and retrieve the data
         ingredient_results = execute_query(db_connection, ingredients_query).fetchall()
         suppliers_results = execute_query(db_connection, suppliers_query).fetchall()
         order_id_results = execute_query(db_connection, order_id_query).fetchall()
 
-        # the data retrieved from the db are a tuple of tuples, here we take each individual tuple and add to a list (to
-        # get a list of all items)
+        # the data retrieved from the db are a tuple of tuples, here we take each individual tuple and add to a list
+        supplier_choices = []
+        order_id_choices = []
+        ingredients_supplied_choices = []
+
         for choices in ingredient_results:
             order_id_choices.append(choices[3])
 
@@ -277,8 +271,13 @@ def employees_locations():
     employee_manager_form = EmployeeManagerForm(request.form)
     location_form = LocationForm(request.form)
 
+    # headers for tables displaying data
+    employee_headers = ['First Name', 'Last Name', 'Start Date', 'Vacation', 'Managed by', 'Location', "", ""]
+    location_headers = ['City', 'State', 'Zip Code', '', '']
+
     # for POST requests
     if request.method == 'POST':
+        # get the data from each field of the Employee Manager form
         first_name = employee_manager_form.first_name.data
         last_name = employee_manager_form.last_name.data
         start_date = employee_manager_form.start_date.data
@@ -300,13 +299,13 @@ def employees_locations():
 
         store_query = "SELECT store_id FROM Locations WHERE city = %s;"
         store_result = execute_query(db_connection, store_query, str(employee_manager_form.store.data)).fetchall()
-        store = store_result
 
+        store = store_result
         city = location_form.city.data
         state = location_form.state.data
         zip_code = location_form.zip_code.data
 
-        # employees_managers
+        # query for adding employee to the db
         if managed_by is not None:
             employee_input_data = (first_name, last_name, start_date, status, managed_by, store)
             employee_input_query = "INSERT INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id) \
@@ -316,29 +315,32 @@ def employees_locations():
             employee_input_query = "INSERT INTO Employees (first_name, last_name, start_date, status, emp_store_id) \
                                 VALUES (%s, %s, %s, %s, %s);"
 
+        # query for adding manager into db if employee is also a manager
         manager_input_data = None
         if manager is True:
             manager_input_data = (first_name, last_name, status, store)
             manager_input_query = "INSERT INTO Managers (first_name, last_name, status, manager_store_id) \
                                    VALUES (%s, %s, %s, %s);"
 
-        # locations
+        # query for adding location into db
         location_input_data = (city, state, zip_code)
         location_input_query = "INSERT INTO Locations (`city`, state, zip_code) \
                                 VALUES (%s, %s, %s);"
 
         if validator(location_input_data):
+            # execute query to add location into db
             execute_query(db_connection, location_input_query, location_input_data)
             db_connection.commit()
 
         if validator(employee_input_data):
+            # execute query to add employee/manager into db            
             execute_query(db_connection, employee_input_query, employee_input_data)
             if manager_input_data is not None:
                 execute_query(db_connection, manager_input_query, manager_input_data)
 
             db_connection.commit()
 
-            # add manager_num to Employees table
+            # add manager_num FK value to Employees table
             db_connection = connect_to_database()
             if manager_input_data is not None:
                 last_added_employee_query = "SELECT employee_id FROM Employees ORDER BY employee_id DESC LIMIT 1;"
@@ -353,8 +355,7 @@ def employees_locations():
 
         return redirect(url_for("employees_locations"))
 
-    # for GET requests
-    # employees
+    # query for displaying the Employees and Managers 'overview' tables
     employees_managers_query = "SELECT \
                                     Employees.first_name, Employees.last_name, \
                                     Employees.start_date, Employees.status, \
@@ -365,13 +366,11 @@ def employees_locations():
                                 LEFT JOIN Locations ON Locations.store_id = Employees.emp_store_id \
                                 ORDER BY start_date;"
     employees_managers_results = execute_query(db_connection, employees_managers_query).fetchall()
-    # print(employees_managers_results[0])
 
-    # locations
+    # query for displaying the Locations 'overview' table
     location_query = "SELECT city, state, zip_code, store_id FROM Locations;"
     location_results = execute_query(db_connection, location_query).fetchall()
 
-    # dropdowns
     managed_by_name_query = "SELECT first_name FROM Managers;"
     managed_by_name_results = execute_query(db_connection, managed_by_name_query).fetchall()
     managed_by_choices = []
@@ -393,7 +392,7 @@ def employees_locations():
 
     employee_manager_form.store.choices = store_city_choices
 
-    return render_template('employees_locations.html', headers=headers, data=employees_managers_results,
+    return render_template('employees_locations.html', employee_headers=employee_headers, employees_managers_results=employees_managers_results,
                            location_headers=location_headers,
                            location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form,
                            city_name=store_city_results,
@@ -603,27 +602,24 @@ def update_employee(id):
         new_manager = managed_by.split(" ", 1)
         new_manager_query = "SELECT manager_id FROM Managers WHERE Managers.first_name = %s AND Managers.last_name = %s"
         new_manager_data = (new_manager[0], new_manager[1])
-
-        print("new_manager_data = ", new_manager_data)
-        # new_manager_data = (new_manager[0], str(new_manager[1:]))
-
         new_manager_id = execute_query(db_connection, new_manager_query, new_manager_data).fetchone()
 
         # find the store_id of the new location entered in the update form for employee
         location = request.form['location']
         new_location_query = "SELECT store_id FROM Locations WHERE Locations.city = %s"
         new_location_id = execute_query(db_connection, new_location_query, location).fetchone()
-
+        
         update_query = \
             "UPDATE Employees SET first_name = %s, last_name=%s, start_date=%s, status=%s, emp_manager_id=%s, emp_store_id=%s WHERE employee_id = %s;"
 
         data = (first_name, last_name, start_date, vacation, new_manager_id, new_location_id, id)
         result = execute_query(db_connection, update_query, data)
 
-        # if also a manager
+        # if employee being updated is also a manager
         manager_num_query = "SELECT manager_num FROM Employees WHERE Employees.employee_id = %s"
         manager_num_data = (id,)
         manager_num_result = execute_query(db_connection, manager_num_query, manager_num_data).fetchone()
+        
         if manager_num_result is not None:
             manager_update_query = "UPDATE Managers SET first_name=%s, last_name=%s, status=%s, manager_store_id=%s WHERE manager_id = %s;"
             manager_update_data = (first_name, last_name, vacation, new_location_id, manager_num_result)

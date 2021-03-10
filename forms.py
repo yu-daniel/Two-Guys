@@ -51,12 +51,6 @@ class Customers(FlaskForm):
     location = SelectField('Location')
     submit = SubmitField('Add')
 
-# Reference
-# Description: use of render_kw attribute for adding placeholder text in the Field
-# Link: https://stackoverflow.com/questions/9749742/wtforms-can-i-add-a-placeholder-attribute-when-i-init-a-field
-# render_kw={"placeholder": "Enter Customer ID..."}
-
-
 class SubmitCustomers(FlaskForm):
     submit_id = StringField(label='', render_kw={"placeholder": "Customer First Name"})
     submit = SubmitField('Search')

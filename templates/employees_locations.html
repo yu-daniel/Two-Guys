@@ -1,27 +1,30 @@
 {% extends "base.html" %}
 {% block title %}Employees, Managers & Locations{% endblock %}
 {% block content %}
-<!-- <div class="employees-locations-wallpaper wallpapers"></div> -->
-<h2 class="page-description orange-header">Add/Edit/Delete for Employees, Managers & Locations (entities)</h2>
+
 <h4 class="header1">Employees and Managers</h4>
 <div class="search-box-scroll employees-locations">
 	<table>
 		<thead>
 			<tr>
-				{% for header in headers %}
+				<!-- display pre-set column title for employees and managers table -->
+				{% for header in employee_headers %}
 				<th>{{ header }}</th>
 				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				{% for employee in data %}
+				<!-- iterate over employee and manager data from app.py -->
+				{% for employee in employees_managers_results %}
 				<tr>
+					<!-- display each data row for each row in display table -->
 					{% for value in employee[:-1] %}
 					<td>{{ value }}</td>
 					{% endfor %}
 					<td>
 						<div class="container">
+							<!-- pop-up update form to edit row in employee and manager table -->
 							<input type='button' name='Edit' value='Edit' data-bs-toggle="modal" data-bs-target="#edit-modal{{employee[-1]}}">
 							<div class="modal" id="edit-modal{{employee[-1]}}">
 								<div class="modal-dialog modal-dialog-centered">
@@ -31,6 +34,7 @@
 											<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 										</div>
 										<div class="modal-body">
+											<!-- update info in database on update form submit -->
 											<form action="/update_employee/{{employee[-1]}}" method="POST">
 												<div class="row mb-0 mt-0">
 													<label for="first_name_input" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
@@ -88,6 +92,7 @@
 						</div>
 					</td>
 					<td>
+						<!-- delete row from database on delete submit -->
 						<input type='button' class="form-button" name='Delete' value='Delete' onclick="window.location = '/delete_employee/{{employee[-1]}}'">
 					</td>
 				</tr>
@@ -101,6 +106,7 @@
 	<table class="center">
 		<thead>
 			<tr>
+				<!-- display pre-set column title for locations table -->
 				{% for header in location_headers %}
 				<th>{{ header }}</th>
 				{% endfor %}
@@ -108,13 +114,16 @@
 		</thead>
 		<tbody>
 			<tr>
+				<!-- iterate over location data from app.py -->
 				{% for location in location_data %}
 			<tr>
+				<!-- display each data row for each row in display table -->
 				{% for value in location[:-1] %}
 				<td>{{ value }}</td>
 				{% endfor %}
 				<td>
 					<div class="container">
+						<!-- pop-up update form to edit row in locations table -->
 						<input type='button' name='Edit' value='Edit' data-bs-toggle="modal" data-bs-target="#edit-modal_suppliers{{location[-1]}}">
 						<div class="modal" id="edit-modal_suppliers{{location[-1]}}">
 							<div class="modal-dialog modal-dialog-centered">
@@ -124,6 +133,7 @@
 										<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 									</div>
 									<div class="modal-body">
+										<!-- update info in database on update form submit -->
 										<form action="/update_location/{{location[-1]}}" method="POST">
 
 											<div>
@@ -150,6 +160,7 @@
 					</div>
 				</td>
 				<td>
+					<!-- delete row from database on delete submit -->
 					<input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_location/{{location[-1]}}'">
 				</td>
 			</tr>
@@ -158,6 +169,7 @@
 	</table>
 </div>
 
+<!-- display form to submit new employee/manager -->
 <div class="container form-container">
 	<div class="row justify-content-around">
 		<div class="col-4 inner-group">
@@ -200,6 +212,7 @@
 			</form>
 		</div>
 
+		<!-- display form to submit new store location -->
 		<div class="col-4 inner-group">
 			<form action="#", method="POST">
 				{{ loc_form.hidden_tag() }}
