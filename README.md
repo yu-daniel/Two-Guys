@@ -19,7 +19,11 @@ Two Guys is an up-and-coming burger joint ready to take down Five Guys. Two Guys
 
 ### Built with
 
+- HTML, CSS, Bootstrap
+- Python, Flask, SQL
 
-### Contributers
+### Contributors
 
+- Alex Shin https://github.com/ajss25
+- Daniel Yu https://github.com/yu-daniel
 
