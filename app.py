@@ -103,15 +103,14 @@ def orders_customers():
             customer_locations = (get_customer_id_results[0][0], get_location_id_results[0][0],)
 
             execute_query(db_connection, add_customer_locations, customer_locations)
-
         # refresh the page once the form is submitted
         return redirect(url_for('orders_customers'))
 
     else:
         # queries for displaying the Orders and Customers 'overview' tables
         orders_query = \
-            "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number, order_id FROM " \
-            "`Customers` " \
+            "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number, order_id " \
+            "FROM `Customers` " \
             "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id ORDER BY date_time;"
 
         customers_query = \
@@ -123,18 +122,6 @@ def orders_customers():
         order_results = execute_query(db_connection, orders_query).fetchall()
         customer_results = execute_query(db_connection, customers_query).fetchall()
 
-        if request.method == 'POST' and search_data != "":
-            search_query = \
-                "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
-                "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
-                "WHERE first_name LIKE (%s);"
-
-            search_query = execute_query(db_connection, search_query, ("%" + search_data + "%",)).fetchall()
-
-            if search_query:
-                order_results = search_query
-
-        # 
         customer_id_choices = []
         location_choices = []
 
@@ -147,6 +134,18 @@ def orders_customers():
         order_form.customer_id.choices = customer_id_choices
         customer_form.location.choices = location_choices
 
+        if request.method == 'POST' and search_data != "":
+            search_query = \
+                "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number " \
+                "FROM `Customers` " \
+                "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
+                "WHERE first_name LIKE (%s);"
+
+            search_query = execute_query(db_connection, search_query, ("%" + search_data + "%",)).fetchall()
+
+            if search_query:
+                order_results = search_query
+
         # render the webpage with all the data retrieved from the db
         return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers',
                                order_form=order_form, customer_form=customer_form,
@@ -158,12 +157,12 @@ def orders_customers():
 # route for the ingredients & suppliers page
 @app.route("/ingredients-suppliers", methods=["GET", "POST"])
 def ingredients_suppliers():
-    ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
-    suppliers_headers = ["Name", "", ""]
-
     db_connection = connect_to_database()
     ingredient_form = IngredientsForm()
     supplier_form = SuppliersForm()
+
+    ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
+    suppliers_headers = ["Name", "", ""]
 
     # for POST requests
     if request.method == 'POST':
@@ -173,17 +172,17 @@ def ingredients_suppliers():
         supplier = ingredient_form.supplier.data
         order_id = ingredient_form.order_id.data
 
-        # grab user's input from add new Ingredient form, and INSERT into the db
-        ingredients_input_data = (order_date, ingredient_name, ingredient_cost, order_id)
         ingredient_input_query = "INSERT INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
                                  "VALUES (%s, %s, %s, %s);"
-
-        supplier_name = supplier_form.supplier_name.data
-        supplier_input_data = (supplier_name,)
 
         supplier_input_query = "INSERT INTO Suppliers (supplier_name) VALUES (%s);"
         get_supplier_id_query = "SELECT supplier_id FROM `Suppliers` WHERE supplier_name = (%s)"
         get_supplier_id_results = execute_query(db_connection, get_supplier_id_query, (supplier,)).fetchall()
+
+        # grab user's input from add new Ingredient form, and INSERT into the db
+        ingredients_input_data = (order_date, ingredient_name, ingredient_cost, order_id)
+        supplier_name = supplier_form.supplier_name.data
+        supplier_input_data = (supplier_name,)
 
         if validator(ingredients_input_data) is True:
             execute_query(db_connection, ingredient_input_query, ingredients_input_data)
@@ -196,71 +195,50 @@ def ingredients_suppliers():
             # relationship
             add_ingredient_supplier_IDs = "INSERT INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (%s, %s)"
             IDs_parsed = (get_ingredient_id_results[0][0], get_supplier_id_results[0][0])
-
             execute_query(db_connection, add_ingredient_supplier_IDs, IDs_parsed)
-
-            # db_connection.commit()
 
         elif validator(supplier_input_data) is True:
             execute_query(db_connection, supplier_input_query, supplier_input_data)
 
-            # db_connection.commit()
-
         return redirect(url_for('ingredients_suppliers'))
 
-    # for GET requests
-    ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM " \
-                        "`Ingredients`; "
-    suppliers_query = "SELECT supplier_name, supplier_id FROM Suppliers;"
-    ingredients_suppliers_query = "SELECT ingredient_name, supplier_name FROM `Ingredients` \
-            INNER JOIN Ingredients_Suppliers ON Ingredients_Suppliers.ing_id = Ingredients.ingredient_id \
-            INNER JOIN Suppliers ON Suppliers.supplier_id = Ingredients_Suppliers.sup_id \
-            ORDER BY ingredient_name;"
+    elif request.method == 'GET':
+        # for GET requests
+        ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM " \
+                            "`Ingredients`; "
+        suppliers_query = "SELECT supplier_name, supplier_id FROM Suppliers;"
+        order_id_query = "SELECT order_id FROM `Orders`;"
 
-    supplier_results_parsed = []
-    supplier_choices = []
-    order_id_choices = []
-    ingredients_supplied_choices = []
+        supplier_choices = []
+        order_id_choices = []
+        ingredients_supplied_choices = []
 
-    # select suppliers, order_id, and ingredients from the db
-    supplier_choices_query = "SELECT supplier_name FROM `Suppliers`;"
-    order_id_query = "SELECT order_id FROM `Orders`;"
-    ingredients_supplied_query = "SELECT ingredient_name FROM `Ingredients`;"
+        # execute the above select queries and retrieve the data
+        ingredient_results = execute_query(db_connection, ingredients_query).fetchall()
+        suppliers_results = execute_query(db_connection, suppliers_query).fetchall()
+        order_id_results = execute_query(db_connection, order_id_query).fetchall()
 
-    # execute the above select queries and retrieve the data
-    ingredient_results = execute_query(db_connection, ingredients_query).fetchall()
-    suppliers_results = execute_query(db_connection, suppliers_query).fetchall()
-    ingredients_suppliers_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
+        # the data retrieved from the db are a tuple of tuples, here we take each individual tuple and add to a list (to
+        # get a list of all items)
+        for choices in ingredient_results:
+            order_id_choices.append(choices[3])
 
-    supplier_choices_results = execute_query(db_connection, supplier_choices_query).fetchall()
-    ingredients_supplied_results = execute_query(db_connection, ingredients_supplied_query).fetchall()
-    order_id_results = execute_query(db_connection, order_id_query).fetchall()
+        for choices in suppliers_results:
+            supplier_choices.append(choices[0])
 
-    # the data retrieved from the db are a tuple of tuples, here we take each individual tuple and add to a list (to
-    # get a list of all items)
-    for choices in order_id_results:
-        order_id_choices.append(choices[0])
+        for choices in ingredient_results:
+            ingredients_supplied_choices.append(choices[1])
 
-    for choices in supplier_choices_results:
-        supplier_choices.append(choices[0])
+        # from the list of items, assign them to each Form's choices option
+        ingredient_form.supplier.choices = supplier_choices
+        ingredient_form.order_id.choices = order_id_choices
+        supplier_form.ingredients_supplied.choices = ingredients_supplied_choices
 
-    for choices in ingredients_supplied_results:
-        ingredients_supplied_choices.append(choices[0])
-
-    for supplier in suppliers_results:
-        supplier_results_parsed.append(supplier[0])
-
-
-    # from the list of items, assign them to each Form's choices option
-    ingredient_form.supplier.choices = supplier_choices
-    ingredient_form.order_id.choices = order_id_choices
-    supplier_form.ingredients_supplied.choices = ingredients_supplied_choices
-
-    return render_template("ingredients_suppliers.html", title='Add/Edit/Delete Ingredients & Suppliers',
-                           ingredient_form=ingredient_form,
-                           suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
-                           supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
-                           ingredient_suppliers_v=ingredient_results, order_nums=order_id_results,)
+        return render_template("ingredients_suppliers.html", title='Add/Edit/Delete Ingredients & Suppliers',
+                               ingredient_form=ingredient_form,
+                               suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
+                               supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
+                               ingredient_suppliers_v=ingredient_results, order_nums=order_id_results)
 
 
 # route for employees & locations page
