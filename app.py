@@ -3,6 +3,17 @@ from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersF
     SubmitCustomers
 from db_connector import connect_to_database, execute_query
 
+"""
+Sources / Citations
+
+(1) Week 8: Database Application Development - Learn using Python and Flask Framework & Starter Code
+Link: https://github.com/knightsamar/CS340_starter_flask_app
+Link: https://github.com/gkochera/CS340-demo-flask-app#step-3---building-apppy
+Link: https://oregonstate.instructure.com/courses/1825733/pages/learn-using-python-and-flask-framework?module_item_id=20221782
+Description: 
+
+"""
+
 app = Flask(__name__)
 
 # required to keep sessions secure
@@ -404,11 +415,13 @@ def delete_order(id):
 def delete_customer(id):
     """deletes a customer with the given customer id"""
     db_connection = connect_to_database()
+
+    # query to delete a customer from the Customers table, where customer_id is same as id
     delete_customer_query = "DELETE FROM Customers WHERE customer_id = %s;"
     delete_customer_data = (id,)
     execute_query(db_connection, delete_customer_query, delete_customer_data)
 
-    # also delete from customers_locations M:M table
+    # also delete from the customers_locations intersection table where the FK matches the ID
     delete_customers_locations_query = "DELETE FROM Customers_Locations WHERE customer_fk_id=%s;"
     delete_customers_locations_data = (id,)
     execute_query(db_connection, delete_customers_locations_query, delete_customers_locations_data)
@@ -417,35 +430,35 @@ def delete_customer(id):
 
 @app.route('/delete_ingredient/<int:id>')
 def delete_ingredient(id):
-    """deletes a ingredient with the given id"""
+    """deletes an ingredient with the given ingredient id"""
     db_connection = connect_to_database()
-    print("We're at delete query!")
+
+    # query to delete an ingredient from the Ingredients table, where ingredient_id is same as id
     delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE ing_id = %s"
     delete_ingredient_query = "DELETE FROM Ingredients WHERE ingredient_id = %s"
     data = (id,)
     execute_query(db_connection, delete_intersection_query, data)
     execute_query(db_connection, delete_ingredient_query, data)
-
     return redirect(url_for("ingredients_suppliers"))
 
 
 @app.route('/delete_supplier/<int:id>', methods=['GET', 'POST'])
 def delete_supplier(id):
-    """deletes a supplier with the given id"""
+    """deletes a supplier with the given supplier id"""
     db_connection = connect_to_database()
-    print("We're at delete query for deleting a supplier!")
+
+    # query to delete a supplier from the Suppliers table, where supplier_id is same as id
     delete_intersection_query = "DELETE FROM Ingredients_Suppliers WHERE sup_id = %s"
     delete_supplier_query = "DELETE FROM Suppliers WHERE supplier_id = %s"
     data = (id,)
     execute_query(db_connection, delete_intersection_query, data)
     execute_query(db_connection, delete_supplier_query, data)
-
     return redirect(url_for("ingredients_suppliers"))
 
 
 @app.route('/delete_location/<int:id>', methods=['GET', 'POST'])
 def delete_location(id):
-    """deletes a store location with the given id"""
+    """deletes a store location with the given location id"""
     db_connection = connect_to_database()
     delete_intersection_query = "DELETE FROM Customers_Locations WHERE store_fk_id = %s"
     delete_location_query = "DELETE FROM Locations WHERE store_id = %s;"
@@ -475,11 +488,12 @@ def update_order(id):
     db_connection = connect_to_database()
 
     if request.method == 'POST':
+        # get the user's input from the input field
         order_date = request.form['date']
         customer_id = request.form['customer_id']
-
         sales_amount = request.form['sales_amount']
 
+        # query to update one or more attributes for the Orders table
         update_order_query = \
             "UPDATE Orders SET date_time=%s, sale_amount=%s, customer_num=%s WHERE order_id=%s;"
 
@@ -500,12 +514,14 @@ def update_customer(id):
     db_connection = connect_to_database()
 
     if request.method == "POST":
+        # get the user's input from the input field
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         email = request.form['email']
         phone_number = request.form['phone_number']
         location = request.form['location']
 
+        # query to update one or more attributes in the Customers table
         update_customer_query = \
             "UPDATE Customers SET first_name=%s, last_name=%s, email=%s, phone_number=%s WHERE customer_id=%s;"
 
@@ -516,7 +532,7 @@ def update_customer(id):
 
         # also update the customer_locations M:M table row with changed location
         new_location_query = "SELECT store_id FROM Locations WHERE city=%s;"
-        new_location_data = (location)
+        new_location_data = location
         new_location_id = execute_query(db_connection, new_location_query, new_location_data).fetchone()
 
         update_customers_locations_query = \
@@ -530,15 +546,17 @@ def update_customer(id):
 
 @app.route('/update_ingredient/<int:id>', methods=['POST', 'GET'])
 def update_ingredient(id):
-    """update a ingredient with the given id"""
+    """update an ingredient with the given ingredient id"""
     db_connection = connect_to_database()
 
     if request.method == "POST":
+        # grab the data from the input fields
         order_date = request.form['order_date']
         ingredient_name = request.form['ingredient_name']
         ingredient_cost = request.form['ingredient_cost']
         order_num = request.form['order_num']
 
+        # query to update the attribute(s) in the Ingredients table
         update_query = \
             "UPDATE Ingredients SET order_date = %s, ingredient_name = %s, ingredient_cost = %s, order_num = %s " \
             "WHERE ingredient_id =  %s;"
@@ -551,12 +569,14 @@ def update_ingredient(id):
 
 @app.route('/update_supplier/<int:id>', methods=['POST', 'GET'])
 def update_supplier(id):
-    """update a supplier with the given id"""
+    """update a supplier with the given supplier id"""
     db_connection = connect_to_database()
 
     if request.method == "POST":
+        # grab the supplier name in the input field
         supplier_name = request.form['supplier_name']
 
+        # query to update the supplier name in the Suppliers table
         update_query = \
             "UPDATE Suppliers SET supplier_name = %s" \
             "WHERE supplier_id =  %s;"
