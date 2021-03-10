@@ -14,27 +14,33 @@ headers = ['First Name', 'Last Name', 'Start Date', 'Vacation', 'Managed by', 'L
 location_headers = ['City', 'State', 'Zip Code', '', '']
 
 
-# route for the homepage (root) is defined, but it's html is just the base
+# route for the homepage/root
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    # render the homepage html
     return render_template('index.html')
 
 
-# validator helper function to specify which form was submitted
 def validator(data_list):
-    all_valid = True
+    """
+    The validator() function helps validate whether the fields of a
+    form contain any None values. I takes an array of field values
+    as a parameter and checks if any element is None - if true,
+    then returns all_valid as False, otherwise return all_valid as True.
+    """
+    all_valid = True            # assume all elements is not None
 
-    for value in data_list:
-        if value is None:
+    for value in data_list:     # iterate through each element and
+        if value is None:       # check if it is None
             all_valid = False
 
-    return all_valid
+    return all_valid            # return the boolean results
 
 
 # route for the orders & customers page
 @app.route("/orders-customers", methods=["GET", "POST"])
 def orders_customers():
-    # create a reference to the form (objects)
+    # create variables to reference each Form
     order_form = OrderForm(request.form)
     customer_form = Customers(request.form)
     search_form = SubmitCustomers(request.form)
@@ -50,30 +56,30 @@ def orders_customers():
     # get the user's input values from the search box (if any)
     search_data = search_form.submit_id.data
 
-    # check if there is a POST request, that is not from the search box
+    # check if it is a POST request, not from the search box
     if request.method == 'POST' and search_data == "":
-        # get the data from each field of the Order form
+        # get the data from each input field of the Order form
         date_time = order_form.date_time.data
         sale_amount = order_form.sale_amount.data
         customer_id = order_form.customer_id.data
 
-        # get the data from each field of the Customer form
+        # get the data from each input field of the Customer form
         first_name = customer_form.first_name.data
         last_name = customer_form.last_name.data
         email = customer_form.email.data
         phone_number = customer_form.phone_number.data
         location = customer_form.location.data
 
-        # place the data in tuples for it to be iterable and not mutable
+        # place the data in tuples for it to be iterable (and not mutable)
         order_input_data = (date_time, sale_amount, customer_id,)
         customer_input_data = (first_name, last_name, email, phone_number,)
 
-        # query for adding a new Order into the db
+        # query for creating a new Order into the db
         order_input_query = \
             "INSERT INTO Orders (date_time, sale_amount, customer_num) " \
             "VALUES (%s, %s, %s);"
 
-        # query for adding a new Customer into the db
+        # query for creating a new Customer into the db
         customer_input_query = \
             "INSERT INTO Customers (first_name, last_name, email, phone_number) " \
             "VALUES (%s, %s, %s, %s);"
@@ -94,15 +100,15 @@ def orders_customers():
         elif validator(customer_input_data):
             execute_query(db_connection, customer_input_query, customer_input_data)
 
-            # get latest customer_id that was added (just now)
+            # get the latest customer_id
             get_customer_id_query = "SELECT customer_id FROM `Customers` ORDER BY customer_id DESC LIMIT 1"
             get_customer_id_results = execute_query(db_connection, get_customer_id_query).fetchall()
 
-            # add the customer_id and location_id into the intersection table
+            # add the latest customer_id and the location_id into the intersection table
             add_customer_locations = "INSERT INTO Customers_Locations (customer_fk_id, store_fk_id) VALUES (%s, %s);"
             customer_locations = (get_customer_id_results[0][0], get_location_id_results[0][0],)
-
             execute_query(db_connection, add_customer_locations, customer_locations)
+
         # refresh the page once the form is submitted
         return redirect(url_for('orders_customers'))
 
@@ -122,19 +128,23 @@ def orders_customers():
         order_results = execute_query(db_connection, orders_query).fetchall()
         customer_results = execute_query(db_connection, customers_query).fetchall()
 
+        # container to store dropdown menu choices for the page
         customer_id_choices = []
         location_choices = []
 
+        # iterate through the data received from db, and add customer_id and locations to their respective list
         for choices in customer_results:
             customer_id_choices.append(choices[5])
             if choices[4] not in location_choices:
                 location_choices.append(choices[4])
 
-        # set the 'choices' option for customer_id for the OrderForm form
+        # set 'choices' attribute for each form with customer_id_choices and location_choices
         order_form.customer_id.choices = customer_id_choices
         customer_form.location.choices = location_choices
 
+        # check if any POST request is coming from the search box
         if request.method == 'POST' and search_data != "":
+            # use the search box input as a keyword and compare with any customer's first name
             search_query = \
                 "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number " \
                 "FROM `Customers` " \
@@ -143,6 +153,7 @@ def orders_customers():
 
             search_query = execute_query(db_connection, search_query, ("%" + search_data + "%",)).fetchall()
 
+            # when any results are returned from the query, then use this data for the overview table
             if search_query:
                 order_results = search_query
 
@@ -157,33 +168,39 @@ def orders_customers():
 # route for the ingredients & suppliers page
 @app.route("/ingredients-suppliers", methods=["GET", "POST"])
 def ingredients_suppliers():
+    # connect to the db, and set variables to reference the Forms
     db_connection = connect_to_database()
     ingredient_form = IngredientsForm()
     supplier_form = SuppliersForm()
 
+    # column headers for the Ingredient and Suppliers table
     ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
     suppliers_headers = ["Name", "", ""]
 
-    # for POST requests
     if request.method == 'POST':
+        # get the field input values from each Form (if any)
         order_date = ingredient_form.order_date.data
         ingredient_name = ingredient_form.ingredient_name.data
         ingredient_cost = ingredient_form.ingredient_cost.data
         supplier = ingredient_form.supplier.data
         order_id = ingredient_form.order_id.data
 
+        # query for creating new Ingredients and Suppliers
         ingredient_input_query = "INSERT INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
                                  "VALUES (%s, %s, %s, %s);"
 
         supplier_input_query = "INSERT INTO Suppliers (supplier_name) VALUES (%s);"
+
+        # query for selecting all supplier_id
         get_supplier_id_query = "SELECT supplier_id FROM `Suppliers` WHERE supplier_name = (%s)"
         get_supplier_id_results = execute_query(db_connection, get_supplier_id_query, (supplier,)).fetchall()
 
-        # grab user's input from add new Ingredient form, and INSERT into the db
+        # place the form data from user into tuple
         ingredients_input_data = (order_date, ingredient_name, ingredient_cost, order_id)
         supplier_name = supplier_form.supplier_name.data
         supplier_input_data = (supplier_name,)
 
+        # use the validator() function to check which form has data, and determine which form to submit to db
         if validator(ingredients_input_data) is True:
             execute_query(db_connection, ingredient_input_query, ingredients_input_data)
 
@@ -203,12 +220,13 @@ def ingredients_suppliers():
         return redirect(url_for('ingredients_suppliers'))
 
     elif request.method == 'GET':
-        # for GET requests
+        # query to get data from the Ingredients, Suppliers, and Orders table
         ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM " \
                             "`Ingredients`; "
         suppliers_query = "SELECT supplier_name, supplier_id FROM Suppliers;"
         order_id_query = "SELECT order_id FROM `Orders`;"
 
+        # container that will store the supplier name, order IDs, and ingredient names for dropdown menus
         supplier_choices = []
         order_id_choices = []
         ingredients_supplied_choices = []
