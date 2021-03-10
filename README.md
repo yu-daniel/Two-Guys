@@ -8,3 +8,6 @@ Two Guys is an up-and-coming burger joint ready to take down Five Guys. Two Guys
 
 ## Features
 
+
+
+<img src='http://g.recordit.co/JBCngvzkCo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
