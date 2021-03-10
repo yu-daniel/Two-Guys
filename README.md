@@ -1,6 +1,6 @@
 # Two Guys
 
-Things to address later:
-- configure webpages to smaller window sizes.  
-- adjust table sizes.    
-- fix table headers to stay in place when scrolling down tables
+Two Guys is a full-stack web application that provides a web-based UI for database interaction with CRUD operations.
+
+## User Stories
+
