@@ -1,4 +1,4 @@
-## Two Guys
+# Two Guys
 
 Two Guys is a full-stack web application that provides a web-based UI for database interaction with CRUD operations.
 
@@ -15,6 +15,11 @@ Two Guys is an up-and-coming burger joint ready to take down Five Guys. Two Guys
 
 ### Walkthrough
 
-<img src='http://g.recordit.co/JBCngvzkCo.gif' title='Video Walkthrough' width='1000' alt='Video Walkthrough' />
+<img src='http://g.recordit.co/JBCngvzkCo.gif' title='Video Walkthrough' width='1200' alt='Video Walkthrough' />
 
-## 
+### Built with
+
+
+### Contributers
+
+
