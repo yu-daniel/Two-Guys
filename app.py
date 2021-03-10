@@ -14,7 +14,6 @@ headers = ['First Name', 'Last Name', 'Start Date', 'Vacation', 'Managed by', 'L
 location_headers = ['City', 'State', 'Zip Code', '', '']
 
 
-
 # route for the homepage (root) is defined, but it's html is just the base
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -35,37 +34,37 @@ def validator(data_list):
 # route for the orders & customers page
 @app.route("/orders-customers", methods=["GET", "POST"])
 def orders_customers():
+    # create a reference to the form (objects)
+    order_form = OrderForm(request.form)
+    customer_form = Customers(request.form)
+    search_form = SubmitCustomers(request.form)
+
+    # establish a connection to the db
+    db_connection = connect_to_database()
+
+    # column headers for each table
     orders_customers_h = ["Date", "Customer ID", "Sales Amount ($)", "First Name", "Last Name", "E-mail",
                           "Phone Number", "", ""]
     customer_headers = ["First Name", "Last Name", "E-mail", "Phone Number", "Location", "", ""]
 
-    # form objects
-    order_form = OrderForm(request.form)
-    customer_form = Customers(request.form)
-
-    search_form = SubmitCustomers(request.form)
-
-    # establish connect to db
-    db_connection = connect_to_database()
-
-    # grab the user's input from the search box
+    # get the user's input values from the search box (if any)
     search_data = search_form.submit_id.data
 
-    # check first if there is a POST request
+    # check if there is a POST request, that is not from the search box
     if request.method == 'POST' and search_data == "":
-        # retrieve data for each field from the new Orders form
+        # get the data from each field of the Order form
         date_time = order_form.date_time.data
         sale_amount = order_form.sale_amount.data
         customer_id = order_form.customer_id.data
 
-        # retrieve data for each field from the new Customers form
+        # get the data from each field of the Customer form
         first_name = customer_form.first_name.data
         last_name = customer_form.last_name.data
         email = customer_form.email.data
         phone_number = customer_form.phone_number.data
         location = customer_form.location.data
 
-        # place the data in a tuple format
+        # place the data in tuples for it to be iterable and not mutable
         order_input_data = (date_time, sale_amount, customer_id,)
         customer_input_data = (first_name, last_name, email, phone_number,)
 
@@ -85,15 +84,14 @@ def orders_customers():
         get_location_id_results = execute_query(db_connection, get_location_id_query, (location,)).fetchall()
 
         # once our webpage has two forms present, we need to check which one the user is submitting
-        # since the user can only submit one form at any time, the validator() method checks which
-        # form has data and returns a boolean value as a result
+        # since the user can only submit one form at any time, the boolean value returned from validator()
+        # allows us to know which form has data.
 
-        if validator(order_input_data) is True:
+        if validator(order_input_data):
             # execute the query and commit it to the db for changes to be permanent
             execute_query(db_connection, order_input_query, order_input_data)
-            # db_connection.commit()
 
-        elif validator(customer_input_data) is True:
+        elif validator(customer_input_data):
             execute_query(db_connection, customer_input_query, customer_input_data)
 
             # get latest customer_id that was added (just now)
@@ -105,67 +103,56 @@ def orders_customers():
             customer_locations = (get_customer_id_results[0][0], get_location_id_results[0][0],)
 
             execute_query(db_connection, add_customer_locations, customer_locations)
-            # db_connection.commit()
 
         # refresh the page once the form is submitted
         return redirect(url_for('orders_customers'))
 
-    # if the request is not POST, then it must be GET
+    else:
+        # queries for displaying the Orders and Customers 'overview' tables
+        orders_query = \
+            "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number, order_id FROM " \
+            "`Customers` " \
+            "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id ORDER BY date_time;"
 
-    # queries for displaying the Orders and Customers 'overview' tables
-    orders_query = \
-        "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number, order_id FROM " \
-        "`Customers` " \
-        "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id ORDER BY date_time;"
+        customers_query = \
+            "SELECT first_name, last_name, email, phone_number, city AS location, customer_id FROM `Customers` " \
+            "INNER JOIN Customers_Locations ON Customers_Locations.customer_fk_id = Customers.customer_id " \
+            "INNER JOIN Locations ON Locations.store_id = Customers_Locations.store_fk_id ORDER BY last_name;"
 
-    customers_query = \
-        "SELECT first_name, last_name, email, phone_number, city AS location, customer_id FROM `Customers` " \
-        "INNER JOIN Customers_Locations ON Customers_Locations.customer_fk_id = Customers.customer_id " \
-        "INNER JOIN Locations ON Locations.store_id = Customers_Locations.store_fk_id ORDER BY last_name;"
+        # execute the query to retrieve the table data from the db
+        order_results = execute_query(db_connection, orders_query).fetchall()
+        customer_results = execute_query(db_connection, customers_query).fetchall()
 
-    # execute the query to retrieve the table data from the db
-    order_results = execute_query(db_connection, orders_query).fetchall()
-    customer_results = execute_query(db_connection, customers_query).fetchall()
+        if request.method == 'POST' and search_data != "":
+            search_query = \
+                "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
+                "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
+                "WHERE first_name LIKE (%s);"
 
-    if request.method == 'POST' and search_data != "":
-        search_query = \
-            "SELECT date_time, customer_id, sale_amount, first_name, last_name, email, phone_number FROM `Customers` " \
-            "INNER JOIN Orders ON Orders.customer_num = Customers.customer_id " \
-            "WHERE first_name LIKE (%s);"
+            search_query = execute_query(db_connection, search_query, ("%" + search_data + "%",)).fetchall()
 
-        search_query = execute_query(db_connection, search_query, ("%" + search_data + "%",)).fetchall()
+            if search_query:
+                order_results = search_query
 
-        if search_query:
-            order_results = search_query
+        # 
+        customer_id_choices = []
+        location_choices = []
 
-    # in the 'orders-customers' page, when adding a new Order, we need a dropdown menu for existing Customer ID
-    # below will select all existing Customer IDs and add them to 'choices' in the dropdown menu
-    customer_id_query = "SELECT customer_id FROM Customers;"
-    customer_id_results = execute_query(db_connection, customer_id_query).fetchall()
-    customer_id_choices = []
+        for choices in customer_results:
+            customer_id_choices.append(choices[5])
+            if choices[4] not in location_choices:
+                location_choices.append(choices[4])
 
-    for choices in customer_id_results:
-        customer_id_choices.append(choices[0])
+        # set the 'choices' option for customer_id for the OrderForm form
+        order_form.customer_id.choices = customer_id_choices
+        customer_form.location.choices = location_choices
 
-    # set the 'choices' option for customer_id for the OrderForm form
-    order_form.customer_id.choices = customer_id_choices
-
-    # same idea for the Locations dropdown menu in the new Customer form
-    locations_query = "SELECT city FROM Locations;"
-    location_results = execute_query(db_connection, locations_query).fetchall()
-    location_choices = []
-
-    for choices in location_results:
-        location_choices.append(choices[0])
-
-    customer_form.location.choices = location_choices
-
-    # render the webpage with all the data retrieved from the db
-    return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers',
-                           order_form=order_form, customer_form=customer_form,
-                           customer_headers=customer_headers, customer_values=customer_results,
-                           orders_customers_h=orders_customers_h, orders_customers_v=order_results,
-                           customer_ids=customer_id_results, search_form=search_form, city_name=location_results)
+        # render the webpage with all the data retrieved from the db
+        return render_template("orders_customers.html", title='Add/Edit/Delete Orders & Customers',
+                               order_form=order_form, customer_form=customer_form,
+                               customer_headers=customer_headers, customer_values=customer_results,
+                               orders_customers_h=orders_customers_h, orders_customers_v=order_results,
+                               search_form=search_form, city_name=location_choices)
 
 
 # route for the ingredients & suppliers page
