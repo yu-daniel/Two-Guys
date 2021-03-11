@@ -79,12 +79,12 @@ def orders_customers():
 
         # query for creating a new Order into the db
         order_input_query = \
-            "INSERT INTO Orders (date_time, sale_amount, customer_num) " \
+            "INSERT IGNORE INTO Orders (date_time, sale_amount, customer_num) " \
             "VALUES (%s, %s, %s);"
 
         # query for creating a new Customer into the db
         customer_input_query = \
-            "INSERT INTO Customers (first_name, last_name, email, phone_number) " \
+            "INSERT IGNORE INTO Customers (first_name, last_name, email, phone_number) " \
             "VALUES (%s, %s, %s, %s);"
 
         # adding a new Customer also involves adding them to the Customers_Locations intersection table
@@ -108,7 +108,7 @@ def orders_customers():
             get_customer_id_results = execute_query(db_connection, get_customer_id_query).fetchall()
 
             # add the latest customer_id and the location_id into the intersection table
-            add_customer_locations = "INSERT INTO Customers_Locations (customer_fk_id, store_fk_id) VALUES (%s, %s);"
+            add_customer_locations = "INSERT IGNORE INTO Customers_Locations (customer_fk_id, store_fk_id) VALUES (%s, %s);"
             customer_locations = (get_customer_id_results[0][0], get_location_id_results[0][0],)
             execute_query(db_connection, add_customer_locations, customer_locations)
 
@@ -192,11 +192,11 @@ def ingredients_suppliers():
         order_id = ingredient_form.order_id.data
         
         # query for adding a new Ingredient into db
-        ingredient_input_query = "INSERT INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
+        ingredient_input_query = "INSERT IGNOREINTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
                                  "VALUES (%s, %s, %s, %s);"
 
         # query for adding a new Supplier into db
-        supplier_input_query = "INSERT INTO Suppliers (supplier_name) VALUES (%s);"
+        supplier_input_query = "INSERT IGNORE INTO Suppliers (supplier_name) VALUES (%s);"
 
         # adding a new Ingredient also involves adding them to the Ingrdients_Suppliers intersection table
         # here, we get the supplier_id based on the location that the user selected
@@ -216,7 +216,7 @@ def ingredients_suppliers():
             get_ingredient_id_results = execute_query(db_connection, get_ingredient_id_query).fetchall()
 
             # add ingredient_id and supplier_id to the Ingredients_Suppliers intersection table
-            add_ingredient_supplier_IDs = "INSERT INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (%s, %s)"
+            add_ingredient_supplier_IDs = "INSERT IGNORE INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (%s, %s)"
             IDs_parsed = (get_ingredient_id_results[0][0], get_supplier_id_results[0][0])
             execute_query(db_connection, add_ingredient_supplier_IDs, IDs_parsed)
 
@@ -308,23 +308,23 @@ def employees_locations():
         # query for adding employee to the db
         if managed_by is not None:
             employee_input_data = (first_name, last_name, start_date, status, managed_by, store)
-            employee_input_query = "INSERT INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id) \
+            employee_input_query = "INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id) \
                                 VALUES (%s, %s, %s, %s, %s, %s);"
         else:
             employee_input_data = (first_name, last_name, start_date, status, store)
-            employee_input_query = "INSERT INTO Employees (first_name, last_name, start_date, status, emp_store_id) \
+            employee_input_query = "INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_store_id) \
                                 VALUES (%s, %s, %s, %s, %s);"
 
         # query for adding manager into db if employee is also a manager
         manager_input_data = None
         if manager is True:
             manager_input_data = (first_name, last_name, status, store)
-            manager_input_query = "INSERT INTO Managers (first_name, last_name, status, manager_store_id) \
+            manager_input_query = "INSERT IGNORE INTO Managers (first_name, last_name, status, manager_store_id) \
                                    VALUES (%s, %s, %s, %s);"
 
         # query for adding location into db
         location_input_data = (city, state, zip_code)
-        location_input_query = "INSERT INTO Locations (`city`, state, zip_code) \
+        location_input_query = "INSERT IGNORE INTO Locations (`city`, state, zip_code) \
                                 VALUES (%s, %s, %s);"
 
         if validator(location_input_data):

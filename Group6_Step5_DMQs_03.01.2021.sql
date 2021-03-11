@@ -23,13 +23,13 @@ INNER JOIN Suppliers ON Suppliers.supplier_id = Ingredients_Suppliers.sup_id
 ORDER BY ingredient_name;
 
 -- add a new Ingredient
-INSERT INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) VALUES (:order_dateInput, :ingredient_nameInput, :ingredient_costInput, :order_numInput);
+INSERT IGNORE INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) VALUES (:order_dateInput, :ingredient_nameInput, :ingredient_costInput, :order_numInput);
 
 -- add a new Supplier
-INSERT INTO Suppliers (supplier_name) VALUES (:supplier_nameInput);
+INSERT IGNORE INTO Suppliers (supplier_name) VALUES (:supplier_nameInput);
 
 -- relate an Ingredient with a Supplier for creating a M:M relationship
-INSERT INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (:ing_idInput, :sup_idInput);
+INSERT IGNORE INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (:ing_idInput, :sup_idInput);
 
 -- update an entry in the Ingredients table
 UPDATE Ingredients SET order_date = :order_dateInput, ingredient_name = :ingredient_nameInput, ingredient_cost = :ingredient_costInput, order_num = :order_numInput WHERE ingredient_id =  :ingredient_id_from_editable_in_table;
@@ -66,13 +66,13 @@ ORDER BY last_name;
 SELECT customer_id FROM `Customers` ORDER BY customer_id DESC LIMIT 1
 
 -- add a new Customer
-INSERT INTO Customers (first_name, last_name, email, phone_number) VALUES (:first_nameInput, :last_nameInput, :emailInput, :phone_numberInput);
+INSERT IGNORE INTO Customers (first_name, last_name, email, phone_number) VALUES (:first_nameInput, :last_nameInput, :emailInput, :phone_numberInput);
 
 -- add a new Order
-INSERT INTO Orders (date_time, sale_amount, customer_num) VALUES (:date_timeInput, :sale_amountInput, :customer_numInput);
+INSERT IGNORE INTO Orders (date_time, sale_amount, customer_num) VALUES (:date_timeInput, :sale_amountInput, :customer_numInput);
 
 -- add the customer_id and location_id into the intersection table
-INSERT INTO Customers_Locations (customer_fk_id, store_fk_id) VALUES (:customer_fk_idInput, store_fk_idInput);
+INSERT IGNORE INTO Customers_Locations (customer_fk_id, store_fk_id) VALUES (:customer_fk_idInput, store_fk_idInput);
 
 -- update an entry in the Customers table
 UPDATE Customers SET first_name = :first_nameInput, last_name = :last_nameInput, email = :emailInput, phone_number = :phone_numberInput WHERE customer_id =  :customer_id_from_editable_in_table;
@@ -134,10 +134,10 @@ DELETE FROM Managers
 WHERE CONCAT(first_name, ' ', last_name) = :employee_name_from_the_table;
 
 -- INSERT a new employee/manager data based on submission of the 'Add a new employee/manager' form
-INSERT INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id)
+INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id)
 VALUES (:first_nameInput, :last_nameInput, :start_dateInput, :emp_manager_idInput, :emp_store_idInput);
 
-INSERT INTO Managers (first_name, last_name, status, manager_store_id)
+INSERT IGNORE INTO Managers (first_name, last_name, status, manager_store_id)
 VALUES (:first_nameInput, :last_nameInput, :statusInput, :manager_store_idInput);
 
 -- SELECT all store locations data to populate on the 'Locations' table
@@ -155,6 +155,6 @@ DELETE FROM Locations
 WHERE store_id = :store_id_from_the_table;
 
 -- INSERT a new location data based on submission of the 'Add a store location' form
-INSERT INTO Locations (city, state, zip_code)
+INSERT IGNORE INTO Locations (city, state, zip_code)
 VALUES (:cityInput, :stateInput, :zip_codeInput);
 
