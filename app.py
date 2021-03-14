@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect
 from forms import EmployeeManagerForm, LocationForm, IngredientsForm, SuppliersForm, OrderForm, Customers, \
     SubmitCustomers
 from db_connector import connect_to_database, execute_query
-import yaml
+import os
 
 """
 Sources / Citations
@@ -17,8 +17,7 @@ Description:
 
 app = Flask(__name__)
 
-config = yaml.safe_load(open('db_credentials.yaml'))
-app.config['SECRET_KEY'] = config['secret_key']
+app.config['SECRET_KEY'] = host = os.environ.get('SECRET', None)
 
 def validator(data_list):
     """
