@@ -1,12 +1,6 @@
 import pymysql.cursors
 import os
 
-# database = yaml.safe_load(open('db_credentials.yaml'))
-# host = database['host']
-# user = database['user']
-# passwd = database['passwd']
-# db = database['db']
-
 host = os.environ.get('HOST', None)
 user = os.environ.get('USER', None)
 passwd = os.environ.get('PASSWORD', None)
