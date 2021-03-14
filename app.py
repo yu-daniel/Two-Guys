@@ -185,7 +185,7 @@ def employees_locations():
         first_name = employee_manager_form.first_name.data
         last_name = employee_manager_form.last_name.data
         start_date = employee_manager_form.start_date.data
-        managed_byWho = employee_manager_form.managed_by.data
+        managedBy = employee_manager_form.managed_by.data
 
         if employee_manager_form.status.data is True:
             status = "vacation"
@@ -202,6 +202,9 @@ def employees_locations():
                                               str(employee_manager_form.managed_by.data)).fetchall()
             managed_by = managed_by_result
 
+            if len(managed_by_result) == 0:
+                return redirect(url_for("employees_locations"))
+
         store_query = "SELECT store_id FROM Locations WHERE city = %s;"
         store_result = execute_query(db_connection, store_query, str(employee_manager_form.store.data)).fetchall()
 
@@ -210,15 +213,25 @@ def employees_locations():
         state = location_form.state.data
         zip_code = location_form.zip_code.data
 
-        # query for adding employee to the db
+        # adding a regular employee (non-manager)
         if managed_by is not None:
+            print("Adding Regular Worker")
             employee_input_data = (first_name, last_name, start_date, status, managed_by, store)
             employee_input_query = "INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id) \
                                 VALUES (%s, %s, %s, %s, %s, %s);"
+
+        elif manager and managedBy != "None":
+            return redirect(url_for("employees_locations"))
+
+        # adding a new manager
         else:
+            print("Adding Manager")
+            print("managed_by = ", managed_by)
+            print("managed_by = ", type(managed_by))
             employee_input_data = (first_name, last_name, start_date, status, store)
             employee_input_query = "INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_store_id) \
                                 VALUES (%s, %s, %s, %s, %s);"
+
 
         # query for adding manager into db if employee is also a manager
         manager_input_data = None
@@ -237,7 +250,7 @@ def employees_locations():
             execute_query(db_connection, location_input_query, location_input_data)
             db_connection.commit()
 
-        if validator(employee_input_data) and managed_byWho != "None":
+        if validator(employee_input_data):
             # execute query to add employee/manager into db
             execute_query(db_connection, employee_input_query, employee_input_data)
             if manager_input_data is not None:
@@ -265,7 +278,7 @@ def employees_locations():
                                     Employees.first_name, Employees.last_name, \
                                     Employees.start_date, Employees.status, \
                                     CONCAT(Managers.first_name, ' ', Managers.last_name) AS ManagedBy, \
-	                                Locations.city, Employees.employee_id \
+                                    Locations.city, Employees.employee_id \
                                 FROM Employees \
                                 LEFT JOIN Managers ON Managers.manager_id = Employees.emp_manager_id \
                                 LEFT JOIN Locations ON Locations.store_id = Employees.emp_store_id \
