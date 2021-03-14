@@ -305,6 +305,8 @@ def employees_locations():
         state = location_form.state.data
         zip_code = location_form.zip_code.data
 
+        managed_by = employee_manager_form.managed_by.data
+        
         # query for adding employee to the db
         if managed_by != "None":
             employee_input_data = (first_name, last_name, start_date, status, managed_by, store)
