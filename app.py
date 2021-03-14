@@ -277,6 +277,22 @@ def employees_locations():
     # for POST requests
     if request.method == 'POST':
         # get the data from each field of the Employee Manager form
+        city = location_form.city.data
+        state = location_form.state.data
+        zip_code = location_form.zip_code.data
+
+        # query for adding location into db
+        location_input_data = (city, state, zip_code)
+        location_input_query = "INSERT IGNORE INTO Locations (`city`, state, zip_code) \
+                                VALUES (%s, %s, %s);"
+
+        if validator(location_input_data):
+            # execute query to add location into db
+            execute_query(db_connection, location_input_query, location_input_data)
+            db_connection.commit()
+            return redirect(url_for("employees_locations"))
+
+        # get the data from each field of the Employee Manager form
         first_name = employee_manager_form.first_name.data
         last_name = employee_manager_form.last_name.data
         start_date = employee_manager_form.start_date.data
@@ -304,9 +320,6 @@ def employees_locations():
         store_result = execute_query(db_connection, store_query, str(employee_manager_form.store.data)).fetchall()
 
         store = store_result
-        city = location_form.city.data
-        state = location_form.state.data
-        zip_code = location_form.zip_code.data
 
         # adding a regular employee (non-manager)
         if managed_by is not None:
@@ -331,16 +344,6 @@ def employees_locations():
             manager_input_data = (first_name, last_name, status, store)
             manager_input_query = "INSERT IGNORE INTO Managers (first_name, last_name, status, manager_store_id) \
                                    VALUES (%s, %s, %s, %s);"
-
-        # query for adding location into db
-        location_input_data = (city, state, zip_code)
-        location_input_query = "INSERT IGNORE INTO Locations (`city`, state, zip_code) \
-                                VALUES (%s, %s, %s);"
-
-        if validator(location_input_data):
-            # execute query to add location into db
-            execute_query(db_connection, location_input_query, location_input_data)
-            db_connection.commit()
 
         if validator(employee_input_data):
             # execute query to add employee/manager into db
