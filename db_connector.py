@@ -12,6 +12,11 @@ user = os.environ.get('USER', None)
 passwd = os.environ.get('PASSWORD', None)
 db = os.environ.get('DB', None)
 
+print("HOST = ", host)
+print("USER = ", user)
+print("PASSWORD = ", passwd)
+print("DB = ", db)
+
 def connect_to_database(host=host, user=user, passwd=passwd, db=db):
     """connects to a database and returns a database objects"""
     db_connection = pymysql.connect(host=host, user=user, passwd=passwd, db=db)
