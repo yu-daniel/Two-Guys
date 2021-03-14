@@ -281,6 +281,7 @@ def employees_locations():
         first_name = employee_manager_form.first_name.data
         last_name = employee_manager_form.last_name.data
         start_date = employee_manager_form.start_date.data
+        managed_byWho = employee_manager_form.managed_by.data
 
         if employee_manager_form.status.data is True:
             status = "vacation"
@@ -334,7 +335,7 @@ def employees_locations():
             execute_query(db_connection, location_input_query, location_input_data)
             db_connection.commit()
 
-        if validator(employee_input_data):
+        if validator(employee_input_data) and managed_byWho != "None":
             # execute query to add employee/manager into db
             execute_query(db_connection, employee_input_query, employee_input_data)
             if manager_input_data is not None:
