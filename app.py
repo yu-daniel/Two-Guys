@@ -306,9 +306,9 @@ def employees_locations():
         zip_code = location_form.zip_code.data
 
         managed_by = employee_manager_form.managed_by.data
-        
+
         # query for adding employee to the db
-        if managed_by != "None":
+        if managed_by is not None:
             employee_input_data = (first_name, last_name, start_date, status, managed_by, store)
             employee_input_query = "INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id) \
                                 VALUES (%s, %s, %s, %s, %s, %s);"
@@ -329,7 +329,7 @@ def employees_locations():
         location_input_query = "INSERT IGNORE INTO Locations (`city`, state, zip_code) \
                                 VALUES (%s, %s, %s);"
 
-        if validator(location_input_data):
+        if validator(location_input_data) and managed_by != "None":
             # execute query to add location into db
             execute_query(db_connection, location_input_query, location_input_data)
             db_connection.commit()
