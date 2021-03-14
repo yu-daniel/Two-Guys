@@ -168,102 +168,6 @@ def orders_customers():
                                search_form=search_form, city_name=location_choices)
 
 
-# route for the ingredients & suppliers page
-@app.route("/ingredients-suppliers", methods=["GET", "POST"])
-def ingredients_suppliers():
-    # create a reference to the form (objects)
-    ingredient_form = IngredientsForm()
-    supplier_form = SuppliersForm()
-
-    # establish a connection to the db
-    db_connection = connect_to_database()
-
-    # column headers for each table
-    ingredient_suppliers_h = ["Order Date", "Name", "Cost ($)", "Order ID", "", ""]
-    suppliers_headers = ["Name", "", ""]
-
-    if request.method == 'POST':
-
-        # get the data from each field of the Ingredient Form
-        order_date = ingredient_form.order_date.data
-        ingredient_name = ingredient_form.ingredient_name.data
-        ingredient_cost = ingredient_form.ingredient_cost.data
-        supplier = ingredient_form.supplier.data
-        order_id = ingredient_form.order_id.data
-
-        # query for adding a new Ingredient into db
-        ingredient_input_query = "INSERT IGNORE INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
-                                 "VALUES (%s, %s, %s, %s);"
-
-        # query for adding a new Supplier into db
-        supplier_input_query = "INSERT IGNORE INTO Suppliers (supplier_name) VALUES (%s);"
-
-        # adding a new Ingredient also involves adding them to the Ingrdients_Suppliers intersection table
-        # here, we get the supplier_id based on the location that the user selected
-        get_supplier_id_query = "SELECT supplier_id FROM `Suppliers` WHERE supplier_name = (%s);"
-        get_supplier_id_results = execute_query(db_connection, get_supplier_id_query, (supplier,)).fetchall()
-        ingredients_input_data = (order_date, ingredient_name, ingredient_cost, order_id)
-        supplier_name = supplier_form.supplier_name.data
-        supplier_input_data = (supplier_name,)
-
-        # use the validator() function to check which form has data, and determine which form to submit to db
-        if validator(ingredients_input_data) is True:
-            # execute query to add ingredient into database
-            execute_query(db_connection, ingredient_input_query, ingredients_input_data)
-
-            # get latest ingredient_id, that was just created
-            get_ingredient_id_query = "SELECT ingredient_id FROM `Ingredients` ORDER BY ingredient_id DESC LIMIT 1"
-            get_ingredient_id_results = execute_query(db_connection, get_ingredient_id_query).fetchall()
-
-            # add ingredient_id and supplier_id to the Ingredients_Suppliers intersection table
-            add_ingredient_supplier_IDs = "INSERT IGNORE INTO Ingredients_Suppliers (ing_id, sup_id) VALUES (%s, %s)"
-            IDs_parsed = (get_ingredient_id_results[0][0], get_supplier_id_results[0][0])
-            execute_query(db_connection, add_ingredient_supplier_IDs, IDs_parsed)
-
-        elif validator(supplier_input_data) is True:
-            # execute query to add supplier into database
-            execute_query(db_connection, supplier_input_query, supplier_input_data)
-
-        return redirect(url_for('ingredients_suppliers'))
-
-    else:
-        # queries for displaying the Ingredients and Suppliers 'overview' tables
-        ingredients_query = "SELECT order_date, ingredient_name, ingredient_cost, order_num, ingredient_id FROM " \
-                            "`Ingredients`; "
-        suppliers_query = "SELECT supplier_name, supplier_id FROM Suppliers;"
-        order_id_query = "SELECT order_id FROM `Orders`;"
-
-        # execute the above select queries and retrieve the data
-        ingredient_results = execute_query(db_connection, ingredients_query).fetchall()
-        suppliers_results = execute_query(db_connection, suppliers_query).fetchall()
-        order_id_results = execute_query(db_connection, order_id_query).fetchall()
-
-        # the data retrieved from the db are a tuple of tuples, here we take each individual tuple and add to a list
-        supplier_choices = []
-        order_id_choices = []
-        ingredients_supplied_choices = []
-
-        for choices in ingredient_results:
-            order_id_choices.append(choices[3])
-
-        for choices in suppliers_results:
-            supplier_choices.append(choices[0])
-
-        for choices in ingredient_results:
-            ingredients_supplied_choices.append(choices[1])
-
-        # from the list of items, assign them to each Form's choices option
-        ingredient_form.supplier.choices = supplier_choices
-        ingredient_form.order_id.choices = order_id_choices
-        supplier_form.ingredients_supplied.choices = ingredients_supplied_choices
-
-        return render_template("ingredients_suppliers.html", title='Add/Edit/Delete Ingredients & Suppliers',
-                               ingredient_form=ingredient_form,
-                               suppliers_headers=suppliers_headers, suppliers_values=suppliers_results,
-                               supplier_form=supplier_form, ingredient_suppliers_h=ingredient_suppliers_h,
-                               ingredient_suppliers_v=ingredient_results, order_nums=order_id_results)
-
-
 # route for employees & locations page
 @app.route("/employees-locations", methods=['GET', 'POST'])
 def employees_locations():
@@ -305,8 +209,6 @@ def employees_locations():
         city = location_form.city.data
         state = location_form.state.data
         zip_code = location_form.zip_code.data
-
-        managed_by = employee_manager_form.managed_by.data
 
         # query for adding employee to the db
         if managed_by is not None:
