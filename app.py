@@ -191,7 +191,7 @@ def ingredients_suppliers():
         order_id = ingredient_form.order_id.data
         
         # query for adding a new Ingredient into db
-        ingredient_input_query = "INSERT IGNOREINTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
+        ingredient_input_query = "INSERT IGNORE INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
                                  "VALUES (%s, %s, %s, %s);"
 
         # query for adding a new Supplier into db
