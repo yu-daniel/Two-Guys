@@ -134,7 +134,7 @@ DELETE FROM Managers
 WHERE CONCAT(first_name, ' ', last_name) = :employee_name_from_the_table;
 
 -- INSERT a new employee/manager data based on submission of the 'Add a new employee/manager' form
-INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id)
+INSERT INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id)
 VALUES (:first_nameInput, :last_nameInput, :start_dateInput, :emp_manager_idInput, :emp_store_idInput);
 
 INSERT IGNORE INTO Managers (first_name, last_name, status, manager_store_id)

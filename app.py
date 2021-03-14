@@ -6,18 +6,17 @@ import os
 
 """
 Sources / Citations
-
 (1) Week 8: Database Application Development - Learn using Python and Flask Framework & Starter Code
 Link: https://github.com/knightsamar/CS340_starter_flask_app
 Link: https://github.com/gkochera/CS340-demo-flask-app#step-3---building-apppy
 Link: https://oregonstate.instructure.com/courses/1825733/pages/learn-using-python-and-flask-framework?module_item_id=20221782
 Description: 
-
 """
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET', None)
+
 
 def validator(data_list):
     """
@@ -26,18 +25,20 @@ def validator(data_list):
     as a parameter and checks if any element is None - if true,
     then returns all_valid as False, otherwise return all_valid as True.
     """
-    all_valid = True            # assume all elements is not None
+    all_valid = True  # assume all elements is not None
 
-    for value in data_list:     # iterate through each element and
-        if value is None:       # check if it is None
+    for value in data_list:  # iterate through each element and
+        if value is None:  # check if it is None
             all_valid = False
 
-    return all_valid            # return the boolean results
+    return all_valid  # return the boolean results
+
 
 # route for home page
 @app.route("/", methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
+
 
 # route for the orders & customers page
 @app.route("/orders-customers", methods=["GET", "POST"])
@@ -189,7 +190,7 @@ def ingredients_suppliers():
         ingredient_cost = ingredient_form.ingredient_cost.data
         supplier = ingredient_form.supplier.data
         order_id = ingredient_form.order_id.data
-        
+
         # query for adding a new Ingredient into db
         ingredient_input_query = "INSERT IGNORE INTO Ingredients (order_date, ingredient_name, ingredient_cost, order_num) " \
                                  "VALUES (%s, %s, %s, %s);"
@@ -332,7 +333,7 @@ def employees_locations():
             db_connection.commit()
 
         if validator(employee_input_data):
-            # execute query to add employee/manager into db            
+            # execute query to add employee/manager into db
             execute_query(db_connection, employee_input_query, employee_input_data)
             if manager_input_data is not None:
                 execute_query(db_connection, manager_input_query, manager_input_data)
@@ -391,7 +392,8 @@ def employees_locations():
 
     employee_manager_form.store.choices = store_city_choices
 
-    return render_template('employees_locations.html', employee_headers=employee_headers, employees_managers_results=employees_managers_results,
+    return render_template('employees_locations.html', employee_headers=employee_headers,
+                           employees_managers_results=employees_managers_results,
                            location_headers=location_headers,
                            location_data=location_results, emp_man_form=employee_manager_form, loc_form=location_form,
                            city_name=store_city_results,
@@ -607,7 +609,7 @@ def update_employee(id):
         location = request.form['location']
         new_location_query = "SELECT store_id FROM Locations WHERE Locations.city = %s"
         new_location_id = execute_query(db_connection, new_location_query, location).fetchone()
-        
+
         update_query = \
             "UPDATE Employees SET first_name = %s, last_name=%s, start_date=%s, status=%s, emp_manager_id=%s, emp_store_id=%s WHERE employee_id = %s;"
 
@@ -618,7 +620,7 @@ def update_employee(id):
         manager_num_query = "SELECT manager_num FROM Employees WHERE Employees.employee_id = %s"
         manager_num_data = (id,)
         manager_num_result = execute_query(db_connection, manager_num_query, manager_num_data).fetchone()
-        
+
         if manager_num_result is not None:
             manager_update_query = "UPDATE Managers SET first_name=%s, last_name=%s, status=%s, manager_store_id=%s WHERE manager_id = %s;"
             manager_update_data = (first_name, last_name, vacation, new_location_id, manager_num_result)
