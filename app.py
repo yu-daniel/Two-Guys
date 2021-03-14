@@ -17,7 +17,7 @@ Description:
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = host = os.environ.get('SECRET', None)
+app.config['SECRET_KEY'] = os.environ.get('SECRET', None)
 
 def validator(data_list):
     """
