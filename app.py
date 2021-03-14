@@ -330,7 +330,7 @@ def employees_locations():
         location_input_query = "INSERT IGNORE INTO Locations (`city`, state, zip_code) \
                                 VALUES (%s, %s, %s);"
 
-        if validator(location_input_data) and managed_by != "None":
+        if validator(location_input_data):
             # execute query to add location into db
             execute_query(db_connection, location_input_query, location_input_data)
             db_connection.commit()
