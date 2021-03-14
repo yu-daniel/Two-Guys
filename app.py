@@ -306,7 +306,7 @@ def employees_locations():
         zip_code = location_form.zip_code.data
 
         # query for adding employee to the db
-        if managed_by is not None:
+        if managed_by != "None":
             employee_input_data = (first_name, last_name, start_date, status, managed_by, store)
             employee_input_query = "INSERT IGNORE INTO Employees (first_name, last_name, start_date, status, emp_manager_id, emp_store_id) \
                                 VALUES (%s, %s, %s, %s, %s, %s);"
