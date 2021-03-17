@@ -1,6 +1,5 @@
 # Two Guys
 
-https://twoguys.herokuapp.com/    
 Two Guys is a full-stack web application that provides a web-based UI for database interaction with CRUD operations.
 
 ### Background
@@ -18,9 +17,10 @@ Two Guys is an up-and-coming burger joint ready to take down Five Guys. Two Guys
 
 <img src='http://g.recordit.co/JBCngvzkCo.gif' title='Video Walkthrough' width='1200' alt='Video Walkthrough' />
 
-### Built with
+### Built with & Link
 
 - HTML, CSS, Bootstrap, Python, Flask, SQL
+- https://twoguys.herokuapp.com/    
 
 ### Contributors
 
